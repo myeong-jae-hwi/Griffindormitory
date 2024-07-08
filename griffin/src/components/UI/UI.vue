@@ -1,3 +1,3 @@
 <template>
-    <h2>ui here</h2>
+  <h2>UI here</h2>
 </template>
