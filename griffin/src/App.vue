@@ -1,12 +1,4 @@
 <template>
-<<<<<<< Updated upstream
-    <div>
-        <h2>Hello World</h2>
-        <h2>Jaehwi commit</h2>
-        <h2>Sungwoo commit</h2>
-    </div>
-</template>
-=======
   <div>
     <the-header></the-header>
     <students-license></students-license>
@@ -34,4 +26,3 @@ export default {
   }
   
 </style>
->>>>>>> Stashed changes
