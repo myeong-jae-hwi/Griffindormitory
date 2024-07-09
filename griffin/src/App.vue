@@ -1,29 +1,21 @@
 <template>
-  <div>
-    <the-header></the-header>
-    <students-license></students-license>
-    <base-btn>Click ME</base-btn>
-  </div>
+  <the-header></the-header>
+  <main>
+    <router-view></router-view>
+  </main>
 </template>
 
 <script>
-import BaseBtn from './components/UI/BaseBtn.vue';
-import StudentsLicense from './components/UI/StudentsLicense.vue'
-import TheHeader from './components/UI/TheHeader.vue'
+import TheHeader from './components/UI/TheHeader.vue';
 export default {
-    components: {
-      StudentsLicense,
-      TheHeader,
-        BaseBtn,
-    },
-
+  components: {
+    TheHeader,
+  },
 };
 </script>
 
 <style>
-  body {
-    background-color: #F2F2f2;
-  }
-  
+body {
+  background-color: #f2f2f2;
+}
 </style>
-
