@@ -20,15 +20,21 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+    font-family: 'Dovemayo_gothic';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
   header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     height: 8vh;
-    background-color: #f78686;
+    background-color: #ffffff;
     margin-bottom: 30px;
-    box-shadow: 0px 4px 0px 0px #d0d0d090;
+    box-shadow: 0px 4px 0px 0px #f0f0f0d7;
   }
   .left-section {
     display: flex;
@@ -45,8 +51,8 @@ export default {
     align-items: center;
   }
   .center-section h1 {
-    color: white;
     font-size: 1.5em;
+    font-family:'Dovemayo_gothic';
   }
   .right-section {
     display: flex;
