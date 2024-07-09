@@ -1,15 +1,17 @@
 <template>
-  <div class="base-card">
+  <div>
     <slot></slot>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+
+};
 </script>
 
 <style scoped>
-.base-card {
+div {
   width: clac(100% - 20px);
   height: 18vh;
   background-color: #fcfcfc;
