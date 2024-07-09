@@ -33,7 +33,7 @@ export default {
         },
         {
           id: 'b2',
-          name: 'SW',
+          name: 'SWdsfsafadsfdsafdsfdfdsaffdsfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
           title: 'I like Pubao',
           description: 'I miss pubao',
         },
