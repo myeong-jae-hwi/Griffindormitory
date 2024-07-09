@@ -2,7 +2,7 @@
   <div>
     <the-header></the-header>
     <students-license></students-license>
-    <base-btn></base-btn>
+    <base-btn>Click ME</base-btn>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
 
 <style>
   body {
-    background-color: #f2f2f2;
+    background-color: #F2F2f2;
   }
   
 </style>

@@ -15,18 +15,20 @@ export default {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
-  background: #4CAF50;
-  width: 100%;
-  border: 0;
+  background: #5805BB;
+  text-align: center;
+  width: 100px;
+  border-radius: 8px;
   padding: 15px;
   color: #FFFFFF;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
   cursor: pointer;
+  
 }
 .btn:hover,.btn:active,.btn:focus {
-  background: #43A047;
+  background: #48049b;
 }
 </style>
 
