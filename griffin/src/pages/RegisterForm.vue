@@ -1,6 +1,6 @@
 <template>
-  <div class="roommate-register-form">
-    <h2>룸메이트 모집 게시물 등록</h2>
+  <div class="register-form">
+    <h2>게시물 등록</h2>
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <label for="title">제목</label>
@@ -8,27 +8,7 @@
       </div>
       <div class="form-group">
         <label for="content">내용</label>
-        <textarea
-          id="content"
-          v-model="form.content"
-          @input="adjustHeight($event)"
-          ref="contentInput"
-          required
-        ></textarea>
-      </div>
-      <div class="form-group">
-        <label for="location">위치</label>
-        <input type="text" id="location" v-model="form.location" required />
-      </div>
-      <div class="form-group">
-        <label for="preferences">선호 사항</label>
-        <textarea
-          id="preferences"
-          v-model="form.preferences"
-          @input="adjustHeight($event)"
-          ref="preferencesInput"
-          required
-        ></textarea>
+        <textarea id="content" v-model="form.content" required></textarea>
       </div>
       <BaseBtn @submit="submitForm">등록</BaseBtn>
     </form>
@@ -36,27 +16,25 @@
 </template>
 
 <script>
-import BaseBtn from '../UI/BaseBtn.vue';
+// import BaseBtn from '../UI/BaseBtn.vue';
 
 export default {
-  name: 'RoommateRegisterForm',
+  name: 'RegisterForm',
   components: {
-    BaseBtn,
+    // BaseBtn,
   },
   data() {
     return {
       form: {
         title: '',
         content: '',
-        location: '',
-        preferences: '',
       },
     };
   },
   methods: {
     submitForm() {
       console.log('Form submitted:', this.form);
-      fetch('/api/roommate-posts', {
+      fetch('/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,24 +46,17 @@ export default {
           console.log('Success:', data);
           this.form.title = '';
           this.form.content = '';
-          this.form.location = '';
-          this.form.preferences = '';
         })
         .catch((error) => {
           console.error('Error:', error);
         });
-    },
-    adjustHeight(event) {
-      const textarea = event.target;
-      textarea.style.height = 'auto';
-      textarea.style.height = textarea.scrollHeight + 'px';
     },
   },
 };
 </script>
 
 <style scoped>
-.roommate-register-form {
+.register-form {
   max-width: 600px;
   margin: 2vh auto;
   padding: 20px;
@@ -93,6 +64,7 @@ export default {
   border: 1px solid #78aef5;
   border-radius: 2vh;
 }
+
 .form-group {
   margin-bottom: 15px;
 }
@@ -111,12 +83,14 @@ export default {
   box-sizing: border-box;
 }
 
-textarea {
+input[type='text'] {
+  overflow: hidden;
   resize: none;
 }
 
-input[type='text'] {
-  overflow: hidden;
+.form-group textarea {
+  max-height: 60vh;
+  min-height: 30vh;
   resize: none;
 }
 </style>
