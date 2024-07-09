@@ -9,7 +9,6 @@ const router = createRouter({
     { path: '/p3', component: null },
     { path: '/p4', component: null },
   ],
-  
 });
 
 export default router;
