@@ -15,7 +15,7 @@ export default {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
-  background: #5805BB;
+  background: #E60023;
   text-align: center;
   width: 100px;
   border-radius: 8px;
@@ -28,7 +28,7 @@ export default {
   
 }
 .btn:hover,.btn:active,.btn:focus {
-  background: #48049b;
+  background: #cf0120;
 }
 </style>
 
