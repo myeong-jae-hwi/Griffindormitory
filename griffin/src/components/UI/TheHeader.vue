@@ -1,5 +1,16 @@
 <template>
-  <header></header>
+  <header>
+    <div class="left-section">
+      <img src="../../images/Logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="center-section">
+      <h1>Griffin</h1>
+    </div>
+    <div class="right-section">
+      <div id="alarm"></div>
+      <div id="menu"></div>
+    </div>
+  </header>
 </template>
 
 <script>
@@ -9,9 +20,50 @@ export default {
 </script>
 
 <style scoped>
-  header{
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    height: 15vh;
-    background-color: red;
+    height: 8vh;
+    background-color: #f78686;
+    margin-bottom: 30px;
+    box-shadow: 0px 4px 0px 0px #d0d0d090;
+  }
+  .left-section {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+  }
+  .logo {
+    height: 40px;
+  }
+  .center-section {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .center-section h1 {
+    color: white;
+    font-size: 1.5em;
+  }
+  .right-section {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+  #alarm {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../images/bell.png');
+    background-size: cover;
+    margin-right: 10px;
+  }
+  #menu {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../images/menu.png');
+    background-size: cover;
   }
 </style>

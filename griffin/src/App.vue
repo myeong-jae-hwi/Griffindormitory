@@ -1,6 +1,6 @@
 <template>
+  <the-header></the-header>
   <div>
-    <the-header></the-header>
     <students-license></students-license>
     <base-btn>Click ME</base-btn>
   </div>
@@ -16,12 +16,12 @@ export default {
       TheHeader,
         BaseBtn,
     },
-
 };
 </script>
 
 <style>
   body {
+    margin: 0;
     background-color: #F2F2f2;
   }
   
