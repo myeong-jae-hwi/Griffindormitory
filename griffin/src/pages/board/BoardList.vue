@@ -1,6 +1,12 @@
 <template>
   <section>
     <ul>
+      <router-link to="/roommateboard">
+        <BaseBtn>룸메이트 글 등록</BaseBtn>
+      </router-link>
+      <router-link to="/register">
+        <BaseBtn>자유 게시판 글 등록</BaseBtn>
+      </router-link>
       <board-item
         v-for="board in boards"
         :key="board.id"
