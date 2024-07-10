@@ -17,7 +17,6 @@ const router = createRouter({
       children: [{ path: 'register', component: RegisterForm }],
     },
     { path: '/roommateboard', component: RoomMateRegisterForm },
-    { path: '/login', component: LoginForm },
   ],
 });
 
