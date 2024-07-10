@@ -26,8 +26,9 @@ export default {
   padding: 10px;
   background: transparent;
   border-radius: 0;
-  border-top: solid 2px #E9E9E9;
-  border-bottom: solid 2px #E9E9E9;
+  border-top: solid 1px #dedede;
+  border-bottom: solid 1px #dedede;
+  margin: 2px 20px 2px 20px;
 }
 
 .custom-card-content {

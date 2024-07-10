@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="left-section">
-      <img src="../../images/Logo.png" alt="Logo" class="logo">
+      <img src="../../assets/images/Logo.png" alt="Logo" class="logo">
     </div>
     <div class="center-section">
       <h1>Griffin</h1>
@@ -62,14 +62,14 @@ export default {
   #alarm {
     width: 20px;
     height: 20px;
-    background-image: url('../../images/bell.png');
+    background-image: url('../../assets/images/bell.png');
     background-size: cover;
     margin-right: 10px;
   }
   #menu {
     width: 20px;
     height: 20px;
-    background-image: url('../../images/menu.png');
+    background-image: url('../../assets/images/menu.png');
     background-size: cover;
   }
 </style>
