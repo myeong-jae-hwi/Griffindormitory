@@ -1,9 +1,9 @@
+const dbURL = process.env.VUE_APP_FIREBASE_DATABASE_URL;
+
 export default {
   async fetchInitialData(context) {
     try {
-      const response = await fetch(
-        `https://gryffindormitor-default-rtdb.asia-southeast1.firebasedatabase.app/boards.json`
-      );
+      const response = await fetch(`${dbURL}/boards.json`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch initial data');
@@ -34,16 +34,13 @@ export default {
     };
 
     try {
-      const response = await fetch(
-        `https://gryffindormitor-default-rtdb.asia-southeast1.firebasedatabase.app/boards.json`,
-        {
-          method: 'POST',
-          body: JSON.stringify(boardData),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const response = await fetch(`${dbURL}/boards.json`, {
+        method: 'POST',
+        body: JSON.stringify(boardData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (!response.ok) {
         throw new Error('Failed to register board');
@@ -52,7 +49,6 @@ export default {
       const responseData = await response.json();
       context.commit('registerBoard', { id: responseData.name, ...boardData });
 
-      // After registering a board, fetch the updated list
       context.dispatch('fetchInitialData');
     } catch (error) {
       console.error('Error registering board:', error.message);
