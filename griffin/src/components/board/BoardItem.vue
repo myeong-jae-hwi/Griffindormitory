@@ -3,14 +3,14 @@
     <div class="horizontal">
       <h3 class="description">{{ title }}</h3>
       <p class="description">{{ name }}</p>
-      <div class="description">{{ description }}</div>
+      <div class="content">{{ content }}</div>
     </div>
   </base-card>
 </template>
 
 <script>
 export default {
-  props: ["id", "name", "title", "description"],
+  props: ['id', 'name', 'title', 'content'],
 };
 </script>
 
@@ -34,18 +34,17 @@ export default {
 .custom-card-content {
   list-style-type: none;
 }
-.description {
+.content {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-h3{
+h3 {
   margin: 0;
 }
 
-p{
+p {
   margin: 0;
 }
-
 </style>
