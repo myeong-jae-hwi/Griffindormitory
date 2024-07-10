@@ -23,3 +23,6 @@ pnpm-debug.log*
 *.sw?
 .env
 .json
+
+package.json
+package-lock.json
