@@ -45,6 +45,7 @@ import {
 import { ref, set } from 'firebase/database';
 
 export default {
+  name: 'LoginForm',
   data() {
     return {
       isLogin: true,
