@@ -4,6 +4,8 @@ import InfoPage from './pages/info/InfoPage.vue';
 import BoardList from './pages/board/BoardList.vue';
 import RoomMateRegisterForm from './pages/RoomMateRegisterForm.vue';
 import RegisterForm from './pages/RegisterForm.vue';
+import LoginForm from './menu/LoginForm.vue';
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -15,7 +17,7 @@ const router = createRouter({
       children: [{ path: 'register', component: RegisterForm }],
     },
     { path: '/roommateboard', component: RoomMateRegisterForm },
-    {}
+    { path: '/login', component: LoginForm },
   ],
 });
 

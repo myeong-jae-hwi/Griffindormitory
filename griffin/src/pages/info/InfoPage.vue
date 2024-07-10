@@ -22,15 +22,15 @@
 </template>
 
 <script>
-import StudentsLicense from "../../components/UI/StudentsLicense.vue";
-import BoardItem from "../../components/board/BoardItem.vue";
-import BaseChart from "../../components/chart/BaseChart.vue";
-import { Chart, registerables } from "chart.js";
+import StudentsLicense from '../../components/UI/StudentsLicense.vue';
+import BoardItem from '../../components/board/BoardItem.vue';
+import BaseChart from '../../components/chart/BaseChart.vue';
+import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 
 export default {
-  name: "InfoPage",
+  name: 'InfoPage',
   components: {
     StudentsLicense,
     BoardItem,
@@ -38,28 +38,28 @@ export default {
   },
   data() {
     return {
-      type: "bar",
+      type: 'bar',
       data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [
           {
-            label: "# of Votes",
+            label: '# of Votes',
             data: [12, 19, 3, 5, 2, 3],
             backgroundColor: [
-              "rgba(255, 99, 132, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-              "rgba(255, 159, 64, 0.2)",
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
             ],
             borderColor: [
-              "rgba(255, 99, 132, 1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)",
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
             ],
             borderWidth: 1,
           },
@@ -74,23 +74,21 @@ export default {
       },
       boards: [
         {
-          id: "b1",
-          name: "MJ",
-          title: "This is Board Test",
-          description: "Hello ?",
+          id: 'b1',
+          name: 'MJ',
+          title: 'This is Board Test',
+          description: 'Hello ?',
         },
         {
-          id: "b2",
-          name: "SW",
-          title: "I like Pubao",
-          description: "I miss pubao",
+          id: 'b2',
+          name: 'SW',
+          title: 'I like Pubao',
+          description: 'I miss pubao',
         },
       ],
     };
   },
-
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
