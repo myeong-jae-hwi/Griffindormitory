@@ -7,6 +7,7 @@
 
 <script>
 import TheHeader from './components/UI/TheHeader.vue';
+
 export default {
   components: {
     TheHeader,
@@ -15,9 +16,8 @@ export default {
 </script>
 
 <style>
-  body {
-    margin: 0;
-    background-color: #F2F2f2;
-  }
-  
+body {
+  margin: 0;
+  background-color: #f2f2f2;
+}
 </style>

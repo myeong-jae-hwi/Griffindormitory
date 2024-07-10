@@ -11,9 +11,12 @@ const router = createRouter({
   routes: [
     { path: '/', redirect: '/info' },
     { path: '/info', component: InfoPage },
-    { path: '/boardlist', component: BoardList },
+    {
+      path: '/boardlist',
+      component: BoardList,
+      children: [{ path: 'register', component: RegisterForm }],
+    },
     { path: '/roommateboard', component: RoomMateRegisterForm },
-    { path: '/register', component: RegisterForm },
     { path: '/login', component: LoginForm },
   ],
 });
