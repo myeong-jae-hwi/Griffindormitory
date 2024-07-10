@@ -2,7 +2,7 @@
   <div>
     <header>
       <div class="left-section">
-        <img src="../../images/Logo.png" alt="Logo" class="logo" />
+        <img src="../../assets/images/Logo.png" alt="Logo" class="logo" />
       </div>
       <div class="center-section">
         <h1>Griffin</h1>
@@ -110,7 +110,7 @@ header {
 #alarm {
   width: 20px;
   height: 20px;
-  background-image: url('../../images/bell.png');
+  background-image: url('../../assets/images/bell.png');
   background-size: cover;
   margin-right: 10px;
 }
