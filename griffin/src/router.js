@@ -8,7 +8,6 @@ import LoginForm from './menu/LoginForm.vue';
 import UserInfo from './menu/UserInfo.vue';
 import UserScore from './menu/UserScore.vue';
 
-
 const router = createRouter({
   history: createWebHistory(),
   routes: [
