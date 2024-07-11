@@ -5,6 +5,7 @@ import BoardList from './pages/board/BoardList.vue';
 import RoomMateRegisterForm from './pages/RoomMateRegisterForm.vue';
 import RegisterForm from './pages/RegisterForm.vue';
 import LoginForm from './menu/LoginForm.vue';
+import UserInfo from './menu/UserInfo.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,6 +19,7 @@ const router = createRouter({
     },
     { path: '/roommateboard', component: RoomMateRegisterForm },
     { path: '/login', component: LoginForm },
+    { path: '/userinfo', component: UserInfo },
   ],
 });
 
