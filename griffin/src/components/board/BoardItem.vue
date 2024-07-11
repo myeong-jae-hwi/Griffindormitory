@@ -1,11 +1,9 @@
 <template>
-  <base-card class="base-list">
-    <div class="horizontal">
-      <h3 class="description">{{ title }}</h3>
-      <p class="description">{{ name }}</p>
-      <div class="content">{{ content }}</div>
-    </div>
-  </base-card>
+  <div class="horizontal">
+    <h3 class="description">{{ title }}</h3>
+    <p class="description">{{ name }}</p>
+    <div class="content">{{ content }}</div>
+  </div>
 </template>
 
 <script>
@@ -20,15 +18,8 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.base-list {
-  height: auto;
-  padding: 10px;
-  background: transparent;
-  border-radius: 0;
-  border-top: solid 1px #dedede;
-  border-bottom: solid 1px #dedede;
-  margin: 2px 20px 2px 20px;
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
 }
 
 .custom-card-content {

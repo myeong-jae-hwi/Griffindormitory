@@ -8,15 +8,17 @@
         <BaseBtn>자유 게시판 글 등록</BaseBtn>
       </router-link>
     </ul>
-    <ul v-if="hasBoards">
-      <board-item
-        v-for="board in boards"
-        :key="board.id"
-        :id="board.id"
-        :title="board.title"
-        :content="board.content"
-      ></board-item>
-    </ul>
+    <base-card>
+      <ul v-if="hasBoards">
+        <board-item
+          v-for="board in boards"
+          :key="board.id"
+          :id="board.id"
+          :title="board.title"
+          :content="board.content"
+        ></board-item>
+      </ul>
+    </base-card>
     <router-view></router-view>
   </section>
 </template>
@@ -41,3 +43,5 @@ export default {
   },
 };
 </script>
+
+<style scoped></style>
