@@ -1,8 +1,10 @@
 <template>
-  <the-header></the-header>
-  <main>
-    <router-view></router-view>
-  </main>
+  <div>
+    <the-header></the-header>
+    <main>
+      <router-view></router-view>
+    </main>
+  </div>
 </template>
 
 <script>
