@@ -10,9 +10,9 @@ import { Chart } from 'chart.js';
 export default {
   name: 'BaseChart',
   props: {
-    type: String, // Chart.js chart type (e.g., 'bar', 'line', etc.)
+    type: String,
     data: Object,
-    options: Object
+    options: Object,
   },
   mounted() {
     this.renderChart();
@@ -23,10 +23,16 @@ export default {
       new Chart(ctx, {
         type: this.type,
         data: this.data,
-        options: this.options
+        options: this.options,
       });
-    }
-  }
+    },
+    destroyChart() {
+      const chartInstance = this.$refs.MyChart._chart;
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+    },
+  },
 };
 </script>
 
