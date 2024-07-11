@@ -11,17 +11,25 @@
     </base-card>
 
     <h3>게시판</h3>
-    <board-item
-      v-for="board in boards"
-      :key="board.id"
-      :id="board.id"
-      :name="board.name"
-      :title="board.title"
-    ></board-item>
+    <base-card>
+      <div>
+        <board-item
+          v-for="board in boards"
+          :key="board.id"
+          :id="board.id"
+          :title="board.title"
+          :content="board.content"
+        ></board-item>
+      </div>
+      <p>
+        <router-link to="/boardlist"> 더보기</router-link>
+      </p>
+    </base-card>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import StudentsLicense from '../../components/UI/StudentsLicense.vue';
 import BoardItem from '../../components/board/BoardItem.vue';
 import BaseChart from '../../components/chart/BaseChart.vue';
@@ -35,6 +43,10 @@ export default {
     StudentsLicense,
     BoardItem,
     BaseChart,
+  },
+  computed: { ...mapGetters('boards', ['boards', 'hasBoards']) },
+  created() {
+    this.$store.dispatch('boards/fetchInitialData');
   },
   data() {
     return {
@@ -72,20 +84,6 @@ export default {
           },
         },
       },
-      boards: [
-        {
-          id: 'b1',
-          name: 'MJ',
-          title: 'This is Board Test',
-          description: 'Hello ?',
-        },
-        {
-          id: 'b2',
-          name: 'SW',
-          title: 'I like Pubao',
-          description: 'I miss pubao',
-        },
-      ],
     };
   },
 };

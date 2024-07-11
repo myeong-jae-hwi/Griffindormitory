@@ -1,22 +1,19 @@
 <template>
-  <section>
-    <ul v-if="!isRegisterRoute">
-      <router-link to="/roommateboard">
-        <BaseBtn>룸메이트 글 등록</BaseBtn>
-      </router-link>
-      <router-link to="/boardlist/register">
-        <BaseBtn>자유 게시판 글 등록</BaseBtn>
-      </router-link>
-    </ul>
-    <ul v-if="hasBoards">
-      <board-item
-        v-for="board in boards"
-        :key="board.id"
-        :id="board.id"
-        :title="board.title"
-        :content="board.content"
-      ></board-item>
-    </ul>
+  <section class="container">
+    <base-card v-if="isListRoute">
+      <ul v-if="hasBoards">
+        <board-item
+          v-for="board in boards"
+          :key="board.id"
+          :id="board.id"
+          :title="board.title"
+          :content="board.content"
+        ></board-item>
+      </ul>
+    </base-card>
+    <router-link to="/boardlist/register">
+      <BaseBtn v-if="isListRoute" class="board-btn">글 쓰기</BaseBtn>
+    </router-link>
     <router-view></router-view>
   </section>
 </template>
@@ -32,8 +29,8 @@ export default {
 
   computed: {
     ...mapGetters('boards', ['boards', 'hasBoards']),
-    isRegisterRoute() {
-      return this.$route.path === '/boardlist/register';
+    isListRoute() {
+      return this.$route.path === '/boardlist';
     },
   },
   created() {
@@ -41,3 +38,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.board-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+}
+</style>

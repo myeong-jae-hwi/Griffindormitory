@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import { Chart } from "chart.js";
+import { Chart } from 'chart.js';
 
 export default {
-  name: "BaseChart",
+  name: 'BaseChart',
   props: {
     type: String,
     data: Object,
@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     renderChart() {
-      const ctx = this.$refs.MyChart.getContext("2d");
+      const ctx = this.$refs.MyChart.getContext('2d');
       new Chart(ctx, {
         type: this.type,
         data: this.data,
