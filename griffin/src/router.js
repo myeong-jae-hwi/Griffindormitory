@@ -7,6 +7,7 @@ import RegisterForm from './pages/RegisterForm.vue';
 import LoginForm from './menu/LoginForm.vue';
 import UserScore from './menu/UserScore.vue';
 
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [

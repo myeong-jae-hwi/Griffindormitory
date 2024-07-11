@@ -74,8 +74,14 @@ export default {
           return;
         }
         try {
-          await signInWithEmailAndPassword(auth, this.email, this.password);
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            this.email,
+            this.password
+          );
           console.log('로그인 성공');
+          console.log('Logged in user UID:', userCredential.user.uid);
+          this.$router.push('/info');
         } catch (error) {
           console.error('Firebase 오류: ', error);
           alert('오류가 발생했습니다. 다시 시도해 주세요.');
@@ -103,7 +109,6 @@ export default {
             this.password
           );
           const user = userCredential.user;
-          // Realtime Database에 사용자 정보 저장
           await set(ref(database, 'users/' + user.uid), {
             name: this.name,
             university: this.university,
@@ -111,8 +116,10 @@ export default {
             email: this.email,
             createdAt: new Date().toISOString(),
           });
-          alert('회원가입 성공 하였습니다!');
           console.log('회원가입 성공');
+          console.log('Logged in user UID:', user.uid);
+          alert('회원가입 성공 하였습니다!');
+          this.$router.push('/info');
         } catch (error) {
           console.error('Firebase 오류: ', error);
           if (error.code === 'auth/email-already-in-use') {
@@ -199,7 +206,7 @@ html {
   transition: 0.5s;
   margin-top: 40px;
   letter-spacing: 4px;
-  cursor: pointer; /* 클릭 가능하게 커서 변경 */
+  cursor: pointer;
 }
 
 .submit-btn {
