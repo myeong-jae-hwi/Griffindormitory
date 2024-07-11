@@ -2,10 +2,14 @@
   <div>
     <header>
       <div class="left-section">
-        <img src="../../assets/images/Logo.png" alt="Logo" class="logo" />
+        <router-link to="/">
+          <img src="../../assets/images/Logo.png" alt="Logo" class="logo" />
+        </router-link>
       </div>
       <div class="center-section">
-        <h1>Griffin</h1>
+        <router-link to="/">
+          <h1>Griffin</h1>
+        </router-link>
       </div>
       <div class="right-section">
         <div id="alarm"></div>

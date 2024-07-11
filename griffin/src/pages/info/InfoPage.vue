@@ -3,13 +3,20 @@
     <students-license></students-license>
 
     <h3>게시판</h3>
-    <board-item
-      v-for="board in boards"
-      :key="board.id"
-      :id="board.id"
-      :name="board.name"
-      :title="board.title"
-    ></board-item>
+    <base-card>
+      <div>
+        <board-item
+          v-for="board in boards"
+          :key="board.id"
+          :id="board.id"
+          :title="board.title"
+          :content="board.content"
+        ></board-item>
+      </div>
+      <p>
+        <router-link to="/boardlist"> 더보기</router-link>
+      </p>
+    </base-card>
   </div>
 </template>
 
@@ -18,9 +25,8 @@ import { mapGetters } from 'vuex';
 import StudentsLicense from '../../components/UI/StudentsLicense.vue';
 import BoardItem from '../../components/board/BoardItem.vue';
 
-
 export default {
-  name: "InfoPage",
+  name: 'InfoPage',
   components: {
     StudentsLicense,
     BoardItem,
@@ -29,9 +35,7 @@ export default {
   created() {
     this.$store.dispatch('boards/fetchInitialData');
   },
-
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

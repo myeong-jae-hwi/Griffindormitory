@@ -2,24 +2,46 @@
   <div class="roommate-register-form">
     <h2>룸메이트 모집 게시물 등록</h2>
     <form @submit.prevent="submitForm">
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="title">제목</label>
         <input type="text" id="title" v-model="form.title" required />
+      </div> -->
+      <div>
+        <label>모집 인원</label>
+        <input type="radio" name="count" value="1" />
+        <label for="1">1명</label>
+        <input type="radio" name="count" value="2" />
+        <label for="2">2명</label>
+        <input type="radio" name="count" value="3" />
+        <label for="3">3명</label>
       </div>
-      <div class="form-group">
-        <label for="content">내용</label>
-        <textarea
-          id="content"
-          v-model="form.content"
-          @input="adjustHeight($event)"
-          ref="contentInput"
-          required
-        ></textarea>
+
+      <div>
+        <label>성별</label>
+        <input type="radio" name="sex" value="male" />
+        <label for="male">남자</label>
+        <input type="radio" name="sex" value="female" />
+        <label for="female">여자</label>
       </div>
-      <div class="form-group">
-        <label for="location">위치</label>
-        <input type="text" id="location" v-model="form.location" required />
+
+      <div>
+        <label>기숙사</label>
+        <input type="radio" name="location" value="east" />
+        <label for="east">동관</label>
+        <input type="radio" name="location" value="west" />
+        <label for="west">서관</label>
       </div>
+      <div>
+        <label>기타</label>
+        <input type="radio" name="etc" value="smoke" />
+        <label for="smoke">흡연</label>
+        <input type="radio" name="etc" value="drink" />
+        <label for="drink">음주</label>
+      </div>
+
+      <label>기상 시간</label>
+      <input type="time" />
+
       <div class="form-group">
         <label for="preferences">선호 사항</label>
         <textarea
@@ -30,19 +52,14 @@
           required
         ></textarea>
       </div>
-      <BaseBtn @submit="submitForm">등록</BaseBtn>
+      <base-btn @submit="submitForm">등록</base-btn>
     </form>
   </div>
 </template>
 
 <script>
-// import BaseBtn from '../UI/BaseBtn.vue';
-
 export default {
   name: 'RoomMateRegisterForm',
-  components: {
-    // BaseBtn,
-  },
   data() {
     return {
       form: {
@@ -86,7 +103,7 @@ export default {
 
 <style scoped>
 .roommate-register-form {
-  max-width: 600px;
+  width: 80%;
   margin: 2vh auto;
   padding: 20px;
   background-color: #78aef5;
