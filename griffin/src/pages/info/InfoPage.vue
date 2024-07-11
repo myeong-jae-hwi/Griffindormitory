@@ -1,12 +1,14 @@
 <template>
   <div>
     <students-license></students-license>
-    <base-chart
-      ref="chartComponent"
-      :type="type"
-      :data="data"
-      :options="options"
-    ></base-chart>
+    <base-card>
+      <base-chart
+        ref="chartComponent"
+        :type="type"
+        :data="data"
+        :options="options"
+      ></base-chart>
+    </base-card>
 
     <h3>게시판</h3>
     <board-item
@@ -32,41 +34,43 @@ export default {
   components: {
     StudentsLicense,
     BoardItem,
-    BaseChart
+    BaseChart,
   },
   data() {
     return {
       type: 'bar',
       data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-        }]
+        datasets: [
+          {
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1,
+          },
+        ],
       },
       options: {
         scales: {
           y: {
-            beginAtZero: true
-          }
-        }
+            beginAtZero: true,
+          },
+        },
       },
       boards: [
         {
@@ -84,13 +88,7 @@ export default {
       ],
     };
   },
-  mounted() {
-    // Access child component method to render chart
-    this.$refs.chartComponent.renderChart();
-  }
 };
 </script>
 
-<style scoped>
-/* Add any scoped styles if needed */
-</style>
+<style scoped></style>

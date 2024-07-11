@@ -20,4 +20,9 @@ body {
   margin: 0;
   background-color: #f2f2f2;
 }
+a,
+a:visited {
+  text-decoration: none;
+  color: black;
+}
 </style>
