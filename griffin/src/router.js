@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import InfoPage from './pages/info/InfoPage.vue';
 import BoardList from './pages/board/BoardList.vue';
-import RoomMateRegisterForm from './pages/RoomMateRegisterForm.vue';
-import RegisterForm from './pages/RegisterForm.vue';
+import RoomMateRegisterForm from './pages/roommate/RoomMateRegisterForm.vue';
+import RegisterForm from './pages/board/RegisterForm.vue';
 import LoginForm from './menu/LoginForm.vue';
 import UserInfo from './menu/UserInfo.vue';
 import UserScore from './menu/UserScore.vue';
