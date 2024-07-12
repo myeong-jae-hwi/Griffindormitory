@@ -1,8 +1,11 @@
 <template>
   <div>
-    <the-header></the-header>
+    <the-header
+      :isLoggedIn="isLoggedIn"
+      @login-success="updateLoginStatus"
+    ></the-header>
     <main>
-      <router-view></router-view>
+      <router-view @login-success="updateLoginStatus"></router-view>
     </main>
   </div>
 </template>
@@ -13,6 +16,16 @@ import TheHeader from './components/UI/TheHeader.vue';
 export default {
   components: {
     TheHeader,
+  },
+  data() {
+    return {
+      isLoggedIn: false,
+    };
+  },
+  methods: {
+    updateLoginStatus(user) {
+      this.isLoggedIn = !!user;
+    },
   },
 };
 </script>
