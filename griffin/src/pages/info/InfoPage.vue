@@ -2,7 +2,7 @@
   <div>
     <students-license></students-license>
 
-    <h3>게시판</h3>
+    <h3>자유 게시판</h3>
     <base-card>
       <div>
         <board-item
@@ -14,7 +14,26 @@
         ></board-item>
       </div>
       <p>
-        <router-link to="/boardlist"> 더보기</router-link>
+        <router-link to="/boardlist">더보기</router-link>
+      </p>
+    </base-card>
+
+    <h3>룸메이트 모집 게시판</h3>
+    <base-card>
+      <div>
+        <mate-item
+          v-for="mate in mates"
+          :key="mate.id"
+          :id="mate.id"
+          :count="mate.count"
+          :sex="mate.sex"
+          :location="mate.location"
+          :etc="mate.etc"
+          :preferences="mate.preferences"
+        ></mate-item>
+      </div>
+      <p>
+        <router-link to="/roommateboard">더보기</router-link>
       </p>
     </base-card>
   </div>
@@ -24,16 +43,25 @@
 import { mapGetters } from 'vuex';
 import StudentsLicense from '../../components/UI/StudentsLicense.vue';
 import BoardItem from '../../components/board/BoardItem.vue';
+import MateItem from '../../components/roommate/MateItem.vue';
 
 export default {
   name: 'InfoPage',
   components: {
     StudentsLicense,
     BoardItem,
+    MateItem,
   },
-  computed: { ...mapGetters('boards', ['boards', 'hasBoards']) },
+  computed: {
+    ...mapGetters('boards', ['boards', 'hasBoards']),
+    ...mapGetters({
+      mates: 'mates',
+      hasMates: 'hasMates',
+    }),
+  },
   created() {
     this.$store.dispatch('boards/fetchInitialData');
+    this.$store.dispatch('mates/fetchInitialData');
   },
 };
 </script>
