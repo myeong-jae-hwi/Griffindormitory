@@ -3,7 +3,7 @@ const dbURL = process.env.VUE_APP_FIREBASE_DATABASE_URL;
 export default {
   async fetchInitialData(context) {
     try {
-      const response = await fetch(`${dbURL}/mata.json`);
+      const response = await fetch(`${dbURL}/roommates.json`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch initial data');
@@ -14,8 +14,11 @@ export default {
       for (const key in matesData) {
         const mate = {
           id: key,
-          titile: matesData[key].title,
-          content: matesData[key].content,
+          count: matesData[key].count,
+          sex: matesData[key].sex,
+          location: matesData[key].location,
+          etc: matesData[key].etc,
+          preferences: matesData[key].preferences,
         };
         mates.push(mate);
       }
@@ -27,12 +30,15 @@ export default {
 
   async registerMate(context, data) {
     const mateData = {
-      title: data.title,
-      content: data.content,
+      count: data.count,
+      sex: data.sex,
+      location: data.location,
+      etc: data.etc,
+      preferences: data.preferences,
     };
 
     try {
-      const response = await fetch(`${dbURL}/boards.json`, {
+      const response = await fetch(`${dbURL}/roommates.json`, {
         method: 'POST',
         body: JSON.stringify(mateData),
         headers: {
@@ -41,7 +47,7 @@ export default {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to register Mate board');
+        throw new Error('Failed to register Mate');
       }
 
       const responseData = await response.json();
@@ -49,7 +55,7 @@ export default {
 
       context.dispatch('fetchInitialData');
     } catch (error) {
-      console.error('Error registering board:', error.message);
+      console.error('Error registering mate:', error.message);
     }
   },
 };
