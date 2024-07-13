@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import InfoPage from './pages/info/InfoPage.vue';
 import BoardList from './pages/board/BoardList.vue';
+import MateList from './pages/roommate/MateList.vue';
 import RoomMateRegisterForm from './pages/roommate/RoomMateRegisterForm.vue';
 import RegisterForm from './pages/board/RegisterForm.vue';
 import LoginForm from './menu/LoginForm.vue';
@@ -18,7 +19,11 @@ const router = createRouter({
       component: BoardList,
       children: [{ path: 'register', component: RegisterForm }],
     },
-    { path: '/roommateboard', component: RoomMateRegisterForm },
+    {
+      path: '/roommateboard',
+      component: MateList,
+      children: [{ path: 'register', component: RoomMateRegisterForm }],
+    },
     { path: '/login', component: LoginForm },
     { path: '/userinfo', component: UserInfo },
     { path: '/score', component: UserScore },
