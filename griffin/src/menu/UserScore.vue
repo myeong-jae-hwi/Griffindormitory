@@ -1,39 +1,47 @@
 <template>
-  <h4>이번 학기 성적</h4>
-  <base-card>
-    <base-chart
-      ref="chartComponent"
-      :type="allScores.type"
-      :data="allScores.data"
-      v-if="allScores.data.datasets[0].data.length > 0"
-    ></base-chart>
-    <p v-else>학점을 입력해 주세요</p>
-  </base-card>
-  <h4>전체 성적</h4>
-  <base-card>
-    <base-chart
-      ref="chartComponent"
-      :type="thisScores.type"
-      :data="thisScores.data"
-    ></base-chart>
-  </base-card>
-  <h4>학점입력</h4>
-  
-  <base-card>
+  <div>
+    <h4>이번 학기 성적</h4>
+    <base-card>
+      <base-chart
+        ref="chartComponent"
+        :type="allScores.type"
+        :data="allScores.data"
+        v-if="allScores.data.datasets[0].data.length > 0"
+      ></base-chart>
+      <p v-else>학점을 입력해 주세요</p>
+    </base-card>
 
-  </base-card>
+    <h4>전체 성적</h4>
+    <base-card>
+      <base-chart
+        ref="chartComponent"
+        :type="thisScores.type"
+        :data="thisScores.data"
+      ></base-chart>
+    </base-card>
+
+    <h4>학점입력</h4>
+    <base-card class="horizontal">
+      <div v-for="(item, index) in scoreItems" :key="index">
+        <score-item></score-item>
+      </div>
+      <button @click="addScoreItem">Plus</button>
+    </base-card>
+  </div>
 </template>
 
 <script>
 import BaseChart from "../components/chart/BaseChart.vue";
 import { Chart, registerables } from "chart.js";
-import BaseCard from '../components/UI/BaseCard.vue';
+import BaseCard from "../components/UI/BaseCard.vue";
+import ScoreItem from "../components/score/ScoreItem.vue";
 Chart.register(...registerables);
 
 export default {
   components: {
     BaseChart,
     BaseCard,
+    ScoreItem,
   },
   data() {
     return {
@@ -83,15 +91,20 @@ export default {
           ],
         },
       },
+      scoreItems: [],
     };
   },
   methods: {
-    addScore(){
-
-    }
-  }
+    addScoreItem() {
+      this.scoreItems.push({});
+    },
+  },
 };
 </script>
 
 <style scoped>
+.horizontal {
+  vertical-align: middle;
+  display: table-cell;
+}
 </style>
