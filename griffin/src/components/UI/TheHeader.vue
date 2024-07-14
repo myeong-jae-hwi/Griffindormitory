@@ -24,9 +24,9 @@
         <ul>
           <li @click="closeMenu">
             <router-link to="/userinfo" class="nav-link">정보 수정</router-link>
-            <router-link to="/score" class="nav-link">학적 관리</router-link>
           </li>
           <li @click="closeMenu">
+            <router-link to="/score" class="nav-link">학적 관리</router-link>
            </li>
           <li @click="closeMenu">
             <router-link

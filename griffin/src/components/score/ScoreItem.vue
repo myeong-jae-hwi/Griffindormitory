@@ -1,9 +1,9 @@
 <template>
   <div class="vartical">
     <section class="">
-      <input type="text" />
+      <input type="text" v-model="subject" placeholder="과목명" />
     </section>
-    <select>
+    <select v-model="grade">
       <option value="A+">A+</option>
       <option value="A0">A0</option>
       <option value="B+">B+</option>
@@ -16,12 +16,27 @@
       <option value="P">P</option>
       <option value="NP">NP</option>
     </select>
+    <button @click="$emit('remove')">삭제</button>
   </div>
 </template>
 
 <script>
 export default {
-  props: [""],
+  props: ['initialSubject', 'initialGrade'],
+  data() {
+    return {
+      subject: this.initialSubject || '',
+      grade: this.initialGrade || 'A+'
+    };
+  },
+  watch: {
+    subject(newSubject) {
+      this.$emit('update-subject', newSubject);
+    },
+    grade(newGrade) {
+      this.$emit('update-grade', newGrade);
+    }
+  }
 };
 </script>
 
