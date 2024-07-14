@@ -1,5 +1,6 @@
 <template>
   <section class="container">
+    <h1 class="name">자유 게시판</h1>
     <base-card v-if="isListRoute">
       <ul v-if="hasBoards" class="list">
         <li v-for="board in boards" :key="board.id">
@@ -40,6 +41,9 @@ export default {
 </script>
 
 <style scoped>
+.name {
+  text-align: center;
+}
 .list {
   padding: 0 20px;
   list-style-type: disc;
