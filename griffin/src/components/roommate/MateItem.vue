@@ -1,10 +1,11 @@
 <template>
   <div class="container">
-    <p class="description">{{ count }}명</p>
-    <p class="description">{{ sex === 'male' ? '남자' : '여자' }}</p>
-    <p class="description">{{ location === 'east' ? '동관' : '서관' }}</p>
-    <p class="description">{{ etc === 'smoke' ? '흡연' : '음주' }}</p>
-    <p class="description">{{ preferences }}</p>
+    <!-- <p class="description">{{ preferences }}</p> -->
+    <h4 class="description">
+      {{ sex === 'male' ? '남자' : '여자' }}
+      {{ location === 'east' ? '동관' : '서관' }} {{ count }}명
+      {{ etc === 'smoke' ? '흡연' : '음주' }} 룸메이트 구합니다.
+    </h4>
   </div>
 </template>
 
@@ -16,28 +17,13 @@ export default {
 
 <style scoped>
 .container {
-  list-style-type: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border-bottom: 1px solid black;
-  margin-bottom: 10px;
+  /* border-bottom: 1px solid black; */
 }
 
-.custom-card-content {
-  list-style-type: none;
-}
-.content {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-h3 {
-  margin: 0;
-}
-
-p {
-  margin: 0;
+.description {
+  margin: 10px 20px;
 }
 </style>

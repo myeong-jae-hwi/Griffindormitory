@@ -10,7 +10,7 @@
         <label for="content">내용</label>
         <textarea id="content" v-model.trim="form.content" required></textarea>
       </div>
-      <button type="submit">등록</button>
+      <base-btn type="submit">등록</base-btn>
     </form>
   </div>
 </template>

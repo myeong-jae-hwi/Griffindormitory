@@ -1,18 +1,18 @@
 <template>
   <section class="container">
     <base-card v-if="isListRoute">
-      <ul v-if="hasBoards">
-        <board-item
-          v-for="board in boards"
-          :key="board.id"
-          :id="board.id"
-          :title="board.title"
-          :content="board.content"
-        ></board-item>
+      <ul v-if="hasBoards" class="list">
+        <li v-for="board in boards" :key="board.id">
+          <board-item
+            :id="board.id"
+            :title="board.title"
+            :content="board.content"
+          ></board-item>
+        </li>
       </ul>
     </base-card>
     <router-link to="/boardlist/register">
-      <BaseBtn v-if="isListRoute" class="board-btn">글 쓰기</BaseBtn>
+      <base-btn v-if="isListRoute" class="board-btn">글 쓰기</base-btn>
     </router-link>
     <router-view></router-view>
   </section>
@@ -40,6 +40,10 @@ export default {
 </script>
 
 <style scoped>
+.list {
+  padding: 0 20px;
+  list-style-type: disc;
+}
 .board-btn {
   position: absolute;
   display: flex;
