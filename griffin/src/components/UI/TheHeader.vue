@@ -12,7 +12,13 @@
         </router-link>
       </div>
       <div class="right-section">
-        <div id="alarm"></div>
+        <div class="alarm-section">
+          <div id="alarm">
+            <div id="notification">
+              <span v-if="notice" class="note-num"></span>
+            </div>
+          </div>
+        </div>
         <div id="menu" @click="toggleMenu">
           <span v-if="!menuOpen">☰</span>
           <span v-else>X</span>
@@ -27,7 +33,7 @@
           </li>
           <li @click="closeMenu">
             <router-link to="/score" class="nav-link">학적 관리</router-link>
-           </li>
+          </li>
           <li @click="closeMenu">
             <router-link
               v-if="isLoggedIn"
@@ -51,8 +57,8 @@
 </template>
 
 <script>
-import { auth } from '@/firebase/config.js';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from "@/firebase/config.js";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export default {
   props: {
@@ -61,11 +67,12 @@ export default {
   data() {
     return {
       menuOpen: false,
+      notice: false,
     };
   },
   created() {
     onAuthStateChanged(auth, (user) => {
-      this.$emit('login-success', user);
+      this.$emit("login-success", user);
     });
   },
   methods: {
@@ -79,14 +86,14 @@ export default {
       if (this.isLoggedIn) {
         signOut(auth)
           .then(() => {
-            this.$router.push('/login');
-            this.$emit('login-success', null);
+            this.$router.push("/login");
+            this.$emit("login-success", null);
           })
           .catch((error) => {
-            console.error('로그아웃 오류: ', error);
+            console.error("로그아웃 오류: ", error);
           });
       } else {
-        this.$router.push('/login');
+        this.$router.push("/login");
       }
       this.closeMenu();
     },
@@ -135,7 +142,7 @@ header {
 
 .center-section h1 {
   font-size: 1.5em;
-  font-family: 'Dovemayo_gothic';
+  font-family: "Dovemayo_gothic";
 }
 
 .right-section {
@@ -147,7 +154,7 @@ header {
 #alarm {
   width: 20px;
   height: 20px;
-  background-image: url('../../assets/images/bell.png');
+  background-image: url("../../assets/images/bell.png");
   background-size: cover;
   margin-right: 10px;
 }
@@ -227,5 +234,16 @@ header {
     transform: translateX(100%);
     opacity: 0;
   }
+}
+
+.note-num {
+  position: absolute;
+  margin-left: 17px;
+  z-index: 3;
+  height: 8px;
+  width: 8px;
+  background-color: rgb(255, 33, 33);
+  border-radius: 15px;
+  display: inline-block;
 }
 </style>
