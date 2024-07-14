@@ -22,17 +22,13 @@
 
     <h4>학점입력</h4>
     <base-card class="horizontal">
-      <div v-for="(item, index) in scoreItems" :key="index" class="score-item">
-        <score-item
-          :initial-subject="item.subject"
-          :initial-grade="item.grade"
-          @update-subject="updateSubject(index, $event)"
-          @update-grade="updateGrade(index, $event)"
-          @remove="removeScoreItem(index)"
-        ></score-item>
-      </div>
-      <button @click="addScoreItem">Plus</button>
-      <button @click="submitScores">확인</button>
+      <form @submit.prevent="submitForm">
+        <div v-for="(item, index) in scoreItems" :key="index">
+          <score-item :item="item" @remove="removeScoreItem(index)"></score-item>
+        </div>
+        <button type="button" @click="addScoreItem">Plus</button>
+        <button type="submit">Submit</button>
+      </form>
     </base-card>
   </div>
 </template>
@@ -82,7 +78,9 @@ export default {
           ],
         },
       },
-      scoreItems: [],
+      scoreItems: [
+        { subject: "", score: null },
+      ],
     };
   },
   created() {
@@ -90,31 +88,24 @@ export default {
   },
   methods: {
     addScoreItem() {
-      this.scoreItems.push({ subject: "", grade: "A+" });
+      this.scoreItems.push({ subject: "", score: null });
     },
     removeScoreItem(index) {
       this.scoreItems.splice(index, 1);
     },
-    updateSubject(index, newSubject) {
-      this.scoreItems[index].subject = newSubject;
-    },
-    updateGrade(index, newGrade) {
-      this.scoreItems[index].grade = newGrade;
-    },
-    async submitScores() {
+    async submitForm() {
       try {
-        const scoresArray = this.scoreItems.map(item => [item.subject, this.convertGradeToPoint(item.grade)]);
         await fetch(`${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(scoresArray),
+          body: JSON.stringify(this.scoreItems),
         });
         this.fetchScores();  // 데이터 저장 후 최신 데이터를 다시 가져옴
-        this.scoreItems = [];  // 제출 후 입력 필드 초기화
+        this.scoreItems = [{ subject: "", score: null }];
       } catch (error) {
-        console.error("Error submitting scores:", error);
+        console.error("Error submitting form:", error);
       }
     },
     async fetchScores() {
@@ -124,35 +115,20 @@ export default {
         
         // 데이터 처리 및 차트 업데이트
         const subjects = [];
-        const grades = [];
+        const scores = [];
         for (const key in data) {
-          const item = data[key];
-          subjects.push(item[0]);
-          grades.push(item[1]);
+          for (const item of data[key]) {
+            subjects.push(item.subject);
+            scores.push(item.score);
+          }
         }
         
         this.allScores.data.labels = subjects;
-        this.allScores.data.datasets[0].data = grades;
+        this.allScores.data.datasets[0].data = scores;
       } catch (error) {
         console.error("Error fetching scores:", error);
       }
     },
-    convertGradeToPoint(grade) {
-      const gradeMap = {
-        "A+": 4.5,
-        "A0": 4.0,
-        "B+": 3.5,
-        "B0": 3.0,
-        "C+": 2.5,
-        "C0": 2.0,
-        "D+": 1.5,
-        "D0": 1.0,
-        "F": 0.0,
-        "P": 0.0,
-        "NP": 0.0
-      };
-      return gradeMap[grade] || 0;
-    }
   },
 };
 </script>
@@ -161,17 +137,5 @@ export default {
 .horizontal {
   vertical-align: middle;
   display: table-cell;
-}
-
-.score-item {
-  margin-bottom: 10px;
-}
-
-.score-item input {
-  margin-right: 10px;
-}
-
-.score-item button {
-  margin-right: 5px;
 }
 </style>
