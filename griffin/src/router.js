@@ -8,6 +8,7 @@ import RegisterForm from './pages/board/RegisterForm.vue';
 import LoginForm from './menu/LoginForm.vue';
 import UserInfo from './menu/UserInfo.vue';
 import UserScore from './menu/UserScore.vue';
+import BoardDetail from './pages/board/BoardDetail.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,6 +19,15 @@ const router = createRouter({
       path: '/boardlist',
       component: BoardList,
       children: [{ path: 'register', component: RegisterForm }],
+    },
+    {
+      path: '/boardlist/:id',
+      component: BoardDetail,
+      props: (route) => ({
+        id: route.params.id,
+        title: decodeURIComponent(route.query.title),
+        content: decodeURIComponent(route.query.content),
+      }),
     },
     {
       path: '/roommateboard',

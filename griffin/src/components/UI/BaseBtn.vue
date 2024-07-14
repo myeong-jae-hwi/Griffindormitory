@@ -13,6 +13,9 @@ export default {};
 <style scoped>
 .btn-container {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .btn {
   font-family: 'Roboto', sans-serif;
@@ -20,7 +23,7 @@ export default {};
   outline: 0;
   background: #c4babc;
   text-align: center;
-  width: auto;
+  width: 100%;
   border: none;
   border-radius: 8px;
   padding: 14px;
