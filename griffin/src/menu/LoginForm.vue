@@ -1,38 +1,42 @@
 <template>
-  <div class="login-box">
-    <h2>{{ isLogin ? '로그인' : '회원가입' }}</h2>
-    <form @submit.prevent="handleSubmit">
-      <div class="user-box" v-if="!isLogin">
-        <input type="text" v-model="name" required />
-        <label>이름</label>
-      </div>
-      <div class="user-box" v-if="!isLogin">
-        <input type="text" v-model="university" required />
-        <label>대학교</label>
-      </div>
-      <div class="user-box" v-if="!isLogin">
-        <input type="text" v-model="studentId" required />
-        <label>학번 또는 수험 응시 번호</label>
-      </div>
-      <div class="user-box">
-        <input type="email" v-model="email" required />
-        <label>이메일</label>
-      </div>
-      <div class="user-box">
-        <input type="password" v-model="password" required />
-        <label>비밀번호</label>
-      </div>
-      <div class="user-box" v-if="!isLogin">
-        <input type="password" v-model="confirmPassword" required />
-        <label>비밀번호 확인</label>
-      </div>
-      <div>
-        <button type="submit" class="submit-btn">
-          {{ isLogin ? '로그인' : '회원가입' }}
-        </button>
-      </div>
-      <a href="#" @click="toggleForm">{{ isLogin ? '회원가입' : '로그인' }}</a>
-    </form>
+  <div class="login-container">
+    <div class="login-box">
+      <h2>{{ isLogin ? '로그인' : '회원가입' }}</h2>
+      <form @submit.prevent="handleSubmit">
+        <div class="user-box" v-if="!isLogin">
+          <input type="text" v-model="name" required />
+          <label>이름</label>
+        </div>
+        <div class="user-box" v-if="!isLogin">
+          <input type="text" v-model="university" required />
+          <label>대학교</label>
+        </div>
+        <div class="user-box" v-if="!isLogin">
+          <input type="text" v-model="studentId" required />
+          <label>학번 또는 수험 응시 번호</label>
+        </div>
+        <div class="user-box">
+          <input type="email" v-model="email" required />
+          <label>이메일</label>
+        </div>
+        <div class="user-box">
+          <input type="password" v-model="password" required />
+          <label>비밀번호</label>
+        </div>
+        <div class="user-box" v-if="!isLogin">
+          <input type="password" v-model="confirmPassword" required />
+          <label>비밀번호 확인</label>
+        </div>
+        <div>
+          <button type="submit" class="submit-btn">
+            {{ isLogin ? '로그인' : '회원가입' }}
+          </button>
+        </div>
+        <a href="#" @click="toggleForm">{{
+          isLogin ? '회원가입' : '로그인'
+        }}</a>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -81,6 +85,7 @@ export default {
           );
           console.log('로그인 성공');
           console.log('Logged in user UID:', userCredential.user.uid);
+          this.$emit('login-success', userCredential.user); // 로그인 성공 이벤트 발생
           this.$router.push('/info');
         } catch (error) {
           console.error('Firebase 오류: ', error);
@@ -119,6 +124,7 @@ export default {
           console.log('회원가입 성공');
           console.log('Logged in user UID:', user.uid);
           alert('회원가입 성공 하였습니다!');
+          this.$emit('login-success', user); // 회원가입 성공 이벤트 발생
           this.$router.push('/info');
         } catch (error) {
           console.error('Firebase 오류: ', error);
@@ -135,17 +141,27 @@ export default {
 </script>
 
 <style scoped>
-html {
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   height: 100%;
 }
 
 .login-box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
   width: 400px;
   padding: 40px;
-  transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);

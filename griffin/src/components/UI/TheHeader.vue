@@ -23,13 +23,26 @@
       <div class="dropdown-menu" v-if="menuOpen">
         <ul>
           <li @click="closeMenu">
-            <router-link to="/login" class="nav-link">로그인</router-link>
-          </li>
-          <li @click="closeMenu">
             <router-link to="/userinfo" class="nav-link">정보 수정</router-link>
+            <router-link to="/score" class="nav-link">학적 관리</router-link>
           </li>
           <li @click="closeMenu">
-            <router-link to="/score" class="nav-link">학적 관리</router-link>
+           </li>
+          <li @click="closeMenu">
+            <router-link
+              v-if="isLoggedIn"
+              @click="handleAuthAction"
+              to="/"
+              class="nav-link"
+              >로그아웃</router-link
+            >
+            <router-link
+              v-else
+              @click="handleAuthAction"
+              to="/login"
+              class="nav-link"
+              >로그인</router-link
+            >
           </li>
         </ul>
       </div>
@@ -38,16 +51,22 @@
 </template>
 
 <script>
-import { RouterLink } from 'vue-router';
+import { auth } from '@/firebase/config.js';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 export default {
-  components: {
-    RouterLink,
+  props: {
+    isLoggedIn: Boolean,
   },
   data() {
     return {
       menuOpen: false,
     };
+  },
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      this.$emit('login-success', user);
+    });
   },
   methods: {
     toggleMenu() {
@@ -56,17 +75,28 @@ export default {
     closeMenu() {
       this.menuOpen = false;
     },
+    handleAuthAction() {
+      if (this.isLoggedIn) {
+        signOut(auth)
+          .then(() => {
+            this.$router.push('/login');
+            this.$emit('login-success', null);
+          })
+          .catch((error) => {
+            console.error('로그아웃 오류: ', error);
+          });
+      } else {
+        this.$router.push('/login');
+      }
+      this.closeMenu();
+    },
   },
 };
 </script>
 
 <style scoped>
-@font-face {
-  font-family: 'Dovemayo_gothic';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2')
-    format('woff2');
-  font-weight: normal;
-  font-style: normal;
+html {
+  height: 100%;
 }
 
 .header-container {
@@ -130,18 +160,18 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px; /* 메뉴 아이콘 크기 조정 */
+  font-size: 24px;
 }
 
 .dropdown-menu {
   position: absolute;
-  top: 8vh; /* 헤더 바로 아래에 위치 */
+  top: 8vh;
   right: 0;
   background-color: white;
   border: 1px solid #ddd;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  width: 200px; /* 메뉴의 너비 조정 */
+  width: 200px;
   text-align: center;
   overflow: hidden;
 }
