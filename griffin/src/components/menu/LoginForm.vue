@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { auth, database } from '../firebase/config.js';
+import { auth, database } from '@/firebase/config.js';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -85,7 +85,7 @@ export default {
           );
           console.log('로그인 성공');
           console.log('Logged in user UID:', userCredential.user.uid);
-          this.$emit('login-success', userCredential.user); // 로그인 성공 이벤트 발생
+          this.$emit('login-success', userCredential.user);
           this.$router.push('/info');
         } catch (error) {
           console.error('Firebase 오류: ', error);
@@ -124,7 +124,7 @@ export default {
           console.log('회원가입 성공');
           console.log('Logged in user UID:', user.uid);
           alert('회원가입 성공 하였습니다!');
-          this.$emit('login-success', user); // 회원가입 성공 이벤트 발생
+          this.$emit('login-success', user);
           this.$router.push('/info');
         } catch (error) {
           console.error('Firebase 오류: ', error);

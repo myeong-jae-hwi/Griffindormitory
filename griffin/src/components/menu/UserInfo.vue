@@ -41,7 +41,7 @@
 
 <script>
 import { ref, update } from 'firebase/database';
-import { database, auth } from '../firebase/config';
+import { database, auth } from '@/firebase/config';
 
 export default {
   data() {

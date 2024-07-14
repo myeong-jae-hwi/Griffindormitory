@@ -38,10 +38,10 @@
 </template>
 
 <script>
-import BaseChart from "../components/chart/BaseChart.vue";
-import { Chart, registerables } from "chart.js";
-import BaseCard from "../components/UI/BaseCard.vue";
-import ScoreItem from "../components/score/ScoreItem.vue";
+import BaseChart from '../chart/BaseChart.vue';
+import { Chart, registerables } from 'chart.js';
+import BaseCard from '../UI/BaseCard.vue';
+import ScoreItem from '../score/ScoreItem.vue';
 
 Chart.register(...registerables);
 
@@ -54,30 +54,30 @@ export default {
   data() {
     return {
       allScores: {
-        type: "bar",
+        type: 'bar',
         data: {
           labels: [],
           datasets: [
             {
-              label: "이번학기 성적",
+              label: '이번학기 성적',
               data: [],
-              backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-              borderColor: ["rgba(255, 99, 132, 1)"],
+              backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+              borderColor: ['rgba(255, 99, 132, 1)'],
               borderWidth: 1,
             },
           ],
         },
       },
       thisScores: {
-        type: "line",
+        type: 'line',
         data: {
           labels: [],
           datasets: [
             {
-              label: "전체 성적",
+              label: '전체 성적',
               data: [],
-              backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-              borderColor: ["rgba(255, 99, 132, 1)"],
+              backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+              borderColor: ['rgba(255, 99, 132, 1)'],
               borderWidth: 1,
             },
           ],
@@ -91,9 +91,9 @@ export default {
   },
   methods: {
     addScoreItem() {
-      this.scoreItems.push({ subject: "", grade: "A+" });
-      console.log(this.allScores)
-      console.log(this.allScores.data.datasets[0].data.length)
+      this.scoreItems.push({ subject: '', grade: 'A+' });
+      console.log(this.allScores);
+      console.log(this.allScores.data.datasets[0].data.length);
     },
     removeScoreItem(index) {
       this.scoreItems.splice(index, 1);
@@ -106,25 +106,33 @@ export default {
     },
     async submitScores() {
       try {
-        const scoresArray = this.scoreItems.map(item => [item.subject, this.convertGradeToPoint(item.grade)]);
-        await fetch(`${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(scoresArray),
-        });
-        this.fetchScores();  // 데이터 저장 후 최신 데이터를 다시 가져옴
-        this.scoreItems = [];  // 제출 후 입력 필드 초기화
+        const scoresArray = this.scoreItems.map((item) => [
+          item.subject,
+          this.convertGradeToPoint(item.grade),
+        ]);
+        await fetch(
+          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(scoresArray),
+          }
+        );
+        this.fetchScores(); // 데이터 저장 후 최신 데이터를 다시 가져옴
+        this.scoreItems = []; // 제출 후 입력 필드 초기화
       } catch (error) {
-        console.error("Error submitting scores:", error);
+        console.error('Error submitting scores:', error);
       }
     },
     async fetchScores() {
       try {
-        const response = await fetch(`${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`);
+        const response = await fetch(
+          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`
+        );
         const data = await response.json();
-        
+
         // 데이터 처리 및 차트 업데이트
         const subjects = [];
         const grades = [];
@@ -136,33 +144,33 @@ export default {
             subjects.push(item[value][0]);
             grades.push(item[value][1]);
           }
-          console.log("item: "+ item.length )
+          console.log('item: ' + item.length);
         }
-        console.log("subjects:" + subjects)
-        console.log("grades:" + grades)
+        console.log('subjects:' + subjects);
+        console.log('grades:' + grades);
 
         this.allScores.data.labels = subjects;
         this.allScores.data.datasets[0].data = grades;
       } catch (error) {
-        console.error("Error fetching scores:", error);
+        console.error('Error fetching scores:', error);
       }
     },
     convertGradeToPoint(grade) {
       const gradeMap = {
-        "A+": 4.5,
-        "A0": 4.0,
-        "B+": 3.5,
-        "B0": 3.0,
-        "C+": 2.5,
-        "C0": 2.0,
-        "D+": 1.5,
-        "D0": 1.0,
-        "F": 0.0,
-        "P": 0.0,
-        "NP": 0.0
+        'A+': 4.5,
+        A0: 4.0,
+        'B+': 3.5,
+        B0: 3.0,
+        'C+': 2.5,
+        C0: 2.0,
+        'D+': 1.5,
+        D0: 1.0,
+        F: 0.0,
+        P: 0.0,
+        NP: 0.0,
       };
       return gradeMap[grade] || 0;
-    }
+    },
   },
 };
 </script>
