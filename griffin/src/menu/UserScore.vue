@@ -6,7 +6,7 @@
         ref="chartComponent"
         :type="allScores.type"
         :data="allScores.data"
-        v-if="allScores.data.datasets[0].data.length > 0"
+        v-if="allScores.data.labels.length > 0"
       ></base-chart>
       <p v-else>학점을 입력해 주세요</p>
     </base-card>
@@ -42,6 +42,7 @@ import BaseChart from "../components/chart/BaseChart.vue";
 import { Chart, registerables } from "chart.js";
 import BaseCard from "../components/UI/BaseCard.vue";
 import ScoreItem from "../components/score/ScoreItem.vue";
+
 Chart.register(...registerables);
 
 export default {
@@ -91,6 +92,8 @@ export default {
   methods: {
     addScoreItem() {
       this.scoreItems.push({ subject: "", grade: "A+" });
+      console.log(this.allScores)
+      console.log(this.allScores.data.datasets[0].data.length)
     },
     removeScoreItem(index) {
       this.scoreItems.splice(index, 1);
@@ -125,12 +128,19 @@ export default {
         // 데이터 처리 및 차트 업데이트
         const subjects = [];
         const grades = [];
+
         for (const key in data) {
           const item = data[key];
-          subjects.push(item[0]);
-          grades.push(item[1]);
+
+          for (const value in item) {
+            subjects.push(item[value][0]);
+            grades.push(item[value][1]);
+          }
+          console.log("item: "+ item.length )
         }
-        
+        console.log("subjects:" + subjects)
+        console.log("grades:" + grades)
+
         this.allScores.data.labels = subjects;
         this.allScores.data.datasets[0].data = grades;
       } catch (error) {
