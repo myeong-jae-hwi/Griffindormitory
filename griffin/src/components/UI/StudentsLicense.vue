@@ -22,14 +22,16 @@ export default {
   width: 10vh;
   height: 10vh;
   border-radius: 50%;
-  background-color: blue;
+  background-image: url("../../assets/images/BaseProfile.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 3%;
 }
 .vertical{
   width: 30vh;
   height: 13vh;
   display: block;
   margin-left: 20px;
-  /* background-color: aquamarine; */
 }
 h2{
   margin: 0;
