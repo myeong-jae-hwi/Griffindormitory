@@ -3,36 +3,36 @@
     <students-license></students-license>
 
     <h3>자유 게시판</h3>
-    <base-card>
-      <div>
-        <board-item
-          v-for="board in boards"
-          :key="board.id"
-          :id="board.id"
-          :title="board.title"
-          :content="board.content"
-        ></board-item>
-      </div>
-      <p>
+    <base-card class="card">
+      <ul v-if="hasBoards" class="list">
+        <li v-for="board in boards" :key="board.id">
+          <board-item
+            :id="board.id"
+            :title="board.title"
+            :content="board.content"
+          ></board-item>
+        </li>
+      </ul>
+      <p class="more">
         <router-link to="/boardlist">더보기</router-link>
       </p>
     </base-card>
 
     <h3>룸메이트 모집 게시판</h3>
-    <base-card>
-      <div>
-        <mate-item
-          v-for="mate in mates"
-          :key="mate.id"
-          :id="mate.id"
-          :count="mate.count"
-          :sex="mate.sex"
-          :location="mate.location"
-          :etc="mate.etc"
-          :preferences="mate.preferences"
-        ></mate-item>
-      </div>
-      <p>
+    <base-card class="card">
+      <ul class="list">
+        <li v-for="mate in mates" :key="mate.id">
+          <mate-item
+            :id="mate.id"
+            :count="mate.count"
+            :sex="mate.sex"
+            :location="mate.location"
+            :etc="mate.etc"
+            :preferences="mate.preferences"
+          ></mate-item>
+        </li>
+      </ul>
+      <p class="more">
         <router-link to="/roommateboard">더보기</router-link>
       </p>
     </base-card>
@@ -61,9 +61,21 @@ export default {
   },
   created() {
     this.$store.dispatch('boards/fetchInitialData');
-    this.$store.dispatch('mates/fetchInitialData');
+    this.$store.dispatch('fetchInitialData');
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+h3 {
+  margin-left: 20px;
+}
+.card {
+  position: relative;
+}
+.more {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+}
+</style>
