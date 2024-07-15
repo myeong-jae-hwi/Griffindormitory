@@ -1,4 +1,4 @@
-<template>
+<!--<template>
   <div>
     <h4>이번 학기 성적</h4>
     <base-card>
@@ -85,7 +85,9 @@ export default {
   },
   created() {
     this.fetchScores();
+    console.log("제발좀!!!"+ this.scoreItems)
     this.fetchSchedules();
+    
   },
   methods: {
     async fetchSchedules() {
@@ -101,7 +103,7 @@ export default {
       } catch (error) {
         console.error("Error fetching schedules:", error);
       }
-      console.log("제발좀!!!"+ this.scoreItems)
+      
     },
     addScoreItem() {
       this.scoreItems.push({ subject: "", score: null });
@@ -155,3 +157,4 @@ export default {
   display: table-cell;
 }
 </style>
+->
