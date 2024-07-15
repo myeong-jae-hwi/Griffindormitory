@@ -1,7 +1,13 @@
 <template>
   <div>
-    <base-card>
-      <h2>{{ title }}</h2>
+    <div class="title-header">
+      <div class="profile"></div>
+      <div>
+        <h4>{{ title }}</h4>
+        <p>작성자 : 이성우랑우탄</p>
+      </div>
+    </div>
+    <base-card class="horizontal">
       <p>{{ content }}</p>
     </base-card>
     <section class="comment-section">
@@ -17,16 +23,18 @@
 
 <script>
 export default {
-  props: ['id', 'name', 'title', 'content'],
+  props: ["id", "title", "content"],
 };
 </script>
 
 <style scoped>
-h2 {
-  font-size: 24px;
+h4 {
+  margin: 10px;
+  margin-bottom: 0;
 }
 
 p {
+  margin: 10px;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -57,5 +65,20 @@ p {
   font-size: 14px;
   border: none;
   cursor: pointer;
+}
+
+.profile {
+  width: 5vh;
+  height: 5vh;
+  border-radius: 50%;
+  background-image: url("../../assets/images/BaseProfile.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 3%;
+}
+
+.title-header {
+  display: flex;
+  align-items: center;
 }
 </style>

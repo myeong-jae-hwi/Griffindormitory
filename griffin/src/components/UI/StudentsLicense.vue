@@ -28,10 +28,11 @@ export default {
   margin-left: 3%;
 }
 .vertical{
-  width: 30vh;
-  height: 13vh;
+  position: relative;
   display: block;
   margin-left: 20px;
+  padding-top: 2%;
+  padding-bottom: 2%;
 }
 h2{
   margin: 0;
