@@ -18,17 +18,18 @@ const router = createRouter({
     {
       path: '/boardlist',
       component: BoardList,
-      children: [{ path: 'register', component: RegisterForm }],
-    },
-    {
-      path: '/boardlist/:id',
-      component: BoardDetail,
-      props: (route) => ({
-        id: route.params.id,
-        title: decodeURIComponent(route.query.title),
-        content: decodeURIComponent(route.query.content),
-        time: decodeURIComponent(route.query.time),
-      }),
+      children: [
+        { path: 'register', component: RegisterForm },
+        {
+          path: '/boardlist/:id',
+          component: BoardDetail,
+          props: (route) => ({
+            id: route.params.id,
+            title: decodeURIComponent(route.query.title),
+            content: decodeURIComponent(route.query.content),
+          }),
+        },
+      ],
     },
     {
       path: '/roommateboard',
