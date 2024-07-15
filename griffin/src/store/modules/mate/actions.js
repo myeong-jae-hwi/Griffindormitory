@@ -20,7 +20,7 @@ export default {
           etc: matesData[key].etc,
           preferences: matesData[key].preferences,
         };
-        mates.push(mate);
+        mates.unshift(mate);
       }
       context.commit('setMates', mates);
     } catch (error) {
