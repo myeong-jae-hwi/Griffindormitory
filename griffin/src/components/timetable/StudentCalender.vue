@@ -309,8 +309,12 @@ export default {
             const snapshot = await get(dayRef);
             if (snapshot.exists()) {
               this.schedules[day] = snapshot.val().schedules || [];
+              console.log("1"+ this.schedules[day])
+
             } else {
               this.schedules[day] = [];
+              console.log("2" + this.schedules[day])
+
             }
           });
           await Promise.all(promises);

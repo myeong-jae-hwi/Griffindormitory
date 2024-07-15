@@ -9,6 +9,7 @@ import LoginForm from './menu/LoginForm.vue';
 import UserInfo from './menu/UserInfo.vue';
 import UserScore from './menu/UserScore.vue';
 import BoardDetail from './pages/board/BoardDetail.vue';
+import StudentCalender from './components/timetable/StudentCalender.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -37,6 +38,8 @@ const router = createRouter({
     { path: '/login', component: LoginForm },
     { path: '/userinfo', component: UserInfo },
     { path: '/score', component: UserScore },
+    { path: '/timetable', component: StudentCalender },
+
   ],
 });
 

@@ -38,6 +38,7 @@ import BaseChart from "../components/chart/BaseChart.vue";
 import { Chart, registerables } from "chart.js";
 import BaseCard from "../components/UI/BaseCard.vue";
 import ScoreItem from "../components/score/ScoreItem.vue";
+import StudentCalender from "../components/timetable/StudentCalender.vue";
 Chart.register(...registerables);
 
 export default {
@@ -45,6 +46,7 @@ export default {
     BaseChart,
     BaseCard,
     ScoreItem,
+    StudentCalender
   },
   data() {
     return {
@@ -78,15 +80,29 @@ export default {
           ],
         },
       },
-      scoreItems: [
-        { subject: "", score: null },
-      ],
+      scoreItems: [],
     };
   },
   created() {
     this.fetchScores();
+    this.fetchSchedules();
   },
   methods: {
+    async fetchSchedules() {
+      try {
+        const response = await fetch(`${process.env.VUE_APP_FIREBASE_DATABASE_URL}/schedules.json`);
+        const data = await response.json();
+        
+        this.scoreItems = Object.values(data).map(schedule => ({
+          subject: schedule.title,
+          score: null
+        }));
+
+      } catch (error) {
+        console.error("Error fetching schedules:", error);
+      }
+      console.log("제발좀!!!"+ this.scoreItems)
+    },
     addScoreItem() {
       this.scoreItems.push({ subject: "", score: null });
     },
