@@ -1,14 +1,11 @@
 <template>
   <div>
-    <div class="title-header">
-      <div class="profile"></div>
-      <div>
-        <h4>{{ title }}</h4>
-        <p>작성자 : 이성우랑우탄</p>
-      </div>
-    </div>
-    <base-card class="horizontal">
-      <p>{{ content }}</p>
+    <base-card>
+      <h2>{{ title }}</h2>
+      <p>
+        {{ utcToKor }}<br />
+        {{ content }}
+      </p>
     </base-card>
     <section class="comment-section">
       <input
@@ -22,8 +19,18 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
-  props: ["id", "title", "content"],
+  props: ['id', 'name', 'title', 'content', 'time'],
+  computed: {
+    utcToKor() {
+      return moment.utc(this.time).local().format('YYYY-MM-DD HH:mm:ss');
+    },
+  },
+  created() {
+    console.log('Time prop: ', this.time);
+  },
 };
 </script>
 
