@@ -2,7 +2,10 @@
   <div>
     <base-card>
       <h2>{{ title }}</h2>
-      <p>{{ content }}</p>
+      <p>
+        {{ utcToKor }}<br />
+        {{ content }}
+      </p>
     </base-card>
     <section class="comment-section">
       <input
@@ -16,8 +19,18 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
-  props: ['id', 'name', 'title', 'content'],
+  props: ['id', 'name', 'title', 'content', 'time'],
+  computed: {
+    utcToKor() {
+      return moment.utc(this.time).local().format('YYYY-MM-DD HH:mm:ss');
+    },
+  },
+  created() {
+    console.log('Time prop: ', this.time);
+  },
 };
 </script>
 
