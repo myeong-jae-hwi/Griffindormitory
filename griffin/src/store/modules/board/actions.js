@@ -17,8 +17,9 @@ export default {
           id: key,
           title: boardsData[key].title,
           content: boardsData[key].content,
+          time: boardsData[key].time,
         };
-        boards.push(board);
+        boards.unshift(board);
       }
 
       context.commit('setBoards', boards);
@@ -31,6 +32,7 @@ export default {
     const boardData = {
       title: data.title,
       content: data.content,
+      time: new Date().toISOString(),
     };
 
     try {

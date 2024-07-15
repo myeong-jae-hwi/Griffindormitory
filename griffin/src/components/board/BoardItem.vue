@@ -2,12 +2,13 @@
   <section class="board-list" @click="goToDetail">
     <h4 class="title">{{ title }}</h4>
     <p class="description">{{ content }}</p>
+    <p class="description">{{ time }}</p>
   </section>
 </template>
 
 <script>
 export default {
-  props: ['id', 'name', 'title', 'content'],
+  props: ['id', 'name', 'title', 'content', 'time'],
   methods: {
     goToDetail() {
       this.$router.push({
@@ -15,6 +16,7 @@ export default {
         query: {
           title: encodeURIComponent(this.title),
           content: encodeURIComponent(this.content),
+          time: encodeURIComponent(this.time),
         },
       });
     },
