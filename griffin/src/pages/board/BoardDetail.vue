@@ -35,11 +35,13 @@ export default {
 </script>
 
 <style scoped>
-h2 {
-  font-size: 24px;
+h4 {
+  margin: 10px;
+  margin-bottom: 0;
 }
 
 p {
+  margin: 10px;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -70,5 +72,20 @@ p {
   font-size: 14px;
   border: none;
   cursor: pointer;
+}
+
+.profile {
+  width: 5vh;
+  height: 5vh;
+  border-radius: 50%;
+  background-image: url("../../assets/images/BaseProfile.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 3%;
+}
+
+.title-header {
+  display: flex;
+  align-items: center;
 }
 </style>
