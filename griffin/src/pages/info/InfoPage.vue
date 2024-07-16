@@ -2,8 +2,9 @@
   <div>
     <students-license></students-license>
 
-    <h3>자유 게시판</h3>
     <base-card class="card">
+      <h3>자유 게시판</h3>
+
       <p class="more">
         <router-link to="/boardlist">더보기</router-link>
       </p>
@@ -18,8 +19,9 @@
       </ul>
     </base-card>
 
-    <h3>룸메이트 모집 게시판</h3>
     <base-card class="card">
+        <h3>룸메이트 모집 게시판</h3>
+
       <ul class="list">
         <li v-for="mate in mates" :key="mate.id">
           <mate-item
@@ -58,11 +60,16 @@ export default {
       mates: "mates",
       hasMates: "hasMates",
     }),
+
   },
   created() {
     this.$store.dispatch("boards/fetchInitialData");
     this.$store.dispatch("fetchInitialData");
+    
   },
+  methods: {
+    
+  }
 };
 </script>
 
@@ -72,7 +79,8 @@ h3 {
 }
 .card {
   position: relative;
-  display: block;
+  display: block !important;
+
 }
 .more {
   position: absolute;
@@ -86,7 +94,13 @@ h3 {
 
 li {
   width: 100%;
-  border-bottom: solid 1px #dedede;
+  border-top: solid 1px #ececec;
+  border-bottom: solid 1px #ececec;
+
+}
+
+h3{
+  display: block;
 }
 
 ul {
@@ -94,7 +108,6 @@ ul {
 }
 
 a {
-  display: block;
   color: #6a6a6a;
   font-size: 13px;
 }
