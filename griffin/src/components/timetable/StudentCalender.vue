@@ -307,10 +307,14 @@ export default {
           const promises = this.days.map(async (day) => {
             const dayRef = child(dbRef, day);
             const snapshot = await get(dayRef);
+
+            // 요일에 데이터가 있으면 true 없으면 else로 빠짐 
             if (snapshot.exists()) {
               this.schedules[day] = snapshot.val().schedules || [];
+              console.log("1"+ this.schedules[day])
             } else {
               this.schedules[day] = [];
+              // console.log("2" + this.schedules[day])
             }
           });
           await Promise.all(promises);

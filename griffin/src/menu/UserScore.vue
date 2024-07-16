@@ -104,10 +104,10 @@ export default {
     updateGrade(index, newGrade) {
       this.scoreItems[index].grade = newGrade;
     },
-    async submitScores() {
+    async submitScores() {        // 확인 눌렀을 때 DB에 저장하는 부분인데 경로 변경해야함 
       try {
         const scoresArray = this.scoreItems.map(item => [item.subject, this.convertGradeToPoint(item.grade)]);
-        await fetch(`${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`, {
+        await fetch(`${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`, {                       
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export default {
     },
     async fetchScores() {
       try {
-        const response = await fetch(`${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`);
+        const response = await fetch(`${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`);       // 경로 변경 
         const data = await response.json();
         
         // 데이터 처리 및 차트 업데이트
@@ -132,7 +132,7 @@ export default {
         for (const key in data) {
           const item = data[key];
 
-          for (const value in item) {
+          for (const value in item) {             // 변경한 경로에 맞게 수정 
             subjects.push(item[value][0]);
             grades.push(item[value][1]);
           }
