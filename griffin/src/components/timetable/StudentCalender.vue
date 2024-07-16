@@ -17,11 +17,11 @@
       <thead>
         <tr class="days">
           <th></th>
-          <th>월</th>
-          <th>화</th>
-          <th>수</th>
-          <th>목</th>
-          <th>금</th>
+          <th>월요일</th>
+          <th>화요일</th>
+          <th>수요일</th>
+          <th>목요일</th>
+          <th>금요일</th>
         </tr>
       </thead>
       <tbody>
@@ -45,7 +45,7 @@
       <div class="modal-content">
         <span class="close" @click="closeAddModal">&times;</span>
         <h2>스케줄 추가</h2>
-        <form @submit.prevent="addSchedule" class="schedule-form">
+        <form @submit.prevent="submitNewSchedule" class="schedule-form">
           <input
             v-model="newSchedule.title"
             type="text"
@@ -53,42 +53,32 @@
             required
           />
           <div class="time-select">
-            <select
-              v-model="newSchedule.startHour"
-              @change="updateAmPm('start')"
-              required
-            >
+            <select v-model="newSchedule.startHour" required>
               <option v-for="hour in hours" :key="hour" :value="hour">
-                {{ hour }}
+                {{ hour }}시
               </option>
             </select>
             <select v-model="newSchedule.startMinute" required>
               <option v-for="minute in minutes" :key="minute" :value="minute">
-                {{ minute }}
+                {{ minute }}분
               </option>
             </select>
-            <span>{{ newSchedule.startAmPm }}</span>
           </div>
           <div class="time-select">
-            <select
-              v-model="newSchedule.endHour"
-              @change="updateAmPm('end')"
-              required
-            >
+            <select v-model="newSchedule.endHour" required>
               <option v-for="hour in hours" :key="hour" :value="hour">
-                {{ hour }}
+                {{ hour }}시
               </option>
             </select>
             <select v-model="newSchedule.endMinute" required>
               <option v-for="minute in minutes" :key="minute" :value="minute">
-                {{ minute }}
+                {{ minute }}분
               </option>
             </select>
-            <span>{{ newSchedule.endAmPm }}</span>
           </div>
           <select v-model="newSchedule.day" required class="day-select">
             <option v-for="day in days" :key="day" :value="day">
-              {{ day }}
+              {{ day }}요일
             </option>
           </select>
           <button class="confirm-button" type="submit">추가</button>
@@ -109,6 +99,52 @@
         <button @click="removeSchedule(selectedDay, selectedIndex)">
           삭제
         </button>
+        <button @click="openEditModal">수정</button>
+      </div>
+    </div>
+
+    <div v-if="editModalVisible" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeEditModal">&times;</span>
+        <h2>스케줄 수정</h2>
+        <form @submit.prevent="updateSchedule" class="schedule-form">
+          <input
+            v-model="selectedSchedule.title"
+            type="text"
+            placeholder="수업명"
+            required
+          />
+          <div class="time-select">
+            <select v-model="selectedSchedule.startHour" required>
+              <option v-for="hour in hours" :key="hour" :value="hour">
+                {{ hour }}시
+              </option>
+            </select>
+            <select v-model="selectedSchedule.startMinute" required>
+              <option v-for="minute in minutes" :key="minute" :value="minute">
+                {{ minute }}분
+              </option>
+            </select>
+          </div>
+          <div class="time-select">
+            <select v-model="selectedSchedule.endHour" required>
+              <option v-for="hour in hours" :key="hour" :value="hour">
+                {{ hour }}시
+              </option>
+            </select>
+            <select v-model="selectedSchedule.endMinute" required>
+              <option v-for="minute in minutes" :key="minute" :value="minute">
+                {{ minute }}분
+              </option>
+            </select>
+          </div>
+          <select v-model="selectedSchedule.day" required class="day-select">
+            <option v-for="day in days" :key="day" :value="day">
+              {{ day }}요일
+            </option>
+          </select>
+          <button class="confirm-button" type="submit">수정</button>
+        </form>
       </div>
     </div>
   </div>
@@ -140,8 +176,6 @@ export default {
         startMinute: '00',
         endHour: '08',
         endMinute: '00',
-        startAmPm: '오전',
-        endAmPm: '오전',
         day: '월',
       },
       schedules: {
@@ -218,6 +252,7 @@ export default {
       },
       modalVisible: false,
       addModalVisible: false,
+      editModalVisible: false,
       selectedSchedule: {},
       selectedDay: '',
       selectedIndex: null,
@@ -244,23 +279,10 @@ export default {
       }
     },
     async addSchedule() {
-      const {
-        title,
-        startHour,
-        startMinute,
-        endHour,
-        endMinute,
-        startAmPm,
-        endAmPm,
-        day,
-      } = this.newSchedule;
-
-      const startTime = this.convertTo24HourFormat(
-        startHour,
-        startMinute,
-        startAmPm
-      );
-      const endTime = this.convertTo24HourFormat(endHour, endMinute, endAmPm);
+      const { title, startHour, startMinute, endHour, endMinute, day } =
+        this.newSchedule;
+      const startTime = `${startHour}:${startMinute}`;
+      const endTime = `${endHour}:${endMinute}`;
 
       if (title && startTime && endTime && day) {
         if (this.isScheduleConflict(day, startTime, endTime)) {
@@ -275,8 +297,6 @@ export default {
           startMinute: '00',
           endHour: '08',
           endMinute: '00',
-          startAmPm: '오전',
-          endAmPm: '오전',
           day: '월',
         };
         this.closeAddModal();
@@ -284,10 +304,13 @@ export default {
         if (this.user) {
           try {
             const encodedSemester = encodeURIComponent(
-              this.selectedSemester.replace(/ /g, '_')
+              this.selectedSemester
+                .replace(/ /g, '_')
+                .replace(/학년/g, 'grade')
+                .replace(/학기/g, 'semester')
             );
-            const semesterPath = `users/${this.user.uid}/semesters/${encodedSemester}/${day}`;
-            const dbRef = ref(db, semesterPath);
+            const tablePath = `users/${this.user.uid}/semesters/${encodedSemester}/${day}`;
+            const dbRef = ref(db, tablePath);
             await set(dbRef, { schedules: this.schedules[day] });
             console.log('시간표가 저장되었습니다.');
           } catch (e) {
@@ -300,10 +323,13 @@ export default {
       if (this.user) {
         try {
           const encodedSemester = encodeURIComponent(
-            this.selectedSemester.replace(/ /g, '_')
+            this.selectedSemester
+              .replace(/ /g, '_')
+              .replace(/학년/g, 'grade')
+              .replace(/학기/g, 'semester')
           );
-          const semesterPath = `users/${this.user.uid}/semesters/${encodedSemester}`;
-          const dbRef = ref(db, semesterPath);
+          const tablePath = `users/${this.user.uid}/semesters/${encodedSemester}`;
+          const dbRef = ref(db, tablePath);
           const promises = this.days.map(async (day) => {
             const dayRef = child(dbRef, day);
             const snapshot = await get(dayRef);
@@ -334,10 +360,13 @@ export default {
       if (this.user) {
         try {
           const encodedSemester = encodeURIComponent(
-            this.selectedSemester.replace(/ /g, '_')
+            this.selectedSemester
+              .replace(/ /g, '_')
+              .replace(/학년/g, 'grade')
+              .replace(/학기/g, 'semester')
           );
-          const semesterPath = `users/${this.user.uid}/semesters/${encodedSemester}/${day}`;
-          const dbRef = ref(db, semesterPath);
+          const tablePath = `users/${this.user.uid}/semesters/${encodedSemester}/${day}`;
+          const dbRef = ref(db, tablePath);
           await set(dbRef, { schedules: this.schedules[day] });
           console.log('시간표가 업데이트되었습니다.');
         } catch (e) {
@@ -345,30 +374,46 @@ export default {
         }
       }
     },
-    updateAmPm(type) {
-      if (type === 'start') {
-        const hour = parseInt(this.newSchedule.startHour, 10);
-        this.newSchedule.startAmPm = hour < 12 ? '오전' : '오후';
-      } else if (type === 'end') {
-        const hour = parseInt(this.newSchedule.endHour, 10);
-        this.newSchedule.endAmPm = hour < 12 ? '오전' : '오후';
+    async updateSchedule() {
+      const { title, startHour, startMinute, endHour, endMinute, day } =
+        this.selectedSchedule;
+      const startTime = `${startHour}:${startMinute}`;
+      const endTime = `${endHour}:${endMinute}`;
+
+      if (title && startTime && endTime && day) {
+        if (
+          this.isScheduleConflict(day, startTime, endTime, this.selectedIndex)
+        ) {
+          alert('수정하려는 일정이 이미 저장되어 있습니다.');
+          return;
+        }
+        this.schedules[day][this.selectedIndex] = { title, startTime, endTime };
+        this.closeEditModal();
+
+        if (this.user) {
+          try {
+            const encodedSemester = encodeURIComponent(
+              this.selectedSemester
+                .replace(/ /g, '_')
+                .replace(/학년/g, 'grade')
+                .replace(/학기/g, 'semester')
+            );
+            const tablePath = `users/${this.user.uid}/semesters/${encodedSemester}/${day}`;
+            const dbRef = ref(db, tablePath);
+            await set(dbRef, { schedules: this.schedules[day] });
+            console.log('시간표가 업데이트되었습니다.');
+          } catch (e) {
+            console.error('시간표 업데이트 중 오류 발생:', e);
+          }
+        }
       }
     },
-    convertTo24HourFormat(hour, minute, amPm) {
-      let hour24 = parseInt(hour, 10);
-      if (amPm === '오후' && hour24 !== 12) {
-        hour24 += 12;
-      }
-      if (amPm === '오전' && hour24 === 12) {
-        hour24 = 0;
-      }
-      return `${hour24 < 10 ? '0' : ''}${hour24}:${minute}`;
-    },
-    isScheduleConflict(day, startTime, endTime) {
+    isScheduleConflict(day, startTime, endTime, excludeIndex = -1) {
       const newStart = new Date(`1970-01-01T${startTime}:00`);
       const newEnd = new Date(`1970-01-01T${endTime}:00`);
 
-      return this.schedules[day].some((schedule) => {
+      return this.schedules[day].some((schedule, index) => {
+        if (index === excludeIndex) return false;
         const scheduleStart = new Date(`1970-01-01T${schedule.startTime}:00`);
         const scheduleEnd = new Date(`1970-01-01T${schedule.endTime}:00`);
 
@@ -413,10 +458,18 @@ export default {
         startMinute: '00',
         endHour: '08',
         endMinute: '00',
-        startAmPm: '오전',
-        endAmPm: '오전',
         day: '월',
       };
+    },
+    openEditModal() {
+      this.editModalVisible = true;
+      this.closeModal();
+    },
+    closeEditModal() {
+      this.editModalVisible = false;
+      this.selectedSchedule = {};
+      this.selectedDay = '';
+      this.selectedIndex = null;
     },
     getScheduleColor(title) {
       if (!this.scheduleColors[title]) {
