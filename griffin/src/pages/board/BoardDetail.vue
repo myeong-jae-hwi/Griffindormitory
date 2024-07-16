@@ -10,26 +10,77 @@
     <section class="comment-section">
       <input
         type="text"
+        v-model="newComment"
         class="comment-input"
         placeholder="댓글을 입력하세요."
       />
-      <base-btn class="comment-btn">입력</base-btn>
+      <base-btn @click="submitComment" class="comment-btn">입력</base-btn>
+    </section>
+    <section class="comments">
+      <base-card>
+        <ul>
+          <board-comments
+            v-for="(comment, index) in comments"
+            :key="index"
+            :text="comment.text"
+            :time="comment.time"
+          />
+        </ul>
+      </base-card>
     </section>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
+import { mapGetters } from 'vuex';
+import BoardComments from '../../components/board/BoardComments.vue';
 
 export default {
+  components: {
+    BoardComments,
+  },
+
   props: ['id', 'name', 'title', 'content', 'time'],
+  data() {
+    return {
+      newComment: '',
+      comments: [],
+    };
+  },
   computed: {
+    ...mapGetters('boards', ['boards']),
     utcToKor() {
       return moment.utc(this.time).local().format('YYYY-MM-DD HH:mm:ss');
     },
   },
+  methods: {
+    async submitComment() {
+      if (this.newComment.trim() === '') return;
+      const commentText = this.newComment.trim();
+
+      try {
+        await this.$store.dispatch('boards/addComment', {
+          boardId: this.id,
+          comment: commentText,
+        });
+        this.comments.push({
+          text: commentText,
+          time: new Date().toISOString(),
+        });
+        this.newComment = '';
+      } catch (error) {
+        console.error('Error adding comment:', error.message);
+      }
+    },
+    async fetchComments() {
+      await this.$store.dispatch('boards/fetchInitialData', this.id);
+      const board = this.boards.find((board) => board.id === this.id);
+      this.comments = board.comments;
+    },
+  },
   created() {
-    console.log('Time prop: ', this.time);
+    this.fetchComments();
   },
 };
 </script>
@@ -72,20 +123,5 @@ p {
   font-size: 14px;
   border: none;
   cursor: pointer;
-}
-
-.profile {
-  width: 5vh;
-  height: 5vh;
-  border-radius: 50%;
-  background-image: url("../../assets/images/BaseProfile.svg");
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-left: 3%;
-}
-
-.title-header {
-  display: flex;
-  align-items: center;
 }
 </style>

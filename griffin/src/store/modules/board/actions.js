@@ -10,17 +10,15 @@ export default {
       }
 
       const boardsData = await response.json();
-      const boards = [];
-
-      for (const key in boardsData) {
-        const board = {
+      const boards = Object.keys(boardsData)
+        .map((key) => ({
           id: key,
           title: boardsData[key].title,
           content: boardsData[key].content,
           time: boardsData[key].time,
-        };
-        boards.unshift(board);
-      }
+          comments: boardsData[key].comments || [],
+        }))
+        .reverse();
 
       context.commit('setBoards', boards);
     } catch (error) {
@@ -33,6 +31,7 @@ export default {
       title: data.title,
       content: data.content,
       time: new Date().toISOString(),
+      comments: [],
     };
 
     try {
@@ -54,6 +53,40 @@ export default {
       context.dispatch('fetchInitialData');
     } catch (error) {
       console.error('Error registering board:', error.message);
+    }
+  },
+
+  async addComment(context, { boardId, comment }) {
+    try {
+      const boardResponse = await fetch(`${dbURL}/boards/${boardId}.json`);
+      if (!boardResponse.ok) {
+        throw new Error('Failed to fetch board data');
+      }
+
+      const boardData = await boardResponse.json();
+
+      if (!Array.isArray(boardData.comments)) {
+        boardData.comments = [];
+      }
+
+      const newComment = { text: comment, time: new Date().toISOString() };
+      boardData.comments.push(newComment);
+
+      const updateResponse = await fetch(`${dbURL}/boards/${boardId}.json`, {
+        method: 'PUT',
+        body: JSON.stringify(boardData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error('Failed to add comment');
+      }
+
+      context.dispatch('fetchInitialData');
+    } catch (error) {
+      console.error('Error adding comment:', error.message);
     }
   },
 };

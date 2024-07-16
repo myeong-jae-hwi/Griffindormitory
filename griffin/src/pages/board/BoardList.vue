@@ -11,10 +11,13 @@
           ></board-item>
         </li>
       </ul>
+      <h3 v-if="!hasBoards">작성된 게시물이 없습니다.</h3>
     </base-card>
-    <router-link to="/boardlist/register">
-      <base-btn v-if="isListRoute" class="board-btn">글 쓰기</base-btn>
-    </router-link>
+    <div class="btn-container">
+      <router-link to="/boardlist/register">
+        <base-btn v-if="isListRoute" class="board-btn">글 쓰기</base-btn>
+      </router-link>
+    </div>
     <router-view></router-view>
   </section>
 </template>
@@ -48,8 +51,8 @@ export default {
   padding: 0 20px;
   list-style-type: disc;
 }
-.board-btn {
-  position: absolute;
+
+.btn-container {
   display: flex;
   justify-content: center;
 }

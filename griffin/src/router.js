@@ -5,9 +5,9 @@ import BoardList from './pages/board/BoardList.vue';
 import MateList from './pages/roommate/MateList.vue';
 import RoomMateRegisterForm from './pages/roommate/RoomMateRegisterForm.vue';
 import RegisterForm from './pages/board/RegisterForm.vue';
-import LoginForm from './menu/LoginForm.vue';
-import UserInfo from './menu/UserInfo.vue';
-import UserScore from './menu/UserScore.vue';
+import LoginForm from './components/menu/LoginForm.vue';
+import UserInfo from './components/menu/UserInfo.vue';
+import UserScore from './components/menu/UserScore.vue';
 import BoardDetail from './pages/board/BoardDetail.vue';
 import StudentCalender from './components/timetable/StudentCalender.vue';
 
@@ -41,7 +41,6 @@ const router = createRouter({
     { path: '/userinfo', component: UserInfo },
     { path: '/score', component: UserScore },
     { path: '/timetable', component: StudentCalender },
-
   ],
 });
 
