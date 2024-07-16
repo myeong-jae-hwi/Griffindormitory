@@ -5,4 +5,9 @@ export default {
   hasBoards(state) {
     return state.boards && state.boards.length > 0;
   },
+  hasComments(state) {
+    return state.boards.some(
+      (board) => board.comments && board.comments.length > 0
+    );
+  },
 };
