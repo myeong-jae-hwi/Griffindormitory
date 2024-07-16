@@ -10,18 +10,15 @@ export default {
       }
 
       const boardsData = await response.json();
-      const boards = [];
-
-      for (const key in boardsData) {
-        const board = {
+      const boards = Object.keys(boardsData)
+        .map((key) => ({
           id: key,
           title: boardsData[key].title,
           content: boardsData[key].content,
           time: boardsData[key].time,
-          comments: boardsData[key].comments,
-        };
-        boards.unshift(board);
-      }
+          comments: boardsData[key].comments || [],
+        }))
+        .reverse();
 
       context.commit('setBoards', boards);
     } catch (error) {
@@ -61,15 +58,29 @@ export default {
 
   async addComment(context, { boardId, comment }) {
     try {
-      const response = await fetch(`${dbURL}/boards/${boardId}/comments.json`, {
-        method: 'POST',
-        body: JSON.stringify({ text: comment, time: new Date().toISOString() }),
+      const boardResponse = await fetch(`${dbURL}/boards/${boardId}.json`);
+      if (!boardResponse.ok) {
+        throw new Error('Failed to fetch board data');
+      }
+
+      const boardData = await boardResponse.json();
+
+      if (!Array.isArray(boardData.comments)) {
+        boardData.comments = [];
+      }
+
+      const newComment = { text: comment, time: new Date().toISOString() };
+      boardData.comments.push(newComment);
+
+      const updateResponse = await fetch(`${dbURL}/boards/${boardId}.json`, {
+        method: 'PUT',
+        body: JSON.stringify(boardData),
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (!response.ok) {
+      if (!updateResponse.ok) {
         throw new Error('Failed to add comment');
       }
 
