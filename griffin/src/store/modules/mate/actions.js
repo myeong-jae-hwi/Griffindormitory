@@ -17,7 +17,7 @@ export default {
           count: matesData[key].count,
           sex: matesData[key].sex,
           location: matesData[key].location,
-          etc: matesData[key].etc,
+          besmoke: matesData[key].besmoke,
           preferences: matesData[key].preferences,
         };
         mates.unshift(mate);
@@ -33,7 +33,7 @@ export default {
       count: data.count,
       sex: data.sex,
       location: data.location,
-      etc: data.etc,
+      besmoke: data.besmoke,
       preferences: data.preferences,
     };
 

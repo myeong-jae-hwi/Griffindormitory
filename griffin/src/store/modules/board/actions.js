@@ -18,6 +18,7 @@ export default {
           title: boardsData[key].title,
           content: boardsData[key].content,
           time: boardsData[key].time,
+          comments: boardsData[key].comments,
         };
         boards.unshift(board);
       }
@@ -33,6 +34,7 @@ export default {
       title: data.title,
       content: data.content,
       time: new Date().toISOString(),
+      comments: [],
     };
 
     try {
@@ -54,6 +56,26 @@ export default {
       context.dispatch('fetchInitialData');
     } catch (error) {
       console.error('Error registering board:', error.message);
+    }
+  },
+
+  async addComment(context, { boardId, comment }) {
+    try {
+      const response = await fetch(`${dbURL}/boards/${boardId}/comments.json`, {
+        method: 'POST',
+        body: JSON.stringify({ text: comment, time: new Date().toISOString() }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add comment');
+      }
+
+      context.dispatch('fetchInitialData');
+    } catch (error) {
+      console.error('Error adding comment:', error.message);
     }
   },
 };
