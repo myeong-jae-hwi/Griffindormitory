@@ -47,6 +47,8 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { ref, set } from "firebase/database";
+import { mapMutations } from "vuex";
+
 
 export default {
   name: "LoginForm",
@@ -62,7 +64,9 @@ export default {
       userId: null
     };
   },
+
   methods: {
+    ...mapMutations("users", ["setUserId"]),
     toggleForm() {
       this.isLogin = !this.isLogin;
       this.name = "";
@@ -87,9 +91,9 @@ export default {
           console.log("로그인 성공");
           console.log("Logged in user UID:", userCredential.user.uid);
           
-          console.log("여기까지 실행됨"); 
-          this.$store.commit("setUserId", userCredential.user.uid);
-
+          // store에 저장
+          this.setUserId(userCredential.user.uid);
+          
           this.$emit("login-success", userCredential.user);
           this.$router.push("/info");
         } catch (error) {
