@@ -40,6 +40,6 @@ export default {
 }
 
 .description {
-  margin: 5px 10px;
+  margin: 10px 20px;
 }
 </style>
