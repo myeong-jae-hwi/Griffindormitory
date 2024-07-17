@@ -1,33 +1,33 @@
 <template>
   <base-card>
     <div class="image"></div>
-    <div class="vertical">
-      <h2>{{ users }}</h2>
-      <p>2000.12.02</p>
-      <p>지능로봇공학과</p>
-      <p>1958012</p>
+    <div class="vertical" v-if="currentUser">
+      <h2>{{ currentUser.name }}</h2>
+      <p>{{ currentUser.email }}</p>
+      <p>{{ currentUser.university }}</p>
+      <p>{{ currentUser.studentId }}</p>
+      <p>{{ currentUser.semester.join(', ') }}</p>
     </div>
   </base-card>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
     return { isLoggedIn: false };
   },
   computed: {
-    ...mapGetters("users", ["users", "hasUsers"]),
+    ...mapGetters('users', ['currentUser']),
     userId() {
-      return this.$store.state.user?.userId || null;
+      return this.$store.state.users.userID;
     },
   },
   created() {
     if (this.userId) {
-      // userId가 있을 때만 데이터 fetch
-      this.$store.dispatch("users/fetchInitialData", {
-        uid: this.userId, // userID가 아닌 uid로 변경
+      this.$store.dispatch('users/fetchUserInitialData', {
+        uid: this.userId,
       });
     }
   },
@@ -44,7 +44,7 @@ export default {
   width: 10vh;
   height: 10vh;
   border-radius: 50%;
-  background-image: url("../../assets/images/BaseProfile.svg");
+  background-image: url('../../assets/images/BaseProfile.svg');
   background-size: contain;
   background-repeat: no-repeat;
   margin-left: 3%;
