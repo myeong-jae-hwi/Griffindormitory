@@ -2,13 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import InfoPage from './pages/info/InfoPage.vue';
 import BoardList from './pages/board/BoardList.vue';
-import MateList from './pages/roommate/MateList.vue';
+import MatesList from './pages/roommate/MateList.vue';
 import RoomMateRegisterForm from './pages/roommate/RoomMateRegisterForm.vue';
 import RegisterForm from './pages/board/RegisterForm.vue';
 import LoginForm from './components/menu/LoginForm.vue';
 import UserInfo from './components/menu/UserInfo.vue';
 import UserScore from './components/menu/UserScore.vue';
 import BoardDetail from './pages/board/BoardDetail.vue';
+import MateDetail from './pages/roommate/MateDetail.vue';
 import StudentCalender from './components/timetable/StudentCalender.vue';
 
 const router = createRouter({
@@ -34,8 +35,20 @@ const router = createRouter({
     },
     {
       path: '/roommateboard',
-      component: MateList,
+      component: MatesList,
       children: [{ path: 'register', component: RoomMateRegisterForm }],
+    },
+    {
+      path: '/roommateboard/:id',
+      component: MateDetail,
+      props: (route) => ({
+        id: route.params.id,
+        count: decodeURIComponent(route.query.count),
+        sex: route.query.sex,
+        location: route.query.location,
+        besmoke: route.query.besmoke,
+        preferences: route.query.preferences,
+      }),
     },
     { path: '/login', component: LoginForm },
     { path: '/userinfo', component: UserInfo },

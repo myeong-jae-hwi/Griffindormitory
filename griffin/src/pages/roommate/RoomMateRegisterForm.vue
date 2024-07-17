@@ -55,13 +55,18 @@
           <label>흡연 여부</label>
           <input
             type="radio"
-            name="etc"
+            name="besmoke"
             v-model="form.besmoke"
             value="notsmoke"
             required
           />
           <label for="notsmoke">비흡연자만</label>
-          <input type="radio" name="etc" v-model="form.besmoke" value="smoke" />
+          <input
+            type="radio"
+            name="besmoke"
+            v-model="form.besmoke"
+            value="smoke"
+          />
           <label for="smoke">상관없음</label>
         </div>
         <div class="form-group">
