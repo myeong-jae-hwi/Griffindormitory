@@ -18,6 +18,9 @@
       <p>지능로봇공학과</p>
       <p>1958012</p>
     </div>
+    <div v-else>
+      <h2>로그인이 필요합니다 ^^</h2>
+    </div>
   </base-card>
 </template>
 

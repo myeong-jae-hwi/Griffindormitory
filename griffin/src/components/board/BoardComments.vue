@@ -1,6 +1,6 @@
 <template>
   <li>
-    <div>
+    <div class="container">
       <p>{{ text }}, {{ formatTime(time) }}</p>
     </div>
   </li>
