@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import InfoPage from './pages/info/InfoPage.vue';
 import BoardList from './pages/board/BoardList.vue';
-import MatesList from './pages/roommate/MateList.vue';
+import MatesList from './pages/roommate/MatesList.vue';
 import RoomMateRegisterForm from './pages/roommate/RoomMateRegisterForm.vue';
 import RegisterForm from './pages/board/RegisterForm.vue';
 import LoginForm from './components/menu/LoginForm.vue';

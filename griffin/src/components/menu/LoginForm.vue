@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <h2>{{ isLogin ? "로그인" : "회원가입" }}</h2>
+      <h2>{{ isLogin ? '로그인' : '회원가입' }}</h2>
       <form @submit.prevent="handleSubmit">
         <div class="user-box" v-if="!isLogin">
           <input type="text" v-model="name" required />
@@ -29,11 +29,11 @@
         </div>
         <div>
           <button type="submit" class="submit-btn">
-            {{ isLogin ? "로그인" : "회원가입" }}
+            {{ isLogin ? '로그인' : '회원가입' }}
           </button>
         </div>
         <a href="#" @click="toggleForm">{{
-          isLogin ? "회원가입" : "로그인"
+          isLogin ? '회원가입' : '로그인'
         }}</a>
       </form>
     </div>
@@ -41,41 +41,41 @@
 </template>
 
 <script>
-import { auth, database } from "@/firebase/config.js";
+import { auth, database } from '@/firebase/config.js';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-} from "firebase/auth";
-import { ref, set } from "firebase/database";
+} from 'firebase/auth';
+import { ref, set } from 'firebase/database';
 
 export default {
-  name: "LoginForm",
+  name: 'LoginForm',
   data() {
     return {
       isLogin: true,
-      name: "",
-      university: "",
-      studentId: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      userId: null
+      name: '',
+      university: '',
+      studentId: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      userId: null,
     };
   },
   methods: {
     toggleForm() {
       this.isLogin = !this.isLogin;
-      this.name = "";
-      this.university = "";
-      this.studentId = "";
-      this.email = "";
-      this.password = "";
-      this.confirmPassword = "";
+      this.name = '';
+      this.university = '';
+      this.studentId = '';
+      this.email = '';
+      this.password = '';
+      this.confirmPassword = '';
     },
     async handleSubmit() {
       if (this.isLogin) {
         if (!this.email || !this.password) {
-          alert("모든 필드를 입력하세요.");
+          alert('모든 필드를 입력하세요.');
           return;
         }
         try {
@@ -84,17 +84,16 @@ export default {
             this.email,
             this.password
           );
-          console.log("로그인 성공");
-          console.log("Logged in user UID:", userCredential.user.uid);
-          
-          console.log("여기까지 실행됨"); 
-          this.$store.commit("setUserId", userCredential.user.uid);
+          this.$store.commit('users/setUserId', userCredential.user.uid);
+          await this.$store.dispatch('users/fetchUserInitialData', {
+            uid: userCredential.user.uid,
+          });
 
-          this.$emit("login-success", userCredential.user);
-          this.$router.push("/info");
+          this.$emit('login-success', userCredential.user);
+          this.$router.push('/info');
         } catch (error) {
-          console.error("Firebase 오류: ", error);
-          alert("오류가 발생했습니다. 다시 시도해 주세요.");
+          console.error('Firebase 오류: ', error);
+          alert('오류가 발생했습니다. 다시 시도해 주세요.');
         }
       } else {
         if (
@@ -105,11 +104,11 @@ export default {
           !this.password ||
           !this.confirmPassword
         ) {
-          alert("모든 필드를 입력하세요.");
+          alert('모든 필드를 입력하세요.');
           return;
         }
         if (this.password !== this.confirmPassword) {
-          alert("비밀번호가 일치하지 않습니다.");
+          alert('비밀번호가 일치하지 않습니다.');
           return;
         }
         try {
@@ -119,24 +118,27 @@ export default {
             this.password
           );
           const user = userCredential.user;
-          await set(ref(database, "users/" + user.uid), {
+          await set(ref(database, 'users/' + user.uid), {
             name: this.name,
             university: this.university,
             studentId: this.studentId,
             email: this.email,
             createdAt: new Date().toISOString(),
           });
-          console.log("회원가입 성공");
-          console.log("Logged in user UID:", user.uid);
-          alert("회원가입 성공 하였습니다!");
-          this.$emit("login-success", user);
-          this.$router.push("/info");
+          this.$store.commit('users/setUserId', user.uid);
+          await this.$store.dispatch('users/fetchUserInitialData', {
+            uid: user.uid,
+          });
+
+          alert('회원가입 성공 하였습니다!');
+          this.$emit('login-success', user);
+          this.$router.push('/info');
         } catch (error) {
-          console.error("Firebase 오류: ", error);
-          if (error.code === "auth/email-already-in-use") {
-            alert("이미 사용 중인 이메일입니다.");
+          console.error('Firebase 오류: ', error);
+          if (error.code === 'auth/email-already-in-use') {
+            alert('이미 사용 중인 이메일입니다.');
           } else {
-            alert("오류가 발생했습니다. 다시 시도해 주세요.");
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
           }
         }
       }
