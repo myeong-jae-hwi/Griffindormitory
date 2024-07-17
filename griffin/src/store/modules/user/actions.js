@@ -1,66 +1,38 @@
 const dbURL = process.env.VUE_APP_FIREBASE_DATABASE_URL;
 
 export default {
-  async fetchInitialData(context) {
+  async fetchInitialData(context, {uid}) {
     try {
-      const response = await fetch(`${dbURL}/users.json`);
-
+      const response = await fetch(`${dbURL}/users/${uid}.json`);
       if (!response.ok) {
         throw new Error('Failed to fetch initial data');
       }
-
       const usersData = await response.json();
       const users = [];
 
       for (const key in usersData) {
         const user = {
           id: key,
-          name: usersData[key].name,
           email: usersData[key].email,
-          createdAt: usersData[key].createdAt,
-          semesters: [], // 여기서 더 아래로 내려가야함
+          name: usersData[key].name,
+          university: usersData[key].university,
+          semester: usersData[key].preferences,
+
         };
-
-        const semestersData = usersData[key].semesters;
-        for (const semesterKey in semestersData) {
-          const semester = {
-            name: semesterKey,
-            days: [],
-          };
-
-          const daysData = semestersData[semesterKey];
-          for (const dayKey in daysData) {
-            const day = {
-              name: dayKey,
-              titles: [],
-            };
-
-            const schedulesData = daysData[dayKey].schedules;
-            for (const schedule of schedulesData) {
-              day.titles.push(schedule.title);
-            }
-
-            semester.days.push(day);
-          }
-
-          user.semesters.push(semester);
-        }
-
-        users.unshift(user);
+        users.push(user);
       }
-
-      context.commit('setUsers', users);
+      context.commit('setusers', users);
     } catch (error) {
-      console.error('Error fetching initial data:', error.message);
+      console.log('Error fetching initial data:', error.message);
     }
   },
 
-  async registerUser(context, data) {
+  async registierUser(context, data) {
     const userData = {
-      name: data.name,
       email: data.email,
-      createdAt: data.createdAt,
-      semesters: data.semesters,
+      name: data.name,
+      university: data.university,
+      semester:[],
     };
 
     try {
@@ -73,7 +45,7 @@ export default {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to register user');
+        throw new Error('Failed to register User');
       }
 
       const responseData = await response.json();

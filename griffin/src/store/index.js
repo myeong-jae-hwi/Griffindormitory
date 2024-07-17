@@ -9,7 +9,7 @@ const store = createStore({
   modules: {
     boards: boardModule,
     mates: mateModule,
-    users: userModule
+    users: userModule,
     schedule: scheduleModule,
   },
 });
