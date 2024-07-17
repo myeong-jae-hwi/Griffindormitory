@@ -1,19 +1,8 @@
 <template>
-  <base-card v-if="isLoggedIn"
-  @login-success="updateLoginStatus">
+  <base-card>
     <div class="image"></div>
     <div class="vertical">
-      <h2>{{ users[0].name }}</h2>
-      <p>{{ usersUID }}</p>
-      <p>2000.12.02</p>
-      <p>지능로봇공학과</p>
-      <p>1958012</p>
-    </div>
-  </base-card>
-    <base-card v-else>
-    <div class="image"></div>
-    <div class="vertical">
-      <h2> 홍길동 </h2>
+      <h2>{{ users }}</h2>
       <p>2000.12.02</p>
       <p>지능로봇공학과</p>
       <p>1958012</p>
@@ -25,20 +14,28 @@
 import { mapGetters } from "vuex";
 
 export default {
-  data(){
-    return {isLoggedIn: false}
+  data() {
+    return { isLoggedIn: false };
   },
   computed: {
     ...mapGetters("users", ["users", "hasUsers"]),
+    userId() {
+      return this.$store.state.user?.userId || null;
+    },
   },
   created() {
-    this.$store.dispatch("users/fetchInitialData");
+    if (this.userId) {
+      // userId가 있을 때만 데이터 fetch
+      this.$store.dispatch("users/fetchInitialData", {
+        uid: this.userId, // userID가 아닌 uid로 변경
+      });
+    }
   },
   methods: {
     updateLoginStatus(user) {
       this.isLoggedIn = !!user;
     },
-  }
+  },
 };
 </script>
 
