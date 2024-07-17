@@ -17,7 +17,7 @@
       <base-btn @click="submitComment" class="comment-btn">입력</base-btn>
     </section>
     <section class="comments">
-      <base-card>
+      <base-card v-if="comments.length">
         <ul>
           <board-comments
             v-for="(comment, index) in comments"

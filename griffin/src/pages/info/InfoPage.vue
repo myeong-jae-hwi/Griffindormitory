@@ -8,8 +8,8 @@
       <p class="more">
         <router-link to="/boardlist">더보기</router-link>
       </p>
-      <ul v-if="hasBoards" class="list">
-        <li v-for="board in boards" :key="board.id">
+      <ul v-if="hasBoards && boards.length" class="list">
+        <li v-for="board in boards.slice(0, 2)" :key="board.id">
           <board-item
             :id="board.id"
             :title="board.title"
@@ -17,23 +17,25 @@
           ></board-item>
         </li>
       </ul>
+      <p v-else>등록된 게시물이 없습니다.</p>
     </base-card>
 
     <base-card class="card">
-        <h3>룸메이트 모집 게시판</h3>
+      <h3>룸메이트 모집 게시판</h3>
 
-      <ul class="list">
-        <li v-for="mate in mates" :key="mate.id">
+      <ul v-if="hasMates && mates.length" class="list">
+        <li v-for="mate in mates.slice(0, 3)" :key="mate.id">
           <mate-item
             :id="mate.id"
             :count="mate.count"
             :sex="mate.sex"
             :location="mate.location"
-            :etc="mate.etc"
+            :besmoke="mate.besmoke"
             :preferences="mate.preferences"
           ></mate-item>
         </li>
       </ul>
+      <p v-else>등록된 게시물이 없습니다.</p>
       <p class="more">
         <router-link to="/roommateboard">더보기</router-link>
       </p>
@@ -42,45 +44,42 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import StudentsLicense from "../../components/UI/StudentsLicense.vue";
-import BoardItem from "../../components/board/BoardItem.vue";
-import MateItem from "../../components/roommate/MateItem.vue";
+import { mapGetters } from 'vuex';
+import StudentsLicense from '../../components/UI/StudentsLicense.vue';
+import BoardItem from '../../components/board/BoardItem.vue';
+import MateItem from '../../components/roommate/MateItem.vue';
 
 export default {
-  name: "InfoPage",
+  name: 'InfoPage',
   components: {
     StudentsLicense,
     BoardItem,
     MateItem,
   },
   computed: {
-    ...mapGetters("boards", ["boards", "hasBoards"]),
+    ...mapGetters('boards', ['boards', 'hasBoards']),
     ...mapGetters({
-      mates: "mates",
-      hasMates: "hasMates",
+      mates: 'mates',
+      hasMates: 'hasMates',
     }),
-
   },
   created() {
-    this.$store.dispatch("boards/fetchInitialData");
-    this.$store.dispatch("fetchInitialData");
-    
+    this.$store.dispatch('boards/fetchInitialData');
+    this.$store.dispatch('fetchInitialData');
   },
-  methods: {
-    
-  }
+  methods: {},
 };
 </script>
 
 <style scoped>
 h3 {
   margin-left: 20px;
+  margin-right: 20px;
+  border-bottom: dotted 1px;
 }
 .card {
   position: relative;
   display: block !important;
-
 }
 .more {
   position: absolute;
@@ -96,10 +95,9 @@ li {
   width: 100%;
   border-top: solid 1px #ececec;
   border-bottom: solid 1px #ececec;
-
 }
 
-h3{
+h3 {
   display: block;
 }
 
@@ -110,5 +108,9 @@ ul {
 a {
   color: #6a6a6a;
   font-size: 13px;
+}
+
+p {
+  text-align: center;
 }
 </style>
