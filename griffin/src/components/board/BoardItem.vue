@@ -33,7 +33,7 @@ export default {
   margin: 10px;
 }
 .description {
-  margin: 10px;
+  margin: 5px 10px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;

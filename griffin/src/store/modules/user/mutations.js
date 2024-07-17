@@ -7,5 +7,5 @@ export default {
   },
   setUserId(state, payload) {
     state.userID = payload;
-  }
+  },
 };
