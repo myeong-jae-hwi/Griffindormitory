@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <h1 class="name">자유 게시판</h1>
-    <base-card v-if="isListRoute">
+    <base-card v-if="isListRoute && hasBoards">
       <ul v-if="hasBoards" class="list">
         <li v-for="board in boards" :key="board.id">
           <board-item
@@ -11,8 +11,8 @@
           ></board-item>
         </li>
       </ul>
-      <h3 v-if="!hasBoards">작성된 게시물이 없습니다.</h3>
     </base-card>
+    <h3 v-if="!hasBoards">등록된 게시물이 없습니다.</h3>
     <div class="btn-container">
       <router-link to="/boardlist/register">
         <base-btn v-if="isListRoute" class="board-btn">글 쓰기</base-btn>
@@ -55,5 +55,8 @@ export default {
 .btn-container {
   display: flex;
   justify-content: center;
+}
+h3 {
+  text-align: center;
 }
 </style>
