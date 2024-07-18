@@ -56,4 +56,17 @@ export default {
       console.error('Error registering user:', error.message);
     }
   },
+
+  async fetchSemester(commit, { uid }){
+    try {
+      const semesterResponse = await fetch(`${dbURL}/users/${uid}/semesters.json`);
+      const semesterData = await semesterResponse.json();
+      if (!Array.isArray(semesterData.comments)) {
+        semesterData.comments = [];
+      }
+    }
+    catch (error) {
+      console.error('Error adding comment:', error.message);
+    }
+  }
 };

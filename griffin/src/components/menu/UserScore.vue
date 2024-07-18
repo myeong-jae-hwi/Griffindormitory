@@ -42,6 +42,8 @@ import BaseChart from '../chart/BaseChart.vue';
 import { Chart, registerables } from 'chart.js';
 import BaseCard from '../UI/BaseCard.vue';
 import ScoreItem from '../score/ScoreItem.vue';
+import { mapGetters } from 'vuex';
+
 
 Chart.register(...registerables);
 
@@ -50,6 +52,12 @@ export default {
     BaseChart,
     BaseCard,
     ScoreItem,
+  },
+    computed: {
+    ...mapGetters('users', ['currentUser']),
+    userId() {
+      return this.$store.state.users.userID;
+    },
   },
   data() {
     return {
@@ -87,6 +95,12 @@ export default {
     };
   },
   created() {
+    if (this.userId) {
+      this.$store.dispatch('users/fetchUserInitialData', {
+        uid: this.userId,
+      });
+    }
+    console.log("안녕하삼 ㅋㅋ",this.userId)
     this.fetchScores();
   },
   methods: {
@@ -111,7 +125,7 @@ export default {
           this.convertGradeToPoint(item.grade),
         ]);
         await fetch(
-          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores.json`,
+          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/${this.userId}/scores.json`,
           {
             method: 'POST',
             headers: {
