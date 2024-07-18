@@ -1,5 +1,7 @@
 const dbURL = process.env.VUE_APP_FIREBASE_DATABASE_URL;
 
+import createPersistedState from 'vuex-persistedstate';
+
 export default {
   async fetchUserInitialData({ commit }, { uid }) {
     try {
@@ -57,17 +59,10 @@ export default {
       console.error('Error registering user:', error.message);
     }
   },
-
-  async fetchSemester(commit, { uid }){
-    try {
-      const semesterResponse = await fetch(`${dbURL}/users/${uid}/semesters.json`);
-      const semesterData = await semesterResponse.json();
-      if (!Array.isArray(semesterData.comments)) {
-        semesterData.comments = [];
-      }
-    }
-    catch (error) {
-      console.error('Error adding comment:', error.message);
-    }
-  }
+  logout({ commit }) {
+    commit('resetState');
+    localStorage.removeItem('vuex');
+  },
 };
+
+export const plugins = [createPersistedState()];

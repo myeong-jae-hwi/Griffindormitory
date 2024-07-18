@@ -1,3 +1,5 @@
+import createPersistedState from 'vuex-persistedstate';
+
 import mutations from './mutations';
 import getters from './getters';
 import actions from './actions';
@@ -9,4 +11,5 @@ export default {
   mutations,
   getters,
   actions,
+  plugins: [createPersistedState()],
 };
