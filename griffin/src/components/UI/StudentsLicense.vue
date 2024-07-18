@@ -8,9 +8,11 @@
       <p>{{ currentUser.studentId }}</p>
       <p>{{ currentUser.semester.join(', ') }}</p>
     </div>
+
     <div v-else>
       <h2>로그인이 필요합니다 ^^</h2>
     </div>
+
   </base-card>
 </template>
 
@@ -18,26 +20,18 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  data() {
-    return { isLoggedIn: false };
-  },
   computed: {
     ...mapGetters('users', ['currentUser']),
     userId() {
       return this.$store.state.users.userID;
     },
   },
-  created() {
-    if (this.userId) {
+  mounted() {
+    if (this.userId && !this.currentUser) {
       this.$store.dispatch('users/fetchUserInitialData', {
         uid: this.userId,
       });
     }
-  },
-  methods: {
-    updateLoginStatus(user) {
-      this.isLoggedIn = !!user;
-    },
   },
 };
 </script>

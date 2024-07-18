@@ -8,6 +8,7 @@
             :id="board.id"
             :title="board.title"
             :content="board.content"
+            :time="board.time"
           ></board-item>
         </li>
       </ul>
