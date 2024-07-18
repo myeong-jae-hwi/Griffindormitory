@@ -8,4 +8,8 @@ export default {
   setUserId(state, payload) {
     state.userID = payload;
   },
+  resetState(state) {
+    state.userID = null;
+    state.users = [];
+  },
 };
