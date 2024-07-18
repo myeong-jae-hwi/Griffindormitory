@@ -1,11 +1,13 @@
 <template>
   <div>
+
     <base-card class="horizental">
       <div class="vertical">
         <h2>{{ title }}</h2>
         <p id="time">{{ utcToKor }}</p>
       </div>
       <p>{{ content }}</p>
+
     </base-card>
     <section class="comment-section">
       <input
@@ -49,12 +51,17 @@ export default {
     };
   },
   computed: {
+
     ...mapGetters("boards", ["boards"]),
     utcToKor() {
       return moment.utc(this.time).local().format("YYYY-MM-DD HH:mm:ss");
     },
+
   },
   methods: {
+    formatTime(time) {
+      return moment.utc(time).local().format('YYYY-MM-DD HH:mm:ss');
+    },
     async submitComment() {
       if (this.newComment.trim() === "") return;
       const commentText = this.newComment.trim();

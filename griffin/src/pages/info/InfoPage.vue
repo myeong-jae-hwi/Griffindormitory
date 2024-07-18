@@ -14,6 +14,7 @@
             :id="board.id"
             :title="board.title"
             :content="board.content"
+            :time="board.time"
           ></board-item>
         </li>
       </ul>
@@ -74,8 +75,6 @@ export default {
 <style scoped>
 h3 {
   margin-left: 20px;
-  margin-right: 20px;
-  border-bottom: dotted 1px;
 }
 .card {
   position: relative;
@@ -92,9 +91,9 @@ h3 {
 }
 
 li {
-  width: 100%;
-  border-top: solid 1px #ececec;
-  border-bottom: solid 1px #ececec;
+  width: 98%;
+  border-top: solid 0.5px lightslategray;
+  border-bottom: solid 0.5px lightslategray;
 }
 
 h3 {
