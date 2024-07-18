@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import store from './store';
 
 import InfoPage from './pages/info/InfoPage.vue';
 import BoardList from './pages/board/BoardList.vue';
@@ -20,18 +21,17 @@ const router = createRouter({
     {
       path: '/boardlist',
       component: BoardList,
-      children: [
-        { path: 'register', component: RegisterForm },
-        {
-          path: '/boardlist/:id',
-          component: BoardDetail,
-          props: (route) => ({
-            id: route.params.id,
-            title: decodeURIComponent(route.query.title),
-            content: decodeURIComponent(route.query.content),
-          }),
-        },
-      ],
+      children: [{ path: 'register', component: RegisterForm }],
+    },
+    {
+      path: '/boardlist/:id',
+      component: BoardDetail,
+      props: (route) => ({
+        id: route.params.id,
+        title: decodeURIComponent(route.query.title),
+        content: decodeURIComponent(route.query.content),
+        time: decodeURIComponent(route.query.time),
+      }),
     },
     {
       path: '/roommateboard',
@@ -55,6 +55,14 @@ const router = createRouter({
     { path: '/score', component: UserScore },
     { path: '/timetable', component: StudentCalender },
   ],
+});
+
+router.beforeEach(async (to, from, next) => {
+  const userId = store.state.users.userID;
+  if (userId && !store.getters['users/currentUser']) {
+    await store.dispatch('users/fetchUserInitialData', { uid: userId });
+  }
+  next();
 });
 
 export default router;

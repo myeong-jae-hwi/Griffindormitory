@@ -12,6 +12,7 @@
 
 <script>
 import TheHeader from './components/UI/TheHeader.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -21,6 +22,20 @@ export default {
     return {
       isLoggedIn: false,
     };
+  },
+  computed: {
+    ...mapGetters('users', ['currentUser']),
+    userId() {
+      return this.$store.state.users.userID;
+    },
+  },
+  async created() {
+    if (this.userId && !this.currentUser) {
+      await this.$store.dispatch('users/fetchUserInitialData', {
+        uid: this.userId,
+      });
+      this.isLoggedIn = !!this.currentUser;
+    }
   },
   methods: {
     updateLoginStatus(user) {
