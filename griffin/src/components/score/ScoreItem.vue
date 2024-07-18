@@ -23,7 +23,7 @@
 <script>
 
 export default {
-  props: ['initialSubject', 'initialGrade'],
+  // props: ['initialSubject', 'initialGrade'],
   data() {
     return {
       subject: this.initialSubject || '',
