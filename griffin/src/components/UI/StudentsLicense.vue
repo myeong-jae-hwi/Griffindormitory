@@ -8,7 +8,11 @@
       <p>{{ currentUser.studentId }}</p>
       <p>{{ currentUser.semester.join(', ') }}</p>
     </div>
-    <div v-else>회원 정보가 없습니다.</div>
+
+    <div v-else>
+      <h2>로그인이 필요합니다 ^^</h2>
+    </div>
+
   </base-card>
 </template>
 

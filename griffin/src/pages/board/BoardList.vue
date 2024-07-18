@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <h1 class="name">자유 게시판</h1>
-    <base-card v-if="isListRoute && hasBoards">
+    <base-card class="board-list" v-if="isListRoute && hasBoards">
       <ul v-if="hasBoards" class="list">
         <li v-for="board in boards" :key="board.id">
           <board-item
@@ -52,7 +52,9 @@ export default {
   padding: 0 20px;
   list-style-type: disc;
 }
-
+.board-list{
+  display: block !important;
+}
 .btn-container {
   display: flex;
   justify-content: center;
