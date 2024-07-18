@@ -16,15 +16,27 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'RegisterForm',
+    computed: {
+    ...mapGetters('users', ['currentUser']),
+    userName() {
+      return this.$store.state.users.users[0].name;
+    },
+  },
   data() {
     return {
       form: {
         title: '',
         content: '',
+        author: '',
       },
     };
+  },
+  created() {
+    this.form.author = this.userName
   },
   methods: {
     async submitForm() {

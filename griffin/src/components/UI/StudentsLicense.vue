@@ -55,8 +55,10 @@ export default {
 }
 h2 {
   margin: 0;
+  font-size: 18px;
 }
 p {
-  margin: 8px;
+  margin: 6px 0 0 0 ;
+  font-size: 14px;
 }
 </style>

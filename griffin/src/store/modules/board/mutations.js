@@ -8,7 +8,7 @@ export default {
   addComment(state, { boardId, comment }) {
     const board = state.boards.find((board) => board.id === boardId);
     if (board) {
-      board.comments.push(comment);
+      board.comments.push(comment);      
     }
   },
 };
