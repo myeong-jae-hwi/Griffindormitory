@@ -3,7 +3,7 @@
     <base-card>
       <h2>{{ title }}</h2>
       <p>
-        {{ utcToKor }}<br />
+        {{ formatTime(time) }}<br />
         {{ content }}
       </p>
     </base-card>
@@ -50,11 +50,11 @@ export default {
   },
   computed: {
     ...mapGetters('boards', ['boards']),
-    utcToKor() {
-      return moment.utc(this.time).local().format('YYYY-MM-DD HH:mm:ss');
-    },
   },
   methods: {
+    formatTime(time) {
+      return moment.utc(time).local().format('YYYY-MM-DD HH:mm:ss');
+    },
     async submitComment() {
       if (this.newComment.trim() === '') return;
       const commentText = this.newComment.trim();
