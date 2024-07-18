@@ -1,13 +1,13 @@
 <template>
   <div>
-
     <base-card class="horizental">
+      <h2>{{ title }}</h2>
+
       <div class="vertical">
-        <h2>{{ title }}</h2>
-        <p id="time">{{ utcToKor }}</p>
+        <p id="author">작성자: {{ author }}</p>
+        <p id="author">{{ utcToKor }}</p>
       </div>
       <p>{{ content }}</p>
-
     </base-card>
     <section class="comment-section">
       <input
@@ -26,6 +26,7 @@
             :key="index"
             :text="comment.text"
             :time="comment.time"
+            :userName="comment.userName"
           />
         </ul>
       </base-card>
@@ -43,7 +44,7 @@ export default {
     BoardComments,
   },
 
-  props: ["id", "name", "title", "content", "time"],
+  props: ["id", "name", "title", "content", "time", "author"],
   data() {
     return {
       newComment: "",
@@ -51,28 +52,32 @@ export default {
     };
   },
   computed: {
-
     ...mapGetters("boards", ["boards"]),
     utcToKor() {
-      return moment.utc(this.time).local().format("YYYY-MM-DD HH:mm:ss");
+      return moment.utc(this.time).local().format("YYYY/MM/DD");
     },
-
+    userName() {
+      return this.$store.state.users.users[0].name;
+    },
   },
   methods: {
     formatTime(time) {
-      return moment.utc(time).local().format('YYYY-MM-DD HH:mm:ss');
+      return moment.utc(time).local().format("YYYY/MM/DD");
     },
     async submitComment() {
       if (this.newComment.trim() === "") return;
       const commentText = this.newComment.trim();
-
+      const userName = this.userName
       try {
+        console.log("여기로왔어요 ㅋㅋ",userName)
         await this.$store.dispatch("boards/addComment", {
           boardId: this.id,
           comment: commentText,
+          userName: userName,
         });
         this.comments.push({
           text: commentText,
+          userName: userName,
           time: new Date().toISOString(),
         });
         this.newComment = "";
@@ -93,14 +98,18 @@ export default {
 </script>
 
 <style scoped>
-h4 {
+ul{
+  list-style:none;
+}
+
+h2 {
   margin: 10px;
   margin-bottom: 0;
 }
 
 p {
   margin: 10px;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.5;
 }
 .horizental {
@@ -113,10 +122,9 @@ p {
   align-items: flex-end;
 }
 
-#time{
-  display: inline-block;
-  font-size: 15px;
-  margin: 20px 10px;
+#author {
+  margin: 10px 5px 20px 10px;
+  font-size: 13px;
 }
 
 .comment-section {
@@ -145,9 +153,5 @@ p {
   font-size: 14px;
   border: none;
   cursor: pointer;
-}
-
-.comments_container{
-  
 }
 </style>

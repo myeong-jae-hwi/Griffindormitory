@@ -3,6 +3,7 @@
     <h4 class="title">{{ title }}</h4>
     <p class="description">{{ content }}</p>
     <p class="description nondisplay">{{ formatTime(time) }}</p>
+    <p class="description nondisplay">{{author}}</p>
   </section>
 </template>
 
@@ -10,7 +11,7 @@
 import moment from 'moment';
 
 export default {
-  props: ['id', 'name', 'title', 'content', 'time'],
+  props: ['id', 'name', 'title', 'content', 'time', 'author'],
   methods: {
     formatTime(time) {
       return moment.utc(time).local().format('YYYY-MM-DD HH:mm:ss');
@@ -22,6 +23,7 @@ export default {
           title: encodeURIComponent(this.title),
           content: encodeURIComponent(this.content),
           time: encodeURIComponent(this.time),
+          author: encodeURIComponent(this.author)
         },
       });
     },

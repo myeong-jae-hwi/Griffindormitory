@@ -15,6 +15,7 @@
             :title="board.title"
             :content="board.content"
             :time="board.time"
+            :author="board.author"
           ></board-item>
         </li>
       </ul>
@@ -74,7 +75,8 @@ export default {
 
 <style scoped>
 h3 {
-  margin-left: 20px;
+  font-size: 16px;
+  margin: 20px 0px 0px 20px;
 }
 .card {
   position: relative;
@@ -92,8 +94,8 @@ h3 {
 
 li {
   width: 98%;
-  border-top: solid 0.5px lightslategray;
-  border-bottom: solid 0.5px lightslategray;
+  margin-bottom: 20px;
+  font-size: 14px;
 }
 
 h3 {
@@ -101,7 +103,8 @@ h3 {
 }
 
 ul {
-  padding: 5px;
+  padding: 10px;
+  margin: 0px;
 }
 
 a {

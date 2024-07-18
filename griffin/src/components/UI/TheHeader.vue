@@ -86,6 +86,7 @@ export default {
       if (this.isLoggedIn) {
         signOut(auth)
           .then(() => {
+            this.$store.dispatch('users/logout')
             this.$router.push("/login");
             this.$emit("login-success", null);
           })

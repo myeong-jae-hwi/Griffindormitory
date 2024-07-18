@@ -9,6 +9,7 @@
             :title="board.title"
             :content="board.content"
             :time="board.time"
+            :author="board.author"
           ></board-item>
         </li>
       </ul>

@@ -31,6 +31,7 @@ const router = createRouter({
         title: decodeURIComponent(route.query.title),
         content: decodeURIComponent(route.query.content),
         time: decodeURIComponent(route.query.time),
+        author: decodeURIComponent(route.query.author)
       }),
     },
     {
