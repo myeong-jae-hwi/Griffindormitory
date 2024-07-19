@@ -28,6 +28,7 @@
         <li v-for="mate in mates.slice(0, 3)" :key="mate.id">
           <mate-item
             :id="mate.id"
+            :title="mate.title"
             :count="mate.count"
             :sex="mate.sex"
             :location="mate.location"
