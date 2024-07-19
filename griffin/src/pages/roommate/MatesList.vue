@@ -6,6 +6,7 @@
         <li v-for="mate in mates" :key="mate.id">
           <mate-item
             :id="mate.id"
+            :title="mate.title"
             :count="mate.count"
             :sex="mate.sex"
             :location="mate.location"
@@ -21,7 +22,11 @@
         <base-btn v-if="isListRoute" class="board-btn">글 쓰기</base-btn>
       </router-link>
     </div>
-    <router-view></router-view>
+    <router-view v-slot="slotProps">
+      <transition name="mate" mode="out-in">
+        <component :is="slotProps.Component"></component>
+      </transition>
+    </router-view>
   </section>
 </template>
 
@@ -62,5 +67,17 @@ export default {
 }
 h3 {
   text-align: center;
+}
+
+.mate-enter-from {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.mate-enter-active {
+  transition: all 0.3s ease-out;
+}
+.mate-enter-to {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

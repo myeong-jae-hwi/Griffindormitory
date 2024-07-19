@@ -14,6 +14,7 @@ export default {
       for (const key in matesData) {
         const mate = {
           id: key,
+          title: matesData[key].title,
           count: matesData[key].count,
           sex: matesData[key].sex,
           location: matesData[key].location,
@@ -30,6 +31,7 @@ export default {
 
   async registerMate(context, data) {
     const mateData = {
+      title: data.title,
       count: data.count,
       sex: data.sex,
       location: data.location,

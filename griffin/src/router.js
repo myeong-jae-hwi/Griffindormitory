@@ -44,6 +44,7 @@ const router = createRouter({
       component: MateDetail,
       props: (route) => ({
         id: route.params.id,
+        title: route.query.title,
         count: decodeURIComponent(route.query.count),
         sex: route.query.sex,
         location: route.query.location,

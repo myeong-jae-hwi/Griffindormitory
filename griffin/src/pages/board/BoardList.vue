@@ -20,7 +20,11 @@
         <base-btn v-if="isListRoute" class="board-btn">글 쓰기</base-btn>
       </router-link>
     </div>
-    <router-view></router-view>
+    <router-view v-slot="slotProps">
+      <transition name="board" mode="out-in">
+        <component :is="slotProps.Component"></component>
+      </transition>
+    </router-view>
   </section>
 </template>
 
@@ -53,7 +57,7 @@ export default {
   padding: 0 20px;
   list-style-type: disc;
 }
-.board-list{
+.board-list {
   display: block !important;
 }
 .btn-container {
@@ -62,5 +66,17 @@ export default {
 }
 h3 {
   text-align: center;
+}
+
+.board-enter-from {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.board-enter-active {
+  transition: all 0.3s ease-out;
+}
+.board-enter-to {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
