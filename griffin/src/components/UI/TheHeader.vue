@@ -2,12 +2,12 @@
   <div>
     <header>
       <div class="left-section">
-        <router-link to="/">
+        <router-link to="/info">
           <img src="../../assets/images/Logo.png" alt="Logo" class="logo" />
         </router-link>
       </div>
       <div class="center-section">
-        <router-link to="/">
+        <router-link to="/info">
           <h1>Griffin</h1>
         </router-link>
       </div>
