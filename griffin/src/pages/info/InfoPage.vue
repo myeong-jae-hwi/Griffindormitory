@@ -2,7 +2,7 @@
   <div>
     <students-license></students-license>
 
-    <base-card class="card">
+    <base-card class="card" v-if="currentUser">
       <h3>자유 게시판</h3>
 
       <p class="more">
@@ -22,7 +22,7 @@
       <p v-else>등록된 게시물이 없습니다.</p>
     </base-card>
 
-    <base-card class="card">
+    <base-card class="card" v-if="currentUser">
       <h3>룸메이트 모집 게시판</h3>
 
       <ul v-if="hasMates && mates.length" class="list">
@@ -61,6 +61,7 @@ export default {
   },
   computed: {
     ...mapGetters('boards', ['boards', 'hasBoards']),
+    ...mapGetters('users', ['currentUser']),
     ...mapGetters({
       mates: 'mates',
       hasMates: 'hasMates',
