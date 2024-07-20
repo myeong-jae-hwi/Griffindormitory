@@ -59,6 +59,9 @@ export default {
     userName() {
       return this.$store.state.users.users[0].name;
     },
+    userId() {
+      return this.$store.state.users.userID
+    }
   },
   methods: {
     formatTime(time) {
@@ -68,17 +71,20 @@ export default {
       if (this.newComment.trim() === "") return;
       const commentText = this.newComment.trim();
       const userName = this.userName
+      const userId = this.userId
+      console.log('여기로 왔어요 ㅋㅋ',userId)
       try {
-        console.log("여기로왔어요 ㅋㅋ",userName)
         await this.$store.dispatch("boards/addComment", {
           boardId: this.id,
           comment: commentText,
           userName: userName,
+          userId: userId
         });
         this.comments.push({
           text: commentText,
           userName: userName,
           time: new Date().toISOString(),
+          userId: userId
         });
         this.newComment = "";
       } catch (error) {

@@ -58,7 +58,7 @@ export default {
     }
   },
 
-  async addComment(context, { boardId, comment, userName }) {
+  async addComment(context, { boardId, comment, userName, userId }) {
     try {
       const boardResponse = await fetch(`${dbURL}/boards/${boardId}.json`);
       if (!boardResponse.ok) {
@@ -71,7 +71,7 @@ export default {
         boardData.comments = [];
       }
 
-      const newComment = { text: comment, time: new Date().toISOString(), userName: userName };
+      const newComment = { text: comment, time: new Date().toISOString(), userName: userName, userId: userId };
       boardData.comments.push(newComment);
 
       const updateResponse = await fetch(`${dbURL}/boards/${boardId}.json`, {
