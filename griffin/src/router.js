@@ -18,15 +18,17 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', redirect: '/login' },
-    { path: '/info', component: InfoPage },
+    { path: '/info', component: InfoPage,meta: { requiresAuth: true } },
     {
       path: '/boardlist',
       component: BoardList,
+      meta: { requiresAuth: true },
       children: [{ path: 'register', component: RegisterForm }],
     },
     {
       path: '/boardlist/:id',
       component: BoardDetail,
+      meta: { requiresAuth: true },
       props: (route) => ({
         id: route.params.id,
         title: decodeURIComponent(route.query.title),
@@ -38,11 +40,13 @@ const router = createRouter({
     {
       path: '/roommateboard',
       component: MatesList,
+      meta: { requiresAuth: true },
       children: [{ path: 'register', component: RoomMateRegisterForm }],
     },
     {
       path: '/roommateboard/:id',
       component: MateDetail,
+      meta: { requiresAuth: true },
       props: (route) => ({
         id: route.params.id,
         title: route.query.title,
@@ -54,18 +58,32 @@ const router = createRouter({
       }),
     },
     { path: '/login', component: LoginForm },
-    { path: '/userinfo', component: UserInfo },
-    { path: '/score', component: UserScore },
-    { path: '/timetable', component: StudentCalender },
-    { path: '/alart', component: AlartList },
+    { path: '/userinfo', component: UserInfo, meta: { requiresAuth: true }, },
+    { path: '/score', component: UserScore, meta: { requiresAuth: true }, },
+    { path: '/timetable', component: StudentCalender, meta: { requiresAuth: true }, },
+    { path: '/alart', component: AlartList, meta: { requiresAuth: true }, },
   ],
 });
 
-router.beforeEach(async (_, _2, next) => {
+router.beforeEach(async (to, from, next) => {
   const userId = store.state.users.userID;
-  if (userId && !store.getters['users/currentUser']) {
-    await store.dispatch('users/fetchUserInitialData', { uid: userId });
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+  if (requiresAuth && !userId) {
+    next('/login'); 
+    return;
   }
+
+  if (userId && !store.getters['users/currentUser']) {
+    try {
+      await store.dispatch('users/fetchUserInitialData', { uid: userId });
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      next('/login'); 
+      return;
+    }
+  }
+
   next();
 });
 
