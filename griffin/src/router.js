@@ -12,6 +12,7 @@ import UserScore from './components/menu/UserScore.vue';
 import BoardDetail from './pages/board/BoardDetail.vue';
 import MateDetail from './pages/roommate/MateDetail.vue';
 import StudentCalender from './components/timetable/StudentCalender.vue';
+import AlartList from './pages/alart/AlartList.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -55,6 +56,7 @@ const router = createRouter({
     { path: '/userinfo', component: UserInfo },
     { path: '/score', component: UserScore },
     { path: '/timetable', component: StudentCalender },
+    { path: '/alart', component: AlartList },
   ],
 });
 
