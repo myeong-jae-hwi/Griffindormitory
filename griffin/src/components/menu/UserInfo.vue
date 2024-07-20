@@ -40,73 +40,83 @@
 </template>
 
 <script>
-import { ref, update } from 'firebase/database';
-import { database, auth } from '@/firebase/config';
+import { ref, update } from "firebase/database";
+import { database, auth } from "@/firebase/config";
+import { signOut } from "firebase/auth";
 
 export default {
+  props: {
+    isLoggedIn: Boolean,
+  },
   data() {
     return {
-      name: '',
-      university: '',
-      studentId: '',
-      email: '',
-      password: '',
+      name: "",
+      university: "",
+      studentId: "",
+      email: "",
+      password: "",
     };
   },
   methods: {
     async checkAuth() {
       const user = auth.currentUser;
       if (!user) {
-        alert('로그인이 필요합니다.');
-        this.$router.push('/login');
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
         return null;
       }
-      console.log('Logged in user UID:', user.uid);
+      console.log("Logged in user UID:", user.uid);
       return user;
     },
     async handleNameSubmit() {
       try {
         const user = await this.checkAuth();
         if (user) {
-          await update(ref(database, 'users/' + user.uid), {
+          await update(ref(database, "users/" + user.uid), {
             name: this.name,
           });
-          alert('이름이 수정되었습니다.');
-          this.$router.push('/info');
+          alert("이름이 수정되었습니다.");
+          await signOut(auth);
+          this.$store.dispatch("users/logout");
+          this.$router.push("/login");
         }
       } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        console.error("Firebase 오류: ", error);
+        alert("오류가 발생했습니다. 다시 시도해 주세요.");
       }
     },
     async handleUniversitySubmit() {
       try {
         const user = await this.checkAuth();
         if (user) {
-          await update(ref(database, 'users/' + user.uid), {
+          await update(ref(database, "users/" + user.uid), {
             university: this.university,
           });
-          alert('대학교가 수정되었습니다.');
-          this.$router.push('/info');
+          alert("대학교가 수정되었습니다.");
+          await signOut(auth);
+          this.$store.dispatch("users/logout");
+          this.$router.push("/login");
         }
       } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        console.error("Firebase 오류: ", error);
+        alert("오류가 발생했습니다. 다시 시도해 주세요.");
       }
     },
     async handleStudentIdSubmit() {
       try {
         const user = await this.checkAuth();
         if (user) {
-          await update(ref(database, 'users/' + user.uid), {
+          await update(ref(database, "users/" + user.uid), {
             studentId: this.studentId,
           });
-          alert('학번이 수정되었습니다.');
-          this.$router.push('/info');
+          alert("학번이 수정되었습니다.");
+          await signOut(auth);
+          this.$store.dispatch("users/logout");
+          this.$router.push("/login");
         }
       } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        console.error("Firebase 오류: ", error);
+        alert("오류가 발생했습니다. 다시 시도해 주세요.");
       }
     },
     async handleEmailSubmit() {
@@ -114,15 +124,17 @@ export default {
         const user = await this.checkAuth();
         if (user) {
           await user.updateEmail(this.email);
-          await update(ref(database, 'users/' + user.uid), {
+          await update(ref(database, "users/" + user.uid), {
             email: this.email,
           });
-          alert('이메일이 수정되었습니다.');
-          this.$router.push('/info');
+          alert("이메일이 수정되었습니다.");
+          await signOut(auth);
+          this.$store.dispatch("users/logout");
+          this.$router.push("/login");
         }
       } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        console.error("Firebase 오류: ", error);
+        alert("오류가 발생했습니다. 다시 시도해 주세요.");
       }
     },
     async handlePasswordSubmit() {
@@ -130,12 +142,14 @@ export default {
         const user = await this.checkAuth();
         if (user) {
           await user.updatePassword(this.password);
-          alert('비밀번호가 수정되었습니다.');
-          this.$router.push('/info');
+          alert("비밀번호가 수정되었습니다.");
+          await signOut(auth);
+          this.$store.dispatch("users/logout");
+          this.$router.push("/login");
         }
       } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        console.error("Firebase 오류: ", error);
+        alert("오류가 발생했습니다. 다시 시도해 주세요.");
       }
     },
   },
