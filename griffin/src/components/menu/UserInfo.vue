@@ -72,6 +72,7 @@ export default {
             name: this.name,
           });
           alert('이름이 수정되었습니다.');
+          this.$router.push('/info');
         }
       } catch (error) {
         console.error('Firebase 오류: ', error);
@@ -86,6 +87,7 @@ export default {
             university: this.university,
           });
           alert('대학교가 수정되었습니다.');
+          this.$router.push('/info');
         }
       } catch (error) {
         console.error('Firebase 오류: ', error);
@@ -100,6 +102,7 @@ export default {
             studentId: this.studentId,
           });
           alert('학번이 수정되었습니다.');
+          this.$router.push('/info');
         }
       } catch (error) {
         console.error('Firebase 오류: ', error);
@@ -115,6 +118,7 @@ export default {
             email: this.email,
           });
           alert('이메일이 수정되었습니다.');
+          this.$router.push('/info');
         }
       } catch (error) {
         console.error('Firebase 오류: ', error);
@@ -127,6 +131,7 @@ export default {
         if (user) {
           await user.updatePassword(this.password);
           alert('비밀번호가 수정되었습니다.');
+          this.$router.push('/info');
         }
       } catch (error) {
         console.error('Firebase 오류: ', error);

@@ -17,7 +17,7 @@ import AlartList from './pages/alart/AlartList.vue';
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', redirect: '/info' },
+    { path: '/', redirect: '/login' },
     { path: '/info', component: InfoPage },
     {
       path: '/boardlist',
@@ -32,7 +32,7 @@ const router = createRouter({
         title: decodeURIComponent(route.query.title),
         content: decodeURIComponent(route.query.content),
         time: decodeURIComponent(route.query.time),
-        author: decodeURIComponent(route.query.author)
+        author: decodeURIComponent(route.query.author),
       }),
     },
     {
@@ -45,6 +45,7 @@ const router = createRouter({
       component: MateDetail,
       props: (route) => ({
         id: route.params.id,
+        title: route.query.title,
         count: decodeURIComponent(route.query.count),
         sex: route.query.sex,
         location: route.query.location,
@@ -60,7 +61,7 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (_, _2, next) => {
   const userId = store.state.users.userID;
   if (userId && !store.getters['users/currentUser']) {
     await store.dispatch('users/fetchUserInitialData', { uid: userId });
