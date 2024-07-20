@@ -13,11 +13,13 @@
       </div>
       <div class="right-section">
         <div class="alarm-section">
-          <div id="alarm">
-            <div id="notification">
-              <span v-if="notice" class="note-num"></span>
+          <router-link to="/alart">
+            <div id="alarm">
+              <div id="notification">
+                <span v-if="notice" class="note-num"></span>
+              </div>
             </div>
-          </div>
+          </router-link>
         </div>
         <div id="menu" @click="toggleMenu">
           <span v-if="!menuOpen">☰</span>
@@ -86,7 +88,7 @@ export default {
       if (this.isLoggedIn) {
         signOut(auth)
           .then(() => {
-            this.$store.dispatch('users/logout')
+            this.$store.dispatch("users/logout");
             this.$router.push("/login");
             this.$emit("login-success", null);
           })
