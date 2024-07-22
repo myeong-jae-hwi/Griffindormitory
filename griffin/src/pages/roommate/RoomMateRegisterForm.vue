@@ -136,10 +136,16 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'RoomMateRegisterForm',
+  computed: {
+    ...mapGetters('users', ['currentUser']),
+    userUniversity() {
+      return this.currentUser.university;
+    },
+  },
   data() {
     return {
       form: {
@@ -149,8 +155,12 @@ export default {
         location: null,
         besmoke: null,
         preferences: '',
+        university: '',
       },
     };
+  },
+  created() {
+    this.form.university = this.userUniversity;
   },
   methods: {
     ...mapActions(['registerMate']),
@@ -163,6 +173,7 @@ export default {
         this.form.location = null;
         this.form.besmoke = null;
         this.form.preferences = '';
+        this.form.university = null;
         alert('게시물이 성공적으로 등록되었습니다.');
         this.$router.push('/roommateboard');
       } catch (error) {

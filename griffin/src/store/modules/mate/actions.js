@@ -20,6 +20,7 @@ export default {
           location: matesData[key].location,
           besmoke: matesData[key].besmoke,
           preferences: matesData[key].preferences,
+          university: matesData[key].university,
         };
         mates.unshift(mate);
       }
@@ -37,6 +38,7 @@ export default {
       location: data.location,
       besmoke: data.besmoke,
       preferences: data.preferences,
+      university: data.university,
     };
 
     try {
