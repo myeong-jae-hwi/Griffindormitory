@@ -39,6 +39,7 @@ export default {
         content: '',
         author: '',
         university: '',
+        userUid:'',
       },
     };
   },

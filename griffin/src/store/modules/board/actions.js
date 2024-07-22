@@ -19,7 +19,7 @@ export default {
           comments: boardsData[key].comments || [],
           author: boardsData[key].author,
           university: boardsData[key].university,
-          userUid: boardsData[key].id,
+          userUid: boardsData[key].userUid,
         }))
         .reverse();
 

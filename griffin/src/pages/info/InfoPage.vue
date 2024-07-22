@@ -16,6 +16,7 @@
             :content="board.content"
             :time="board.time"
             :author="board.author"
+            :userUid="board.userUid"
           ></board-item>
         </li>
       </ul>
