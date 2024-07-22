@@ -1,3 +1,9 @@
+<!--
+
+2024. 07. 22) 새로고침해야 알림 뜨는 이슈 있음 
+
+-->
+
 <template>
   <div>
     <header>
@@ -61,6 +67,8 @@
 <script>
 import { auth } from "@/firebase/config.js";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import {mapState, mapActions, mapGetters } from "vuex";
+
 
 export default {
   props: {
@@ -72,12 +80,29 @@ export default {
       notice: false,
     };
   },
+  computed: {
+    ...mapGetters('users', ['currentUser']),
+    ...mapState(["notifications", ['hasUnreadNotifications']]),
+    userUid() {
+      return this.$store.state.users.users[0]?.id
+    }
+  },
+
   created() {
     onAuthStateChanged(auth, (user) => {
       this.$emit("login-success", user);
+      if (user) {
+        this.checkNotifications();
+      }
     });
   },
+  watch: {
+    hasUnreadNotifications(newValue) {
+      this.notice = newValue;
+    },
+  },
   methods: {
+    ...mapActions('notifications',["checkUnreadNotifications"]),
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
     },
@@ -99,6 +124,12 @@ export default {
         this.$router.push("/login");
       }
       this.closeMenu();
+    },
+    async checkNotifications() {
+      const hasUnread = await this.checkUnreadNotifications({
+        uid: this.userUid,
+      });      
+      this.notice = hasUnread;
     },
   },
 };
