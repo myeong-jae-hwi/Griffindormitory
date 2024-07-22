@@ -10,6 +10,7 @@
             :content="board.content"
             :time="board.time"
             :author="board.author"
+            :userUid="board.userUid"
           ></board-item>
         </li>
       </ul>
@@ -36,6 +37,7 @@ export default {
   components: {
     BoardItem,
   },
+
   computed: {
     ...mapGetters('boards', ['boards', 'hasBoards']),
     ...mapGetters('users', ['currentUser']),
@@ -50,6 +52,7 @@ export default {
   },
   created() {
     this.$store.dispatch('boards/fetchInitialData');
+    console.log("제발",this.boards)
   },
 };
 </script>
