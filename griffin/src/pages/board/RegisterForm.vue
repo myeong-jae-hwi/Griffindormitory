@@ -20,10 +20,13 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'RegisterForm',
-    computed: {
+  computed: {
     ...mapGetters('users', ['currentUser']),
     userName() {
       return this.$store.state.users.users[0].name;
+    },
+    userUniversity() {
+      return this.currentUser.university;
     },
   },
   data() {
@@ -32,11 +35,13 @@ export default {
         title: '',
         content: '',
         author: '',
+        university: '',
       },
     };
   },
   created() {
-    this.form.author = this.userName
+    this.form.author = this.userName;
+    this.form.university = this.userUniversity;
   },
   methods: {
     async submitForm() {
