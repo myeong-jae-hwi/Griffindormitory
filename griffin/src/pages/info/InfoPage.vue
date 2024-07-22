@@ -6,7 +6,7 @@
       <h3>자유 게시판</h3>
 
       <p class="more">
-        <router-link to="/boardlist">더보기</router-link>
+        <router-link to="/boardlist">나의 학교 게시물 보기</router-link>
       </p>
       <ul v-if="hasBoards && boards.length" class="list">
         <li v-for="board in boards.slice(0, 2)" :key="board.id">
@@ -40,7 +40,7 @@
       </ul>
       <p v-else>등록된 게시물이 없습니다.</p>
       <p class="more">
-        <router-link to="/roommateboard">더보기</router-link>
+        <router-link to="/roommateboard">나의 학교 게시물 보기</router-link>
       </p>
     </base-card>
   </div>

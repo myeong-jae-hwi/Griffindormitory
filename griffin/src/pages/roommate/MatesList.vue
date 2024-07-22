@@ -1,9 +1,9 @@
 <template>
   <section class="container">
     <h1 class="name">룸메이트 모집 게시판</h1>
-    <base-card v-if="isListRoute && hasMates">
-      <ul v-if="hasMates" class="list">
-        <li v-for="mate in mates" :key="mate.id">
+    <base-card v-if="isListRoute && filteredMates.length">
+      <ul v-if="filteredMates.length" class="list">
+        <li v-for="mate in filteredMates" :key="mate.id">
           <mate-item
             :id="mate.id"
             :title="mate.title"
@@ -16,7 +16,7 @@
         </li>
       </ul>
     </base-card>
-    <h3 v-if="!hasMates">등록된 게시물이 없습니다.</h3>
+    <h3 v-if="!filteredMates.length">등록된 게시물이 없습니다.</h3>
     <div class="btn-container">
       <router-link to="/roommateboard/register">
         <base-btn v-if="isListRoute" class="board-btn">글 쓰기</base-btn>
@@ -43,8 +43,14 @@ export default {
       mates: 'mates',
       hasMates: 'hasMates',
     }),
+    ...mapGetters('users', ['currentUser']),
     isListRoute() {
       return this.$route.path === '/roommateboard';
+    },
+    filteredMates() {
+      return this.mates.filter(
+        (mate) => mate.university === this.currentUser.university
+      );
     },
   },
   created() {
