@@ -25,6 +25,9 @@ export default {
     userName() {
       return this.$store.state.users.users[0].name;
     },
+    userUid(){
+      return this.$store.state.users.users[0].id
+    },
     userUniversity() {
       return this.currentUser.university;
     },
@@ -40,6 +43,7 @@ export default {
     };
   },
   created() {
+    this.form.id = this.userUid;
     this.form.author = this.userName;
     this.form.university = this.userUniversity;
   },

@@ -19,6 +19,7 @@ export default {
           comments: boardsData[key].comments || [],
           author: boardsData[key].author,
           university: boardsData[key].university,
+          userUid: boardsData[key].id,
         }))
         .reverse();
 
@@ -36,6 +37,7 @@ export default {
       comments: [],
       author: data.author,
       university: data.university,
+      userUid: data.id
     };
 
     try {

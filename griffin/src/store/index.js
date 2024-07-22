@@ -5,6 +5,7 @@ import boardModule from './modules/board/index.js';
 import mateModule from './modules/mate/index.js';
 import userModule from './modules/user/index.js';
 import scheduleModule from './modules/schedule/index.js';
+import alartModule from './modules/alart/index.js';
 
 const store = createStore({
   modules: {
@@ -12,6 +13,7 @@ const store = createStore({
     mates: mateModule,
     users: userModule,
     schedule: scheduleModule,
+    notifications: alartModule
   },
   plugins: [createPersistedState()],
 });
