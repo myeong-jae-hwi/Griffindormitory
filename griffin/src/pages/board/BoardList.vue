@@ -1,9 +1,9 @@
 <template>
   <section class="container">
     <h1 class="name">자유 게시판</h1>
-    <base-card class="board-list" v-if="isListRoute && hasBoards">
-      <ul v-if="hasBoards" class="list">
-        <li v-for="board in boards" :key="board.id">
+    <base-card class="board-list" v-if="isListRoute && filteredBoards.length">
+      <ul v-if="filteredBoards.length" class="list">
+        <li v-for="board in filteredBoards" :key="board.id">
           <board-item
             :id="board.id"
             :title="board.title"
@@ -14,7 +14,7 @@
         </li>
       </ul>
     </base-card>
-    <h3 v-if="!hasBoards">등록된 게시물이 없습니다.</h3>
+    <h3 v-if="!filteredBoards.length">등록된 게시물이 없습니다.</h3>
     <div class="btn-container">
       <router-link to="/boardlist/register">
         <base-btn v-if="isListRoute" class="board-btn">글 쓰기</base-btn>
@@ -36,11 +36,16 @@ export default {
   components: {
     BoardItem,
   },
-
   computed: {
     ...mapGetters('boards', ['boards', 'hasBoards']),
+    ...mapGetters('users', ['currentUser']),
     isListRoute() {
       return this.$route.path === '/boardlist';
+    },
+    filteredBoards() {
+      return this.boards.filter(
+        (board) => board.university === this.currentUser.university
+      );
     },
   },
   created() {
