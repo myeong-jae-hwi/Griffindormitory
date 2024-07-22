@@ -9,7 +9,9 @@ export default {
     state.schedules[day].push(schedule);
   },
   REMOVE_SCHEDULE(state, { day, index }) {
-    state.schedules[day].splice(index, 1);
+    if (state.schedules[day]) {
+      state.schedules[day].splice(index, 1);
+    }
   },
   SET_NEW_SCHEDULE(state, newSchedule) {
     state.newSchedule = newSchedule;

@@ -17,7 +17,8 @@ export default {
           content: boardsData[key].content,
           time: boardsData[key].time,
           comments: boardsData[key].comments || [],
-          author: boardsData[key].author
+          author: boardsData[key].author,
+          university: boardsData[key].university,
         }))
         .reverse();
 
@@ -33,7 +34,8 @@ export default {
       content: data.content,
       time: new Date().toISOString(),
       comments: [],
-      author: data.author
+      author: data.author,
+      university: data.university,
     };
 
     try {
@@ -71,7 +73,12 @@ export default {
         boardData.comments = [];
       }
 
-      const newComment = { text: comment, time: new Date().toISOString(), userName: userName, userId: userId };
+      const newComment = {
+        text: comment,
+        time: new Date().toISOString(),
+        userName: userName,
+        userId: userId,
+      };
       boardData.comments.push(newComment);
 
       const updateResponse = await fetch(`${dbURL}/boards/${boardId}.json`, {

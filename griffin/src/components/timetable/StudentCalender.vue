@@ -106,9 +106,7 @@
           {{ selectedSchedule.endTime }}
         </p>
         <p><strong>요일:</strong> {{ selectedDay }}</p>
-        <button @click="removeSchedule(selectedDay, selectedIndex)">
-          삭제
-        </button>
+        <button @click="handleRemoveSchedule">삭제</button>
       </div>
     </div>
   </div>
@@ -133,6 +131,7 @@ export default {
       'selectedDay',
       'selectedIndex',
       'selectedSemester',
+      'schedules', // schedules를 추가하여 컴포넌트에서 접근할 수 있도록 합니다.
     ]),
     ...mapState('users', ['userID']),
     ...mapGetters('users', ['currentUser']),
@@ -207,6 +206,19 @@ export default {
       'SET_SELECTED_DAY',
       'SET_SELECTED_INDEX',
     ]),
+    async showModal(day, index) {
+      const schedulesForDay = this.schedules[day];
+      const selectedSchedule = schedulesForDay[index];
+
+      if (selectedSchedule) {
+        this.SET_SELECTED_SCHEDULE(selectedSchedule);
+        this.SET_SELECTED_DAY(day);
+        this.SET_SELECTED_INDEX(index);
+        this.SET_MODAL_VISIBLE(true);
+      } else {
+        console.error('선택된 일정이 없습니다.');
+      }
+    },
     async handleAddSchedule() {
       const result = await this.addSchedule(this.newSchedule);
       if (result.success) {
@@ -215,13 +227,12 @@ export default {
         alert(result.message);
       }
     },
-    showModal(day, index) {
-      this.SET_SELECTED_SCHEDULE(
-        this.getSchedulesFor(day, this.hoursDisplay[0])[index]
-      );
-      this.SET_SELECTED_DAY(day);
-      this.SET_SELECTED_INDEX(index);
-      this.SET_MODAL_VISIBLE(true);
+    async handleRemoveSchedule() {
+      await this.removeSchedule({
+        day: this.selectedDay,
+        index: this.selectedIndex,
+      });
+      this.closeModal();
     },
     closeModal() {
       this.SET_MODAL_VISIBLE(false);
