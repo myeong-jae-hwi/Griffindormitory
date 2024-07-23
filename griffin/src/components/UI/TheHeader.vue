@@ -65,10 +65,9 @@
 </template>
 
 <script>
-import { auth } from "@/firebase/config.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import {mapState, mapActions, mapGetters } from "vuex";
-
+import { auth } from '@/firebase/config.js';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -82,15 +81,15 @@ export default {
   },
   computed: {
     ...mapGetters('users', ['currentUser']),
-    ...mapState(["notifications", ['hasUnreadNotifications']]),
+    ...mapState(['notifications', ['hasUnreadNotifications']]),
     userUid() {
-      return this.$store.state.users.users[0]?.id
-    }
+      return this.$store.state.users.users[0]?.id;
+    },
   },
 
   created() {
     onAuthStateChanged(auth, (user) => {
-      this.$emit("login-success", user);
+      this.$emit('login-success', user);
       if (user) {
         this.checkNotifications();
       }
@@ -102,7 +101,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('notifications',["checkUnreadNotifications"]),
+    ...mapActions('notifications', ['checkUnreadNotifications']),
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
     },
@@ -113,22 +112,26 @@ export default {
       if (this.isLoggedIn) {
         signOut(auth)
           .then(() => {
-            this.$store.dispatch("users/logout");
-            this.$router.push("/login");
-            this.$emit("login-success", null);
+            this.$store.dispatch('users/logout');
+            this.$router.push('/login');
+            this.$emit('login-success', null);
+            if (self.name != 'reload') {
+              self.name = 'reload';
+              self.location.reload(true);
+            } else self.name = '';
           })
           .catch((error) => {
-            console.error("로그아웃 오류: ", error);
+            console.error('로그아웃 오류: ', error);
           });
       } else {
-        this.$router.push("/login");
+        this.$router.push('/login');
       }
       this.closeMenu();
     },
     async checkNotifications() {
       const hasUnread = await this.checkUnreadNotifications({
         uid: this.userUid,
-      });      
+      });
       this.notice = hasUnread;
     },
   },
@@ -176,7 +179,7 @@ header {
 
 .center-section h1 {
   font-size: 1.5em;
-  font-family: "Dovemayo_gothic";
+  font-family: 'Dovemayo_gothic';
 }
 
 .right-section {
@@ -188,7 +191,7 @@ header {
 #alarm {
   width: 20px;
   height: 20px;
-  background-image: url("../../assets/images/bell.png");
+  background-image: url('../../assets/images/bell.png');
   background-size: cover;
   margin-right: 10px;
 }
