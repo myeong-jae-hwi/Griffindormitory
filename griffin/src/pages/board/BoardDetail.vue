@@ -4,7 +4,6 @@
       <h2>{{ title }}</h2>
 
       <div class="vertical">
-        <p id="author">씨발: {{ userUid }}</p>
         <p id="author">작성자: {{ author }}</p>
         <p id="author">{{ utcToKor }}</p>
       </div>
@@ -45,7 +44,6 @@ export default {
     BoardComments,
   },
 
-
   props: ["id", "name", "title", "content", "time", "author", "userUid"],
   data() {
     return {
@@ -78,7 +76,7 @@ export default {
       const commentText = this.newComment.trim();
       const userName = this.userName;
       const userId = this.id;
-      console.log("보드디테일 76번째 줄: ",this.Please)
+      console.log("보드디테일 76번째 줄: ", this.Please);
 
       try {
         await this.$store.dispatch("boards/addComment", {
@@ -94,32 +92,40 @@ export default {
           userId: userId,
         });
         this.newComment = "";
-        this.createNotificationForPostAuthor(this.Please, this.userName, commentText, this.id);   // to에 해당 글쓴 사람 uid넣어야댐
+        this.createNotificationForPostAuthor(
+          this.Please,
+          this.userName,
+          commentText,
+          this.id,
+          this.userId
+        ); 
       } catch (error) {
         console.error("Error adding comment:", error.message);
       }
     },
-    async createNotificationForPostAuthor(to, from, commentText, boardId) {
-      try {
-        console.log("알림 받는 사람 uid: ",to)
-        console.log("댓글을 쓴 사람: ",from)
-        console.log("뭐라 썼는지: ",commentText)
-        console.log("알림이 발생한 글: ",boardId)
+    async createNotificationForPostAuthor(to, from, commentText, boardId, fromUid) {
+      if (to != fromUid) {
+        try {
+          console.log("알림 받는 사람 uid: ", to);
+          console.log("댓글을 쓴 사람: ", from);
+          console.log("뭐라 썼는지: ", commentText);
+          console.log("알림이 발생한 글: ", boardId);
 
-        const notification = {
-          userId: to, 
-          message: `댓글이 달렸어요 ${from}: ${commentText}`,
-          is_read: false,
-          created_at: new Date().toISOString(),
-          boardId: boardId
-        };
+          const notification = {
+            userId: to,
+            message: `댓글이 달렸어요 ${from}: ${commentText}`,
+            is_read: false,
+            created_at: new Date().toISOString(),
+            boardId: boardId,
+          };
 
-        await this.$store.dispatch("notifications/createNotification", {
-          uid: to,
-          notification: notification,
-        });
-      } catch (error) {
-        console.error("Error creating notification:", error.message);
+          await this.$store.dispatch("notifications/createNotification", {
+            uid: to,
+            notification: notification,
+          });
+        } catch (error) {
+          console.error("Error creating notification:", error.message);
+        }
       }
     },
     async fetchComments() {
@@ -130,7 +136,7 @@ export default {
   },
   created() {
     this.fetchComments();
-    console.log(this.userUid)
+    console.log(this.userUid);
   },
 };
 </script>
