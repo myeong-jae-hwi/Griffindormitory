@@ -13,7 +13,7 @@
         </button>
       </li>
     </ul>
-    <button @click="createNewNotification">Create New Notification</button>
+    <!-- <button @click="createNewNotification">Create New Notification</button> -->
   </div>
 </template>
 
@@ -42,15 +42,15 @@ export default {
       const uid = this.userId;
       this.markNotificationAsRead({ uid, notificationId });
     },
-    createNewNotification() {
-      const uid = this.userId;
-      const newNotification = {
-        message: "This is a new notification",
-        is_read: false,
-        created_at: new Date().toISOString(),
-      };
-      this.createNotification({ uid, notification: newNotification });
-    },
+    // createNewNotification() {
+    //   const uid = this.userId;
+    //   const newNotification = {
+    //     message: "This is a new notification",
+    //     is_read: false,
+    //     created_at: new Date().toISOString(),
+    //   };
+    //   this.createNotification({ uid, notification: newNotification });
+    // },
   },
   created() {
     const uid = this.userId;
