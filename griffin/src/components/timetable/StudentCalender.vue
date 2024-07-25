@@ -131,7 +131,7 @@ export default {
       'selectedDay',
       'selectedIndex',
       'selectedSemester',
-      'schedules', // schedules를 추가하여 컴포넌트에서 접근할 수 있도록 합니다.
+      'schedules',
     ]),
     ...mapState('users', ['userID']),
     ...mapGetters('users', ['currentUser']),
