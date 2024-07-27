@@ -11,16 +11,19 @@
         </transition>
       </router-view>
     </main>
+    <the-footer></the-footer>
   </div>
 </template>
 
 <script>
 import TheHeader from './components/UI/TheHeader.vue';
+import TheFooter from './components/UI/TheFooter.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   components: {
     TheHeader,
+    TheFooter,
   },
   data() {
     return {
