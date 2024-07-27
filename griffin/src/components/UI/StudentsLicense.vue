@@ -41,6 +41,7 @@ export default {
       return {
         backgroundImage: `url(${this.imageUrl})`,
         backgroundSize: 'contain',
+        backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         width: '10vh',
         height: '10vh',
