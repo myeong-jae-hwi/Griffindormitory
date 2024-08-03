@@ -12,6 +12,7 @@
         <router-link to="/info" class="footer-link">홈</router-link>
         <router-link to="/timetable" class="footer-link">시간표</router-link>
         <router-link to="/setting" class="footer-link">설정</router-link>
+        <router-link to="/alart" class="footer-link">알람</router-link>
       </nav>
     </div>
   </footer>
