@@ -38,6 +38,7 @@
       </form>
     </div>
   </div>
+  <base-btn type='submit' @click='logIn'>로그인 ㅋㅋ</base-btn>
 </template>
 
 <script>
@@ -47,8 +48,10 @@ import {
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { ref, set } from 'firebase/database';
+import BaseBtn from '../UI/BaseBtn.vue';
 
 export default {
+  components: { BaseBtn },
   name: 'LoginForm',
   data() {
     return {
@@ -63,6 +66,11 @@ export default {
     };
   },
   methods: {
+    logIn(){
+      this.email = 'audwognl@gmail.com';
+      this.password='123123'
+      this.handleSubmit()
+    },
     toggleForm() {
       this.isLogin = !this.isLogin;
       this.name = '';
