@@ -1,6 +1,12 @@
 <template>
   <base-card>
-    <div class="image"></div>
+    <div class="image" :style="imageStyle" @click="triggerFileInput"></div>
+    <input
+      type="file"
+      ref="fileInput"
+      @change="handleFileUpload"
+      style="display: none"
+    />
     <div class="vertical" v-if="currentUser">
       <h2>{{ currentUser.name }}</h2>
       <p>{{ currentUser.email }}</p>
@@ -10,42 +16,91 @@
     </div>
 
     <div v-else>
-      <h2>로그인이 필요합니다 ^^</h2>
+      <h2>로그인이 필요합니다</h2>
     </div>
-
   </base-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import baseProfileImage from '../../assets/images/BaseProfile.svg';
 
 export default {
+  data() {
+    return {
+      imageUrl: baseProfileImage,
+    };
+  },
   computed: {
     ...mapGetters('users', ['currentUser']),
     userId() {
       return this.$store.state.users.userID;
     },
+    imageStyle() {
+      return {
+        backgroundImage: `url(${this.imageUrl})`,
+        backgroundSize: 'contain',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        width: '10vh',
+        height: '10vh',
+        borderRadius: '50%',
+        marginLeft: '3%',
+        cursor: 'pointer',
+      };
+    },
   },
-  mounted() {
+  async mounted() {
     if (this.userId && !this.currentUser) {
-      this.$store.dispatch('users/fetchUserInitialData', {
+      await this.$store.dispatch('users/fetchUserInitialData', {
         uid: this.userId,
       });
     }
+    if (this.currentUser) {
+      this.loadUserImage();
+    }
+  },
+  methods: {
+    async loadUserImage() {
+      try {
+        const storage = getStorage();
+        const imageRef = ref(
+          storage,
+          `users/${this.currentUser.id}/profile.jpg`
+        );
+        const url = await getDownloadURL(imageRef);
+        this.imageUrl = url;
+      } catch (error) {
+        console.error('Failed to load user image', error);
+        this.imageUrl = baseProfileImage;
+      }
+    },
+    triggerFileInput() {
+      this.$refs.fileInput.click();
+    },
+    async handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      try {
+        const storage = getStorage();
+        const imageRef = ref(
+          storage,
+          `users/${this.currentUser.id}/profile.jpg`
+        );
+        await uploadBytes(imageRef, file);
+        const url = await getDownloadURL(imageRef);
+        this.imageUrl = url;
+      } catch (error) {
+        console.error('Upload error user image', error);
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-.image {
-  width: 10vh;
-  height: 10vh;
-  border-radius: 50%;
-  background-image: url('../../assets/images/BaseProfile.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-left: 3%;
-}
 .vertical {
   position: relative;
   display: block;
@@ -58,7 +113,7 @@ h2 {
   font-size: 18px;
 }
 p {
-  margin: 6px 0 0 0 ;
+  margin: 6px 0 0 0;
   font-size: 14px;
 }
 </style>

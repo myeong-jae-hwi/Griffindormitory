@@ -243,17 +243,25 @@ header {
   height: 100%;
 }
 
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
 .slide-fade-enter-active {
-  animation: slide-fade-in 0.5s forwards;
+  animation-name: slide-fade-in;
 }
 
 .slide-fade-leave-active {
-  animation: slide-fade-out 0.5s forwards;
+  animation-name: slide-fade-out;
 }
-
+/* 여기 수정
+  X만큼 width가 변경되어 footer에 영향을 미침.
+   */
 @keyframes slide-fade-in {
   0% {
-    transform: translateX(100%);
+    transform: translateX(50px);
     opacity: 0;
   }
   100% {
@@ -268,7 +276,7 @@ header {
     opacity: 1;
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(-50px);
     opacity: 0;
   }
 }
