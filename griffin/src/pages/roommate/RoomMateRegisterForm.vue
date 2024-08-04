@@ -145,6 +145,9 @@ export default {
     userUniversity() {
       return this.currentUser.university;
     },
+    userId() {
+      return this.$store.state.users.userID;
+    },
   },
   data() {
     return {
@@ -156,11 +159,13 @@ export default {
         besmoke: null,
         preferences: '',
         university: '',
+        userUid: null,
       },
     };
   },
   created() {
     this.form.university = this.userUniversity;
+    this.form.userUid = this.userId;
   },
   methods: {
     ...mapActions(['registerMate']),
@@ -174,6 +179,7 @@ export default {
         this.form.besmoke = null;
         this.form.preferences = '';
         this.form.university = null;
+        this.form.userUid = null;
         alert('게시물이 성공적으로 등록되었습니다.');
         this.$router.push('/roommateboard');
       } catch (error) {

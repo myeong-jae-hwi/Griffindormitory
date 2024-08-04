@@ -65,8 +65,12 @@ export default {
 </script>
 
 <style scoped>
-li {
+li{
   list-style-type: none;
+}
+
+li:last-child{
+  padding-bottom: 50px;
 }
 
 .isread{
@@ -76,6 +80,10 @@ li {
 
 p{
   font-weight: 700;
+}
+
+ul{
+  padding: 0;
 }
 
 .list{

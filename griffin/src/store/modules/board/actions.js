@@ -37,7 +37,7 @@ export default {
       comments: [],
       author: data.author,
       university: data.university,
-      userUid: data.id
+      userUid: data.id,
     };
 
     try {
@@ -59,6 +59,19 @@ export default {
       context.dispatch('fetchInitialData');
     } catch (error) {
       console.error('Error registering board:', error.message);
+    }
+  },
+
+  async deleteBoard(context, boardId) {
+    try {
+      const response = await fetch(`${dbURL}/boards/${boardId}.json`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete board');
+
+      context.commit('deleteBoard', boardId);
+    } catch (error) {
+      console.error('Error adding comment:', error.message);
     }
   },
 
