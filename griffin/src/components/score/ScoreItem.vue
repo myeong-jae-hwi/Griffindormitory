@@ -23,7 +23,7 @@
 <script>
 
 export default {
-  // props: ['initialSubject', 'initialGrade'],
+  props: ['initialSubject', 'initialGrade'],
   data() {
     return {
       subject: this.initialSubject || '',
@@ -31,6 +31,9 @@ export default {
     };
   },
   watch: {
+    // initialSubject(newSubject) {
+    //   this.subject = newSubject;
+    // },
     subject(newSubject) {
       this.$emit('update-subject', newSubject);
     },

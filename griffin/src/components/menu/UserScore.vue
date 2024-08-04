@@ -1,5 +1,17 @@
+
 <template>
   <div>
+    <select v-model="selectedGrade">
+      <option value="1grade_1semester">1학년 1학기</option>
+      <option value="1grade_2semester">1학년 2학기</option>
+      <option value="2grade_1semester">2학년 1학기</option>
+      <option value="2grade_2semester">2학년 2학기</option>
+      <option value="3grade_1semester">3학년 1학기</option>
+      <option value="3grade_2semester">3학년 2학기</option>
+      <option value="4grade_1semester">4학년 1학기</option>
+      <option value="4grade_2semester">4학년 2학기</option>
+    </select>
+    <base-btn type="submit" @click="submitGrade">확인</base-btn>
     <h4>이번 학기 성적</h4>
     <base-card>
       <base-chart
@@ -24,7 +36,7 @@
     <base-card class="horizontal">
       <div v-for="(item, index) in scoreItems" :key="index" class="score-item">
         <score-item
-          :initial-subject="item.subject"
+          :initial-subject="item"
           :initial-grade="item.grade"
           @update-subject="updateSubject(index, $event)"
           @update-grade="updateGrade(index, $event)"
@@ -38,12 +50,12 @@
 </template>
 
 <script>
-import BaseChart from '../chart/BaseChart.vue';
-import { Chart, registerables } from 'chart.js';
-import BaseCard from '../UI/BaseCard.vue';
-import ScoreItem from '../score/ScoreItem.vue';
-import { mapGetters } from 'vuex';
-
+import BaseChart from "../chart/BaseChart.vue";
+import { Chart, registerables } from "chart.js";
+import BaseCard from "../UI/BaseCard.vue";
+import ScoreItem from "../score/ScoreItem.vue";
+import { mapGetters } from "vuex";
+import BaseBtn from "../UI/BaseBtn.vue";
 
 Chart.register(...registerables);
 
@@ -52,9 +64,10 @@ export default {
     BaseChart,
     BaseCard,
     ScoreItem,
+    BaseBtn,
   },
-    computed: {
-    ...mapGetters('users', ['currentUser']),
+  computed: {
+    ...mapGetters("users", ["currentUser"]),
     userId() {
       return this.$store.state.users.userID;
     },
@@ -62,52 +75,58 @@ export default {
   data() {
     return {
       allScores: {
-        type: 'bar',
+        type: "bar",
         data: {
           labels: [],
           datasets: [
             {
-              label: '이번학기 성적',
+              label: "이번학기 성적",
               data: [],
-              backgroundColor: ['rgba(255, 99, 132, 0.2)'],
-              borderColor: ['rgba(255, 99, 132, 1)'],
+              backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+              borderColor: ["rgba(255, 99, 132, 1)"],
               borderWidth: 1,
             },
           ],
         },
       },
       thisScores: {
-        type: 'line',
+        type: "line",
         data: {
           labels: [],
           datasets: [
             {
-              label: '전체 성적',
+              label: "전체 성적",
               data: [],
-              backgroundColor: ['rgba(255, 99, 132, 0.2)'],
-              borderColor: ['rgba(255, 99, 132, 1)'],
+              backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+              borderColor: ["rgba(255, 99, 132, 1)"],
               borderWidth: 1,
             },
           ],
         },
       },
       scoreItems: [],
+      selectedGrade: "",
     };
   },
   created() {
     if (this.userId) {
-      this.$store.dispatch('users/fetchUserInitialData', {
+      this.$store.dispatch("users/fetchUserInitialData", {
         uid: this.userId,
       });
     }
-    console.log("안녕하삼 ㅋㅋ",this.userId)
-    this.fetchScores();
+    // this.fetchScores();
   },
   methods: {
+    submitGrade() {
+      this.fetchScores();
+      console.log('레이블: ',this.allScores.data.labels)
+      console.log('데이터: ',this.allScores.data.datasets[0].data)
+    },
     addScoreItem() {
-      this.scoreItems.push({ subject: '', grade: 'A+' });
-      console.log(this.allScores);
-      console.log(this.allScores.data.datasets[0].data.length);
+      const subjects = this.allScores.data.labels
+      console.log("aaaa",subjects)
+      this.scoreItems.push({ subject: "", grade: "A+" });
+      console.log('이게머누',this.allScores.data.labels);
     },
     removeScoreItem(index) {
       this.scoreItems.splice(index, 1);
@@ -116,72 +135,79 @@ export default {
       this.scoreItems[index].subject = newSubject;
     },
     updateGrade(index, newGrade) {
+      console.log('aa',newGrade)
+      console.log('b',this.scoreItems[index].grade)
       this.scoreItems[index].grade = newGrade;
     },
     async submitScores() {
       try {
         const scoresArray = this.scoreItems.map((item) => [
-          item.subject,
+          //item.subject,
           this.convertGradeToPoint(item.grade),
         ]);
         await fetch(
-          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}.json`,
+          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}/.json`,
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify(scoresArray),
           }
         );
-        this.fetchScores(); // 데이터 저장 후 최신 데이터를 다시 가져옴
-        this.scoreItems = []; // 제출 후 입력 필드 초기화
+        this.scoreItems = [];
+        this.fetchScores(); 
+        
       } catch (error) {
-        console.error('Error submitting scores:', error);
+        console.error("Error submitting scores:", error);
       }
     },
+
     async fetchScores() {
       try {
+        this.allScores.data.labels = []
+        this.allScores.data.datasets[0].data = [];
+       
         const response = await fetch(
-          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}.json`
+          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}/.json`
         );
         const data = await response.json();
 
-        // 데이터 처리 및 차트 업데이트
         const subjects = [];
         const grades = [];
 
-        for (const key in data) {
-          const item = data[key];
-
-          for (const value in item) {
-            subjects.push(item[value][0]);
-            grades.push(item[value][1]);
+        for (let day in data) {
+          if (data[day] && data[day].schedules) {
+            data[day].schedules.forEach((schedule) => {
+              if (schedule.title) {
+                subjects.push(schedule.title);
+                grades.push((schedule.point));
+              }
+            });
           }
-          console.log('item: ' + item.length);
         }
-        console.log('subjects:' + subjects);
-        console.log('grades:' + grades);
 
         this.allScores.data.labels = subjects;
         this.allScores.data.datasets[0].data = grades;
+        this.scoreItems = subjects;
+
       } catch (error) {
-        console.error('Error fetching scores:', error);
+        console.error("Error fetching scores:", error);
       }
     },
     convertGradeToPoint(grade) {
       const gradeMap = {
-        'A+': 4.5,
-        'A0' : 4.0,
-        'B+': 3.5,
-        'B0': 3.0,
-        'C+': 2.5,
-        'C0': 2.0,
-        'D+': 1.5,
-        'D0': 1.0,
-        'F': 0.0,
-        'P': 0.0,
-        'NP': 0.0,
+        "A+": 4.5,
+        A0: 4.0,
+        "B+": 3.5,
+        B0: 3.0,
+        "C+": 2.5,
+        C0: 2.0,
+        "D+": 1.5,
+        D0: 1.0,
+        F: 0.0,
+        P: 0.0,
+        NP: 0.0,
       };
       return gradeMap[grade] || 0;
     },

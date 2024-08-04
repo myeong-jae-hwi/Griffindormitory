@@ -1,13 +1,13 @@
 <template>
   <div>
     <base-card class="horizental">
-      <h2>{{ title }}</h2>
+      <h2>{{ boardTitle }}</h2>
 
       <div class="vertical">
-        <p id="author">작성자: {{ author }}</p>
+        <p id="author">작성자: {{ boardAuthor }}</p>
         <p id="author">{{ utcToKor }}</p>
       </div>
-      <p>{{ content }}</p>
+      <p>{{ boardContents }}</p>
     </base-card>
     <section class="comment-section">
       <input
@@ -49,13 +49,17 @@ export default {
     return {
       newComment: "",
       comments: [],
+      boardTitle: this.title,
+      boardContents: this.content,
+      boardTime:this.time,
+      boardAuthor: this.author,
     };
   },
 
   computed: {
     ...mapGetters("boards", ["boards"]),
     utcToKor() {
-      return moment.utc(this.time).local().format("YYYY/MM/DD");
+      return moment.utc(this.boardTime).local().format("YYYY/MM/DD");
     },
     userName() {
       return this.$store.state.users.users[0].name;
@@ -132,11 +136,14 @@ export default {
       await this.$store.dispatch("boards/fetchInitialData", this.id);
       const board = this.boards.find((board) => board.id === this.id);
       this.comments = board.comments;
+      this.boardTitle = board.title;
+      this.boardContents = board.content;
+      this.boardTime = board.time
+      this.boardAuthor = board.author
     },
   },
   created() {
     this.fetchComments();
-    console.log(this.userUid);
   },
 };
 </script>

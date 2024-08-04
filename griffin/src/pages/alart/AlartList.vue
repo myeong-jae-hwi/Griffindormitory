@@ -4,23 +4,22 @@
     <div v-if="error">{{ error.message }}</div>
     <ul v-if="!loading">
       <li v-for="notification in allNotifications" :key="notification.id">
-        <p>{{ notification.message }}</p>
-        <button
-          v-if="!notification.is_read"
-          @click="markAsRead(notification.id)"
-        >
-          Mark as Read
-        </button>
+        <base-card @click="GotoPost(notification)" class="list">
+          <p :class="{ isread: notification.is_read }">{{ notification.message }}</p>
+        </base-card>
       </li>
     </ul>
+
     <!-- <button @click="createNewNotification">Create New Notification</button> -->
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import BaseCard from "../../components/UI/BaseCard.vue";
 
 export default {
+  components: { BaseCard },
   computed: {
     ...mapGetters("notifications", [
       "allNotifications",
@@ -42,6 +41,12 @@ export default {
       const uid = this.userId;
       this.markNotificationAsRead({ uid, notificationId });
     },
+    GotoPost(notificationId){
+      this.markAsRead(notificationId.id)
+      console.log(notificationId.boardId)
+      this.$router.push({
+        path: `/boardlist/${notificationId.boardId}`,})
+    }
     // createNewNotification() {
     //   const uid = this.userId;
     //   const newNotification = {
@@ -58,3 +63,23 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+li {
+  list-style-type: none;
+}
+
+.isread{
+  color: #696969;
+  font-weight: normal;
+}
+
+p{
+  font-weight: 700;
+}
+
+.list{
+  padding-left:20px;
+  cursor: pointer;
+}
+</style>
