@@ -21,6 +21,7 @@ export default {
           besmoke: matesData[key].besmoke,
           preferences: matesData[key].preferences,
           university: matesData[key].university,
+          userUid: matesData[key].userUid,
         };
         mates.unshift(mate);
       }
@@ -39,6 +40,7 @@ export default {
       besmoke: data.besmoke,
       preferences: data.preferences,
       university: data.university,
+      userUid: data.userUid,
     };
 
     try {
