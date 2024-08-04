@@ -1,7 +1,6 @@
-
 <template>
   <div>
-    <select v-model="selectedGrade">
+    <select v-model="selectedGrade" class="semesterchoise">
       <option value="1grade_1semester">1학년 1학기</option>
       <option value="1grade_2semester">1학년 2학기</option>
       <option value="2grade_1semester">2학년 1학기</option>
@@ -11,6 +10,7 @@
       <option value="4grade_1semester">4학년 1학기</option>
       <option value="4grade_2semester">4학년 2학기</option>
     </select>
+    <h2 class="semesterhead">성적</h2>
     <base-btn type="submit" @click="submitGrade">확인</base-btn>
     <h4>이번 학기 성적</h4>
     <base-card>
@@ -36,7 +36,7 @@
     <base-card class="horizontal">
       <div v-for="(item, index) in scoreItems" :key="index" class="score-item">
         <score-item
-          :initial-subject="item"
+          :initial-subject="item.subject"
           :initial-grade="item.grade"
           @update-subject="updateSubject(index, $event)"
           @update-grade="updateGrade(index, $event)"
@@ -50,12 +50,12 @@
 </template>
 
 <script>
-import BaseChart from "../chart/BaseChart.vue";
-import { Chart, registerables } from "chart.js";
-import BaseCard from "../UI/BaseCard.vue";
-import ScoreItem from "../score/ScoreItem.vue";
-import { mapGetters } from "vuex";
-import BaseBtn from "../UI/BaseBtn.vue";
+import BaseChart from '../chart/BaseChart.vue';
+import { Chart, registerables } from 'chart.js';
+import BaseCard from '../UI/BaseCard.vue';
+import ScoreItem from '../score/ScoreItem.vue';
+import { mapGetters } from 'vuex';
+import BaseBtn from '../UI/BaseBtn.vue';
 
 Chart.register(...registerables);
 
@@ -67,7 +67,7 @@ export default {
     BaseBtn,
   },
   computed: {
-    ...mapGetters("users", ["currentUser"]),
+    ...mapGetters('users', ['currentUser']),
     userId() {
       return this.$store.state.users.userID;
     },
@@ -75,42 +75,44 @@ export default {
   data() {
     return {
       allScores: {
-        type: "bar",
+        type: 'bar',
         data: {
           labels: [],
+          grades: [],
           datasets: [
             {
-              label: "이번학기 성적",
+              label: '이번학기 성적',
               data: [],
-              backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-              borderColor: ["rgba(255, 99, 132, 1)"],
+              backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+              borderColor: ['rgba(255, 99, 132, 1)'],
               borderWidth: 1,
             },
           ],
         },
       },
       thisScores: {
-        type: "line",
+        type: 'line',
         data: {
           labels: [],
+          grades: [],
           datasets: [
             {
-              label: "전체 성적",
+              label: '전체 성적',
               data: [],
-              backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-              borderColor: ["rgba(255, 99, 132, 1)"],
+              backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+              borderColor: ['rgba(255, 99, 132, 1)'],
               borderWidth: 1,
             },
           ],
         },
       },
       scoreItems: [],
-      selectedGrade: "",
+      selectedGrade: '',
     };
   },
   created() {
     if (this.userId) {
-      this.$store.dispatch("users/fetchUserInitialData", {
+      this.$store.dispatch('users/fetchUserInitialData', {
         uid: this.userId,
       });
     }
@@ -119,14 +121,15 @@ export default {
   methods: {
     submitGrade() {
       this.fetchScores();
-      console.log('레이블: ',this.allScores.data.labels)
-      console.log('데이터: ',this.allScores.data.datasets[0].data)
+      console.log('레이블: ', this.allScores.data.labels);
+      console.log('데이터: ', this.allScores.data.datasets[0].data);
     },
     addScoreItem() {
-      const subjects = this.allScores.data.labels
-      console.log("aaaa",subjects)
-      this.scoreItems.push({ subject: "", grade: "A+" });
-      console.log('이게머누',this.allScores.data.labels);
+      const subjects = this.allScores.data.labels;
+      const grades = this.allScores.data.points;
+      console.log('aaaa', subjects);
+      console.log('bbbb', grades);
+      this.scoreItems.push({ subject: this.subjects, grade: grades });
     },
     removeScoreItem(index) {
       this.scoreItems.splice(index, 1);
@@ -135,39 +138,57 @@ export default {
       this.scoreItems[index].subject = newSubject;
     },
     updateGrade(index, newGrade) {
-      console.log('aa',newGrade)
-      console.log('b',this.scoreItems[index].grade)
+      console.log('aa', newGrade);
+      console.log('b', this.scoreItems[index].grade);
       this.scoreItems[index].grade = newGrade;
     },
     async submitScores() {
       try {
-        const scoresArray = this.scoreItems.map((item) => [
-          //item.subject,
-          this.convertGradeToPoint(item.grade),
-        ]);
-        await fetch(
-          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}/.json`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(scoresArray),
-          }
+        const scoresArray = this.scoreItems.map((item) => ({
+          subject: item.subject,
+          grade: this.convertGradeToPoint(item.grade),
+        }));
+        console.log(scoresArray);
+
+        const response = await fetch(
+          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}.json`
         );
+        const data = await response.json();
+
+        for (let day in data) {
+          if (data[day] && data[day].schedules) {
+            data[day].schedules.forEach(async (schedule, index) => {
+              const matchingScore = scoresArray.find(
+                (score) => score.subject === schedule.title
+              );
+              if (matchingScore) {
+                const pointUpdate = { point: matchingScore.grade };
+
+                await fetch(
+                  `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}/${day}/schedules/${index}.json`,
+                  {
+                    method: 'PATCH',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(pointUpdate),
+                  }
+                );
+              }
+            });
+          }
+        }
         this.scoreItems = [];
-        this.fetchScores(); 
-        
+        this.fetchScores();
       } catch (error) {
-        console.error("Error submitting scores:", error);
+        console.error('Error submitting scores:', error);
       }
     },
-
     async fetchScores() {
       try {
-        this.allScores.data.labels = []
+        this.allScores.data.labels = [];
         this.allScores.data.datasets[0].data = [];
-       
+
         const response = await fetch(
           `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}/.json`
         );
@@ -181,7 +202,9 @@ export default {
             data[day].schedules.forEach((schedule) => {
               if (schedule.title) {
                 subjects.push(schedule.title);
-                grades.push((schedule.point));
+                grades.push(schedule.point);
+                console.log('Title:', schedule.title);
+                console.log('Point:', schedule.point);
               }
             });
           }
@@ -189,21 +212,23 @@ export default {
 
         this.allScores.data.labels = subjects;
         this.allScores.data.datasets[0].data = grades;
-        this.scoreItems = subjects;
-
+        this.scoreItems = subjects.map((subject, index) => ({
+          subject,
+          grade: grades[index],
+        }));
       } catch (error) {
-        console.error("Error fetching scores:", error);
+        console.error('Error fetching scores:', error);
       }
     },
     convertGradeToPoint(grade) {
       const gradeMap = {
-        "A+": 4.5,
+        'A+': 4.5,
         A0: 4.0,
-        "B+": 3.5,
+        'B+': 3.5,
         B0: 3.0,
-        "C+": 2.5,
+        'C+': 2.5,
         C0: 2.0,
-        "D+": 1.5,
+        'D+': 1.5,
         D0: 1.0,
         F: 0.0,
         P: 0.0,
@@ -220,7 +245,6 @@ export default {
   vertical-align: middle;
   display: table-cell;
 }
-
 .score-item {
   margin-bottom: 10px;
 }
