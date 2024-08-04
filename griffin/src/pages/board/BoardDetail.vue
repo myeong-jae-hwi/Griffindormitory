@@ -2,12 +2,14 @@
   <div>
     <base-card class="horizental">
       <h2>{{ boardTitle }}</h2>
-
       <div class="vertical">
         <p id="author">작성자: {{ boardAuthor }}</p>
         <p id="author">{{ utcToKor }}</p>
       </div>
       <p>{{ boardContents }}</p>
+      <div v-if="currentUser.id === boardUid">
+        <button @click="deleteBoard">삭제하기</button>
+      </div>
     </base-card>
     <section class="comment-section">
       <input
@@ -35,31 +37,33 @@
 </template>
 
 <script>
-import moment from "moment";
-import { mapGetters } from "vuex";
-import BoardComments from "../../components/board/BoardComments.vue";
+import moment from 'moment';
+import { mapGetters } from 'vuex';
+import BoardComments from '../../components/board/BoardComments.vue';
 
 export default {
   components: {
     BoardComments,
   },
 
-  props: ["id", "name", "title", "content", "time", "author", "userUid"],
+  props: ['id', 'name', 'title', 'content', 'time', 'author', 'userUid'],
   data() {
     return {
-      newComment: "",
+      newComment: '',
       comments: [],
       boardTitle: this.title,
       boardContents: this.content,
-      boardTime:this.time,
+      boardTime: this.time,
       boardAuthor: this.author,
+      boardUid: this.userUid,
     };
   },
 
   computed: {
-    ...mapGetters("boards", ["boards"]),
+    ...mapGetters('boards', ['boards']),
+    ...mapGetters('users', ['currentUser']),
     utcToKor() {
-      return moment.utc(this.boardTime).local().format("YYYY/MM/DD");
+      return moment.utc(this.boardTime).local().format('YYYY/MM/DD');
     },
     userName() {
       return this.$store.state.users.users[0].name;
@@ -67,23 +71,32 @@ export default {
     userId() {
       return this.$store.state.users.userID;
     },
-    Please() {
+    receiveUid() {
       return this.$route.query.userUid;
     },
   },
   methods: {
     formatTime(time) {
-      return moment.utc(time).local().format("YYYY/MM/DD");
+      return moment.utc(time).local().format('YYYY/MM/DD');
     },
+    async deleteBoard() {
+      try {
+        await this.$store.dispatch('boards/deleteBoard', this.id);
+        alert('게시물을 삭제하셨습니다.');
+        this.$router.push('/boardlist');
+      } catch (error) {
+        console.error('Error deleting board:', error.message);
+      }
+    },
+
     async submitComment() {
-      if (this.newComment.trim() === "") return;
+      if (this.newComment.trim() === '') return;
       const commentText = this.newComment.trim();
       const userName = this.userName;
       const userId = this.id;
-      console.log("보드디테일 76번째 줄: ", this.Please);
 
       try {
-        await this.$store.dispatch("boards/addComment", {
+        await this.$store.dispatch('boards/addComment', {
           boardId: this.id,
           comment: commentText,
           userName: userName,
@@ -95,26 +108,27 @@ export default {
           time: new Date().toISOString(),
           userId: userId,
         });
-        this.newComment = "";
+        this.newComment = '';
         this.createNotificationForPostAuthor(
-          this.Please,
+          this.receiveUid,
           this.userName,
           commentText,
-          this.id,
           this.userId
-        ); 
+          // this.id, ---------- 불필요 코드 ?
+        );
       } catch (error) {
-        console.error("Error adding comment:", error.message);
+        console.error('Error adding comment:', error.message);
       }
     },
-    async createNotificationForPostAuthor(to, from, commentText, boardId, fromUid) {
+    async createNotificationForPostAuthor(
+      to,
+      from,
+      commentText,
+      boardId,
+      fromUid
+    ) {
       if (to != fromUid) {
         try {
-          console.log("알림 받는 사람 uid: ", to);
-          console.log("댓글을 쓴 사람: ", from);
-          console.log("뭐라 썼는지: ", commentText);
-          console.log("알림이 발생한 글: ", boardId);
-
           const notification = {
             userId: to,
             message: `댓글이 달렸어요 ${from}: ${commentText}`,
@@ -123,23 +137,24 @@ export default {
             boardId: boardId,
           };
 
-          await this.$store.dispatch("notifications/createNotification", {
+          await this.$store.dispatch('notifications/createNotification', {
             uid: to,
             notification: notification,
           });
         } catch (error) {
-          console.error("Error creating notification:", error.message);
+          console.error('Error creating notification:', error.message);
         }
       }
     },
     async fetchComments() {
-      await this.$store.dispatch("boards/fetchInitialData", this.id);
+      await this.$store.dispatch('boards/fetchInitialData', this.id);
       const board = this.boards.find((board) => board.id === this.id);
       this.comments = board.comments;
       this.boardTitle = board.title;
       this.boardContents = board.content;
-      this.boardTime = board.time
-      this.boardAuthor = board.author
+      this.boardTime = board.time;
+      this.boardAuthor = board.author;
+      this.boardUid = board.userUid;
     },
   },
   created() {
