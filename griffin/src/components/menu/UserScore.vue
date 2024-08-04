@@ -130,7 +130,6 @@ export default {
       console.log('aaaa', subjects);
       console.log('bbbb', grades);
       this.scoreItems.push({ subject: this.subjects, grade: grades });
-      console.log('이게머누', this.allScores.data.labels);
     },
     removeScoreItem(index) {
       this.scoreItems.splice(index, 1);
@@ -143,31 +142,6 @@ export default {
       console.log('b', this.scoreItems[index].grade);
       this.scoreItems[index].grade = newGrade;
     },
-    // async submitScores() {
-    //   try {
-    //     const scoresArray = this.scoreItems.map((item) => ({
-    //       //item.subject,
-    //       // this.convertGradeToPoint(item.grade),
-    //       subject: item.subject.labels,
-    //       grade: this.convertGradeToPoint(item.grade.grades),
-    //     }));
-    //     console.log(scoresArray);
-    //     await fetch(
-    //       `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}/.json`,
-    //       {
-    //         method: 'POST',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(scoresArray),
-    //       }
-    //     );
-    //     this.scoreItems = [];
-    //     this.fetchScores();
-    //   } catch (error) {
-    //     console.error('Error submitting scores:', error);
-    //   }
-    // },
     async submitScores() {
       try {
         const scoresArray = this.scoreItems.map((item) => ({
@@ -175,23 +149,41 @@ export default {
           grade: this.convertGradeToPoint(item.grade),
         }));
         console.log(scoresArray);
-        await fetch(
-          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}/.json`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(scoresArray),
-          }
+
+        const response = await fetch(
+          `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}.json`
         );
+        const data = await response.json();
+
+        for (let day in data) {
+          if (data[day] && data[day].schedules) {
+            data[day].schedules.forEach(async (schedule, index) => {
+              const matchingScore = scoresArray.find(
+                (score) => score.subject === schedule.title
+              );
+              if (matchingScore) {
+                const pointUpdate = { point: matchingScore.grade };
+
+                await fetch(
+                  `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}/${day}/schedules/${index}.json`,
+                  {
+                    method: 'PATCH',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(pointUpdate),
+                  }
+                );
+              }
+            });
+          }
+        }
         this.scoreItems = [];
         this.fetchScores();
       } catch (error) {
         console.error('Error submitting scores:', error);
       }
     },
-
     async fetchScores() {
       try {
         this.allScores.data.labels = [];
