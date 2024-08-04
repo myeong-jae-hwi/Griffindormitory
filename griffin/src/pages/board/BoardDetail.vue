@@ -37,19 +37,19 @@
 </template>
 
 <script>
-import moment from 'moment';
-import { mapGetters } from 'vuex';
-import BoardComments from '../../components/board/BoardComments.vue';
+import moment from "moment";
+import { mapGetters } from "vuex";
+import BoardComments from "../../components/board/BoardComments.vue";
 
 export default {
   components: {
     BoardComments,
   },
 
-  props: ['id', 'name', 'title', 'content', 'time', 'author', 'userUid'],
+  props: ["id", "name", "title", "content", "time", "author", "userUid"],
   data() {
     return {
-      newComment: '',
+      newComment: "",
       comments: [],
       boardTitle: this.title,
       boardContents: this.content,
@@ -60,10 +60,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters('boards', ['boards']),
-    ...mapGetters('users', ['currentUser']),
+    ...mapGetters("boards", ["boards"]),
+    ...mapGetters("users", ["currentUser"]),
     utcToKor() {
-      return moment.utc(this.boardTime).local().format('YYYY/MM/DD');
+      return moment.utc(this.boardTime).local().format("YYYY/MM/DD");
     },
     userName() {
       return this.$store.state.users.users[0].name;
@@ -77,26 +77,26 @@ export default {
   },
   methods: {
     formatTime(time) {
-      return moment.utc(time).local().format('YYYY/MM/DD');
+      return moment.utc(time).local().format("YYYY/MM/DD");
     },
     async deleteBoard() {
       try {
-        await this.$store.dispatch('boards/deleteBoard', this.id);
-        alert('게시물을 삭제하셨습니다.');
-        this.$router.push('/boardlist');
+        await this.$store.dispatch("boards/deleteBoard", this.id);
+        alert("게시물을 삭제하셨습니다.");
+        this.$router.push("/boardlist");
       } catch (error) {
-        console.error('Error deleting board:', error.message);
+        console.error("Error deleting board:", error.message);
       }
     },
 
     async submitComment() {
-      if (this.newComment.trim() === '') return;
+      if (this.newComment.trim() === "") return;
       const commentText = this.newComment.trim();
       const userName = this.userName;
       const userId = this.id;
 
       try {
-        await this.$store.dispatch('boards/addComment', {
+        await this.$store.dispatch("boards/addComment", {
           boardId: this.id,
           comment: commentText,
           userName: userName,
@@ -108,16 +108,16 @@ export default {
           time: new Date().toISOString(),
           userId: userId,
         });
-        this.newComment = '';
+        this.newComment = "";
         this.createNotificationForPostAuthor(
           this.receiveUid,
           this.userName,
           commentText,
-          this.userId
-          // this.id, ---------- 불필요 코드 ?
+          this.userId,
+          this.id
         );
       } catch (error) {
-        console.error('Error adding comment:', error.message);
+        console.error("Error adding comment:", error.message);
       }
     },
     async createNotificationForPostAuthor(
@@ -127,6 +127,7 @@ export default {
       boardId,
       fromUid
     ) {
+      console.log(fromUid)
       if (to != fromUid) {
         try {
           const notification = {
@@ -134,20 +135,20 @@ export default {
             message: `댓글이 달렸어요 ${from}: ${commentText}`,
             is_read: false,
             created_at: new Date().toISOString(),
-            boardId: boardId,
+            boardId: fromUid,
           };
 
-          await this.$store.dispatch('notifications/createNotification', {
+          await this.$store.dispatch("notifications/createNotification", {
             uid: to,
             notification: notification,
           });
         } catch (error) {
-          console.error('Error creating notification:', error.message);
+          console.error("Error creating notification:", error.message);
         }
       }
     },
     async fetchComments() {
-      await this.$store.dispatch('boards/fetchInitialData', this.id);
+      await this.$store.dispatch("boards/fetchInitialData", this.id);
       const board = this.boards.find((board) => board.id === this.id);
       this.comments = board.comments;
       this.boardTitle = board.title;

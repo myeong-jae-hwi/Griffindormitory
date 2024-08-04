@@ -43,22 +43,14 @@ export default {
     },
     GotoPost(notificationId){
       this.markAsRead(notificationId.id)
-      console.log(notificationId.boardId)
       this.$router.push({
         path: `/boardlist/${notificationId.boardId}`,})
     }
-    // createNewNotification() {
-    //   const uid = this.userId;
-    //   const newNotification = {
-    //     message: "This is a new notification",
-    //     is_read: false,
-    //     created_at: new Date().toISOString(),
-    //   };
-    //   this.createNotification({ uid, notification: newNotification });
-    // },
+
   },
   created() {
     const uid = this.userId;
+    console.log(this.notificationId)
     this.fetchNotifications({ uid });
   },
 };
