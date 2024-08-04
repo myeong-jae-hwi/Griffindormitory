@@ -13,12 +13,13 @@ import BoardDetail from './pages/board/BoardDetail.vue';
 import MateDetail from './pages/roommate/MateDetail.vue';
 import StudentCalender from './components/timetable/StudentCalender.vue';
 import AlartList from './pages/alart/AlartList.vue';
+import NotFound from './pages/NotFound.vue';
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', redirect: '/login' },
-    { path: '/info', component: InfoPage,meta: { requiresAuth: true } },
+    { path: '/info', component: InfoPage, meta: { requiresAuth: true } },
     {
       path: '/boardlist',
       component: BoardList,
@@ -58,19 +59,24 @@ const router = createRouter({
       }),
     },
     { path: '/login', component: LoginForm },
-    { path: '/userinfo', component: UserInfo, meta: { requiresAuth: true }, },
-    { path: '/score', component: UserScore, meta: { requiresAuth: true }, },
-    { path: '/timetable', component: StudentCalender, meta: { requiresAuth: true }, },
-    { path: '/alart', component: AlartList, meta: { requiresAuth: true }, },
+    { path: '/userinfo', component: UserInfo, meta: { requiresAuth: true } },
+    { path: '/score', component: UserScore, meta: { requiresAuth: true } },
+    {
+      path: '/timetable',
+      component: StudentCalender,
+      meta: { requiresAuth: true },
+    },
+    { path: '/alart', component: AlartList, meta: { requiresAuth: true } },
+    { path: '/:notFound(.*)', component: NotFound },
   ],
 });
 
 router.beforeEach(async (to, from, next) => {
   const userId = store.state.users.userID;
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   if (requiresAuth && !userId) {
-    next('/login'); 
+    next('/login');
     return;
   }
 
@@ -79,7 +85,7 @@ router.beforeEach(async (to, from, next) => {
       await store.dispatch('users/fetchUserInitialData', { uid: userId });
     } catch (error) {
       console.error('Failed to fetch user data:', error);
-      next('/login'); 
+      next('/login');
       return;
     }
   }
