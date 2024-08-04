@@ -9,9 +9,18 @@
   <footer class="footer">
     <div class="footer-content">
       <nav>
-        <router-link to="/info" class="footer-link">홈</router-link>
-        <router-link to="/timetable" class="footer-link">시간표</router-link>
-        <router-link to="/setting" class="footer-link">설정</router-link>
+        <router-link to="/info" class="footer-link">
+          <font-awesome-icon :icon="['fas', 'home']" class="fa-lg" />
+        </router-link>
+        <router-link to="/timetable" class="footer-link">
+          <font-awesome-icon :icon="['fas', 'calendar-alt']" class="fa-lg" />
+        </router-link>
+        <router-link to="/setting" class="footer-link">
+          <font-awesome-icon :icon="['fas', 'cogs']" class="fa-lg" />
+        </router-link>
+        <router-link to="/alart" class="footer-link">
+          <font-awesome-icon :icon="['fas', 'bell']" class="fa-lg" />
+        </router-link>
       </nav>
     </div>
   </footer>
@@ -30,18 +39,24 @@
 
 .footer-content {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
 }
 
 nav {
-  margin-top: 10px;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .footer-link {
   margin: 0 10px;
   font-size: 0.9em;
-  color: #007bff;
   text-decoration: none;
+  flex: 1;
+  text-align: center;
+}
+
+.footer-link .fa-icon {
+  margin-right: 5px;
 }
 </style>
