@@ -7,10 +7,10 @@
         <div class="card-content">
           <h2>{{ title }}</h2>
           <p>
-            성별: <strong>{{ sex === "male" ? "남자" : "여자" }}</strong>
+            성별: <strong>{{ sex === 'male' ? '남자' : '여자' }}</strong>
           </p>
           <p>
-            기숙사: <strong>{{ location === "east" ? "동관" : "서관" }}</strong>
+            기숙사: <strong>{{ location === 'east' ? '동관' : '서관' }}</strong>
           </p>
           <p>
             모집 인원: <strong>{{ count }}/4명</strong>
@@ -18,11 +18,15 @@
           <p>
             흡연:
             <strong>{{
-              besmoke === "notsmoke" ? "비흡연자만" : "상관없음"
+              besmoke === 'notsmoke' ? '비흡연자만' : '상관없음'
             }}</strong>
           </p>
           <p class="preferences">{{ preferences }}</p>
         </div>
+        <!--  
+          민재 TODO : 자신 게시물 삭제버튼 활성화하기
+        -->
+        <button>삭제하기</button>
       </base-card>
       <div class="btn-container">
         <base-btn @click="openModal">신청하기</base-btn>
@@ -50,21 +54,21 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import MateModal from "../../components/roommate/MataModal.vue";
+import { mapGetters } from 'vuex';
+import MateModal from '../../components/roommate/MataModal.vue';
 
 export default {
   components: { MateModal },
   props: [
-    "id",
-    "title",
-    "count",
-    "sex",
-    "location",
-    "besmoke",
-    "preferences",
-    "university",
-    "userUid",
+    'id',
+    'title',
+    'count',
+    'sex',
+    'location',
+    'besmoke',
+    'preferences',
+    'university',
+    'userUid',
   ],
   data() {
     return {
@@ -73,10 +77,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("users", ["currentUser"]),
+    ...mapGetters('users', ['currentUser']),
     ...mapGetters({
-      mates: "mates",
-      hasMates: "hasMates",
+      mates: 'mates',
+      hasMates: 'hasMates',
     }),
 
     userId() {
@@ -87,9 +91,9 @@ export default {
     // },
   },
   created() {
-    console.log("Fetching initial data...");
-    this.$store.dispatch("fetchInitialData");
-    console.log("제발", this.postId);
+    console.log('Fetching initial data...');
+    this.$store.dispatch('fetchInitialData');
+    console.log('제발', this.postId);
   },
 
   methods: {
@@ -104,9 +108,9 @@ export default {
     },
     async notice(to, mateId, fromUid) {
       try {
-        console.log("알림 받는 사람 uid: ", to);
-        console.log("알림이 발생한 글: ", mateId);
-        console.log("당신 Uid: ", fromUid);
+        console.log('알림 받는 사람 uid: ', to);
+        console.log('알림이 발생한 글: ', mateId);
+        console.log('당신 Uid: ', fromUid);
 
         const notification = {
           userId: to,
@@ -116,12 +120,12 @@ export default {
           mateId: mateId,
         };
 
-        await this.$store.dispatch("notifications/createNotification", {
+        await this.$store.dispatch('notifications/createNotification', {
           uid: to,
           notification: notification,
         });
       } catch (error) {
-        console.error("Error creating notification:", error.message);
+        console.error('Error creating notification:', error.message);
       }
     },
     openModal() {
@@ -130,7 +134,7 @@ export default {
       const isSameUniversity = mate.university === this.currentUser.university;
       if (isSameUniversity) this.modalOpen = true;
       else {
-        alert("다른 학교 게시물입니다. 신청 자격이 없습니다.");
+        alert('다른 학교 게시물입니다. 신청 자격이 없습니다.');
         return;
       }
     },
@@ -150,7 +154,7 @@ export default {
 
 .card-content {
   padding: 20px;
-  font-family: "Arial, sans-serif";
+  font-family: 'Arial, sans-serif';
   color: #333;
 }
 
