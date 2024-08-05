@@ -15,6 +15,14 @@
           <input type="text" v-model="studentId" required />
           <label>학번 또는 수험 응시 번호</label>
         </div>
+        <div class="user-box" v-if="!isLogin">
+          <select v-model="gender" required>
+            <option value="">성별 선택</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+          </select>
+          <label>성별</label>
+        </div>
         <div class="user-box">
           <input type="email" v-model="email" required />
           <label>이메일</label>
@@ -38,20 +46,19 @@
       </form>
     </div>
   </div>
-  <base-btn type='submit' @click='logIn'>로그인 ㅋㅋ</base-btn>
 </template>
 
 <script>
-import { auth, database } from '@/firebase/config.js';
+import { auth, db } from '@/firebase/config';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { ref, set } from 'firebase/database';
-import BaseBtn from '../UI/BaseBtn.vue';
+// import BaseBtn from '../UI/BaseBtn.vue';
 
 export default {
-  components: { BaseBtn },
+  // components: { BaseBtn },
   name: 'LoginForm',
   data() {
     return {
@@ -59,6 +66,7 @@ export default {
       name: '',
       university: '',
       studentId: '',
+      gender: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -66,26 +74,55 @@ export default {
     };
   },
   methods: {
-    logIn(){
-      this.email = 'audwognl@gmail.com';
-      this.password='123123'
-      this.handleSubmit()
-    },
-    toggleForm() {
-      this.isLogin = !this.isLogin;
-      this.name = '';
-      this.university = '';
-      this.studentId = '';
-      this.email = '';
-      this.password = '';
-      this.confirmPassword = '';
+    validateForm() {
+      if (!this.email || !this.password) {
+        alert('이메일과 비밀번호를 입력하세요.');
+        return false;
+      }
+      if (!/\S+@\S+\.\S+/.test(this.email)) {
+        alert('유효한 이메일 주소를 입력하세요.');
+        return false;
+      }
+      if (this.password.length < 5) {
+        alert('비밀번호는 최소 8자 이상이어야 합니다.');
+        return false;
+      }
+      // if (
+      //   !/[a-z]/.test(this.password) ||
+      //   !/[A-Z]/.test(this.password) ||
+      //   !/[0-9]/.test(this.password) ||
+      //   !/[!@#$%^&*]/.test(this.password)
+      // ) {
+      //   alert('비밀번호에는 대소문자, 숫자, 특수문자가 포함되어야 합니다.');
+      //   return false;
+      // }
+      if (!this.isLogin) {
+        if (!this.name) {
+          alert('이름을 입력하세요.');
+          return false;
+        }
+        if (!this.university) {
+          alert('대학교를 입력하세요.');
+          return false;
+        }
+        if (!this.studentId) {
+          alert('학번 또는 수험 응시 번호를 입력하세요.');
+          return false;
+        }
+        if (!this.gender) {
+          alert('성별을 선택하세요.');
+          return false;
+        }
+        if (this.password !== this.confirmPassword) {
+          alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+          return false;
+        }
+      }
+      return true;
     },
     async handleSubmit() {
+      if (!this.validateForm()) return;
       if (this.isLogin) {
-        if (!this.email || !this.password) {
-          alert('모든 필드를 입력하세요.');
-          return;
-        }
         try {
           const userCredential = await signInWithEmailAndPassword(
             auth,
@@ -104,21 +141,6 @@ export default {
           alert('오류가 발생했습니다. 다시 시도해 주세요.');
         }
       } else {
-        if (
-          !this.name ||
-          !this.university ||
-          !this.studentId ||
-          !this.email ||
-          !this.password ||
-          !this.confirmPassword
-        ) {
-          alert('모든 필드를 입력하세요.');
-          return;
-        }
-        if (this.password !== this.confirmPassword) {
-          alert('비밀번호가 일치하지 않습니다.');
-          return;
-        }
         try {
           const userCredential = await createUserWithEmailAndPassword(
             auth,
@@ -126,10 +148,12 @@ export default {
             this.password
           );
           const user = userCredential.user;
-          await set(ref(database, 'users/' + user.uid), {
+          const userRef = ref(db, 'users/' + user.uid);
+          await set(userRef, {
             name: this.name,
             university: this.university,
             studentId: this.studentId,
+            gender: this.gender,
             email: this.email,
             createdAt: new Date().toISOString(),
           });
@@ -150,6 +174,21 @@ export default {
           }
         }
       }
+    },
+    logIn() {
+      this.email = 'audwognl@gmail.com';
+      this.password = '123123';
+      this.handleSubmit();
+    },
+    toggleForm() {
+      this.isLogin = !this.isLogin;
+      this.name = '';
+      this.university = '';
+      this.studentId = '';
+      this.gender = '';
+      this.email = '';
+      this.password = '';
+      this.confirmPassword = '';
     },
   },
 };
@@ -216,9 +255,23 @@ body {
   pointer-events: none;
   transition: 0.5s;
 }
+.login-box .user-box select {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+  appearance: none;
+}
 
 .login-box .user-box input:focus ~ label,
-.login-box .user-box input:valid ~ label {
+.login-box .user-box input:valid ~ label,
+.login-box .user-box select:focus ~ label,
+.login-box .user-box select:valid ~ label {
   top: -20px;
   left: 0;
   color: #87acf6;
