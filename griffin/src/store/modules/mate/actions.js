@@ -64,4 +64,17 @@ export default {
       console.error('Error registering mate:', error.message);
     }
   },
+
+  async deleteBoard(context, MateId) {
+    try {
+      const response = await fetch(`${dbURL}/boards/${MateId}.json`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete board');
+
+      context.commit('deleteMate', MateId);
+    } catch (error) {
+      console.error('Error adding comment:', error.message);
+    }
+  },
 };
