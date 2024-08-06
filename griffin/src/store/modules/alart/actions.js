@@ -10,7 +10,7 @@ export default {
         throw new Error('Failed to fetch notifications');
       }
       const notificationsData = await response.json();
-      const notifications = Object.keys(notificationsData).map(key => ({
+      const notifications = Object.keys(notificationsData).map((key) => ({
         id: key,
         ...notificationsData[key],
       }));
@@ -27,9 +27,11 @@ export default {
         throw new Error('Failed to fetch notifications');
       }
       const notificationsData = await response.json();
-      
+
       if (notificationsData) {
-        const hasUnread = Object.values(notificationsData).some(notification => !notification.is_read);
+        const hasUnread = Object.values(notificationsData).some(
+          (notification) => !notification.is_read
+        );
         commit('setHasUnreadNotifications', hasUnread);
         return hasUnread;
       } else {
@@ -44,13 +46,16 @@ export default {
 
   async markNotificationAsRead({ commit }, { uid, notificationId }) {
     try {
-      const response = await fetch(`${dbURL}/notifications/${uid}/${notificationId}.json`, {
-        method: 'PATCH',
-        body: JSON.stringify({ is_read: true }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `${dbURL}/notifications/${uid}/${notificationId}.json`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ is_read: true }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Failed to mark notification as read');
