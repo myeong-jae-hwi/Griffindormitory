@@ -106,6 +106,16 @@ export default {
 
       this.notice(userUid, userName, mateId, userId);
     },
+    async deleteMate() {
+      try {
+        await this.$store.dispatch('boards/deleteMate', this.id);
+        alert('게시물을 삭제하셨습니다.');
+        this.$router.push('/roommatelist');
+      } catch (error) {
+        console.error('Error deleting mate:', error.message);
+      }
+    },
+
     async notice(to, mateId, fromUid) {
       try {
         console.log('알림 받는 사람 uid: ', to);
