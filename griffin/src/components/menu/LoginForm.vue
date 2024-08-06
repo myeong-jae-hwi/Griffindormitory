@@ -75,27 +75,31 @@ export default {
   },
   methods: {
     validateForm() {
-      if (!this.email || !this.password) {
-        alert('이메일과 비밀번호를 입력하세요.');
+      if (!this.email) {
+        alert('이메일을 입력하세요.');
         return false;
       }
       if (!/\S+@\S+\.\S+/.test(this.email)) {
         alert('유효한 이메일 주소를 입력하세요.');
         return false;
       }
-      if (this.password.length < 5) {
+      if (!this.password) {
+        alert('비밀번호를 입력하세요.');
+        return false;
+      }
+      if (this.password.length < 8) {
         alert('비밀번호는 최소 8자 이상이어야 합니다.');
         return false;
       }
-      // if (
-      //   !/[a-z]/.test(this.password) ||
-      //   !/[A-Z]/.test(this.password) ||
-      //   !/[0-9]/.test(this.password) ||
-      //   !/[!@#$%^&*]/.test(this.password)
-      // ) {
-      //   alert('비밀번호에는 대소문자, 숫자, 특수문자가 포함되어야 합니다.');
-      //   return false;
-      // }
+      if (
+        !/[a-z]/.test(this.password) ||
+        !/[A-Z]/.test(this.password) ||
+        !/[0-9]/.test(this.password) ||
+        !/[!@#$%^&*]/.test(this.password)
+      ) {
+        alert('비밀번호에는 대소문자, 숫자, 특수문자가 포함되어야 합니다.');
+        return false;
+      }
       if (!this.isLogin) {
         if (!this.name) {
           alert('이름을 입력하세요.');
@@ -137,8 +141,8 @@ export default {
           this.$emit('login-success', userCredential.user);
           this.$router.push('/info');
         } catch (error) {
-          console.error('Firebase 오류: ', error);
-          alert('오류가 발생했습니다. 다시 시도해 주세요.');
+          console.error('로그인 오류: ', error);
+          this.handleAuthError(error);
         }
       } else {
         try {
@@ -166,13 +170,39 @@ export default {
           this.$emit('login-success', user);
           this.$router.push('/info');
         } catch (error) {
-          console.error('Firebase 오류: ', error);
-          if (error.code === 'auth/email-already-in-use') {
-            alert('이미 사용 중인 이메일입니다.');
-          } else {
-            alert('오류가 발생했습니다. 다시 시도해 주세요.');
-          }
+          console.error('회원가입 오류: ', error);
+          this.handleAuthError(error);
         }
+      }
+    },
+    handleAuthError(error) {
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          alert('이미 사용 중인 이메일입니다.');
+          break;
+        case 'auth/invalid-email':
+          alert('유효하지 않은 이메일 주소입니다.');
+          break;
+        case 'auth/operation-not-allowed':
+          alert('이메일/비밀번호 인증이 현재 사용 설정되어 있지 않습니다.');
+          break;
+        case 'auth/weak-password':
+          alert('비밀번호가 너무 약합니다. 더 복잡한 비밀번호를 사용하세요.');
+          break;
+        case 'auth/user-disabled':
+          alert('이 계정은 비활성화되었습니다.');
+          break;
+        case 'auth/user-not-found':
+          alert('사용자를 찾을 수 없습니다. 이메일을 확인하세요.');
+          break;
+        case 'auth/wrong-password':
+          alert('잘못된 비밀번호입니다. 비밀번호를 다시 확인하세요.');
+          break;
+        case 'auth/network-request-failed':
+          alert('네트워크 요청에 실패했습니다. 인터넷 연결을 확인하세요.');
+          break;
+        default:
+          alert('알 수 없는 오류가 발생했습니다. 다시 시도해 주세요.');
       }
     },
     logIn() {
