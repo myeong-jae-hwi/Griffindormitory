@@ -23,14 +23,19 @@
           </p>
           <p class="preferences">{{ preferences }}</p>
         </div>
-        <!--  
-          민재 TODO : 자신 게시물 삭제버튼 활성화하기
-        -->
-        <button>삭제하기</button>
+        <div v-if="currentUser.id === userUid">
+          <button @click="deleteMate">삭제하기</button>
+        </div>
+        <div v-if="currentUser.id === mateUid">
+          <button @click="deleteMate">삭제하기</button>
+        </div>
       </base-card>
       <div class="btn-container">
         <base-btn @click="openModal">신청하기</base-btn>
       </div>
+      <!-- <p>currentUser : {{ currentUser.id }}</p>
+      <p>userUid : {{ mateUid }}</p>
+      <p>userId : {{ userId }}</p> -->
     </div>
     <mate-modal v-if="modalOpen" @close="closeModal">
       <template v-slot:header>
@@ -82,18 +87,12 @@ export default {
       mates: 'mates',
       hasMates: 'hasMates',
     }),
-
+    mateUid() {
+      return this.$store.state.mates.userUid;
+    },
     userId() {
       return this.$store.state.users.userID;
     },
-    // userUid() {
-    //   return this.$store.state.mates.userUid;
-    // },
-  },
-  created() {
-    console.log('Fetching initial data...');
-    this.$store.dispatch('fetchInitialData');
-    console.log('제발', this.postId);
   },
 
   methods: {
@@ -108,44 +107,37 @@ export default {
     },
     async deleteMate() {
       try {
-        await this.$store.dispatch('boards/deleteMate', this.id);
+        await this.$store.dispatch('deleteMate', this.id);
         alert('게시물을 삭제하셨습니다.');
-        this.$router.push('/roommatelist');
+        this.$router.push('/roommateboard');
       } catch (error) {
         console.error('Error deleting mate:', error.message);
       }
     },
+    // async notice(to, mateId, fromUid) {
+    //   try {
+    //     const notification = {
+    //       userId: to,
+    //       message: `새로운 룸메이트 신청이 왔습니다`,
+    //       is_read: false,
+    //       created_at: new Date().toISOString(),
+    //       mateId: mateId,
+    //     };
 
-    async notice(to, mateId, fromUid) {
-      try {
-        console.log('알림 받는 사람 uid: ', to);
-        console.log('알림이 발생한 글: ', mateId);
-        console.log('당신 Uid: ', fromUid);
-
-        const notification = {
-          userId: to,
-          message: `새로운 룸메이트 신청이 왔습니다`,
-          is_read: false,
-          created_at: new Date().toISOString(),
-          mateId: mateId,
-        };
-
-        await this.$store.dispatch('notifications/createNotification', {
-          uid: to,
-          notification: notification,
-        });
-      } catch (error) {
-        console.error('Error creating notification:', error.message);
-      }
-    },
+    //     await this.$store.dispatch('notifications/createNotification', {
+    //       uid: to,
+    //       notification: notification,
+    //     });
+    //   } catch (error) {
+    //     console.error('Error creating notification:', error.message);
+    //   }
+    // },
     openModal() {
       const mate = this.mates.find((mate) => mate.id === this.id);
-
       const isSameUniversity = mate.university === this.currentUser.university;
       if (isSameUniversity) this.modalOpen = true;
       else {
         alert('다른 학교 게시물입니다. 신청 자격이 없습니다.');
-        return;
       }
     },
     closeModal() {

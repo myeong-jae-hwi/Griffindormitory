@@ -65,16 +65,16 @@ export default {
     }
   },
 
-  async deleteBoard(context, MateId) {
+  async deleteMate(context, mateId) {
     try {
-      const response = await fetch(`${dbURL}/boards/${MateId}.json`, {
+      const response = await fetch(`${dbURL}/roommates/${mateId}.json`, {
         method: 'DELETE',
       });
-      if (!response.ok) throw new Error('Failed to delete board');
+      if (!response.ok) throw new Error('Failed to delete roommate');
 
-      context.commit('deleteMate', MateId);
+      context.commit('deleteMate', mateId);
     } catch (error) {
-      console.error('Error adding comment:', error.message);
+      console.error('Error deleting mate:', error.message);
     }
   },
 };
