@@ -11,9 +11,19 @@
 
 <script>
 export default {
-  props: ['id', 'title', 'count', 'sex', 'location', 'besmoke', 'preferences'],
+  props: [
+    'id',
+    'title',
+    'count',
+    'sex',
+    'location',
+    'besmoke',
+    'preferences',
+    'userUid',
+  ],
   methods: {
     goMateDetail() {
+      this.$store.commit('setUserUid', this.userUid);
       this.$router.push({
         path: `/roommateboard/${this.id}`,
         query: {

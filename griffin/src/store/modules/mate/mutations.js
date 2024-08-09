@@ -9,4 +9,7 @@ export default {
   deleteMate(state, mateId) {
     state.mates = state.mates.filter((mate) => mate.id !== mateId);
   },
+  setUserUid(state, userUid) {
+    state.userUid = userUid;
+  },
 };
