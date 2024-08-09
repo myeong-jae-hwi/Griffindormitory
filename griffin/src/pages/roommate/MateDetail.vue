@@ -23,9 +23,6 @@
           </p>
           <p class="preferences">{{ preferences }}</p>
         </div>
-        <div v-if="currentUser.id === userUid">
-          <button @click="deleteMate">삭제하기</button>
-        </div>
         <div v-if="currentUser.id === mateUid">
           <button @click="deleteMate">삭제하기</button>
         </div>
@@ -33,9 +30,6 @@
       <div class="btn-container">
         <base-btn @click="openModal">신청하기</base-btn>
       </div>
-      <!-- <p>currentUser : {{ currentUser.id }}</p>
-      <p>userUid : {{ mateUid }}</p>
-      <p>userId : {{ userId }}</p> -->
     </div>
     <mate-modal v-if="modalOpen" @close="closeModal">
       <template v-slot:header>
