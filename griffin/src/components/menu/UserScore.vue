@@ -29,7 +29,9 @@
         ref="chartComponent"
         :type="thisScores.type"
         :data="thisScores.data"
+        v-if="thisScores.data.labels.length > 0"
       ></base-chart>
+      <p v-else>입력된 전체 성적이 없습니다</p>
     </base-card>
 
     <h4>학점입력</h4>
@@ -126,7 +128,8 @@ export default {
     },
     addScoreItem() {
       const subjects = this.allScores.data.labels;
-      const grades = this.allScores.data.points;
+      // const grades = this.allScores.data.points;
+      const grades = this.allScores.data.datasets[0].data;
       console.log('aaaa', subjects);
       console.log('bbbb', grades);
       this.scoreItems.push({ subject: this.subjects, grade: grades });
@@ -212,13 +215,33 @@ export default {
 
         this.allScores.data.labels = subjects;
         this.allScores.data.datasets[0].data = grades;
+
+        const letterGrades = grades.map((point) =>
+          this.convertPointToGrade(point)
+        );
+
         this.scoreItems = subjects.map((subject, index) => ({
           subject,
-          grade: grades[index],
+          grade: letterGrades[index],
         }));
       } catch (error) {
         console.error('Error fetching scores:', error);
       }
+    },
+    convertPointToGrade(point) {
+      const formattedPoint = point.toFixed(1);
+      const pointToGradeMap = {
+        4.5: 'A+',
+        '4.0': 'A0',
+        3.5: 'B+',
+        '3.0': 'B0',
+        2.5: 'C+',
+        '2.0': 'C0',
+        1.5: 'D+',
+        '1.0': 'D0',
+        '0.0': 'F',
+      };
+      return pointToGradeMap[formattedPoint] || 'Unknown';
     },
     convertGradeToPoint(grade) {
       const gradeMap = {
