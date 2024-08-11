@@ -23,7 +23,7 @@
       <p v-else>학점을 입력해 주세요</p>
     </base-card>
 
-    <h4>전체 성적</h4>
+    <h4>학기별 성적</h4>
     <base-card>
       <base-chart
         ref="chartComponent"
@@ -31,7 +31,7 @@
         :data="thisScores.data"
         v-if="thisScores.data.labels.length > 0"
       ></base-chart>
-      <p v-else>입력된 전체 성적이 없습니다</p>
+      <p v-else>입력된 학기 별 성적이 없습니다</p>
     </base-card>
 
     <h4>학점입력</h4>
@@ -96,10 +96,9 @@ export default {
         type: 'line',
         data: {
           labels: [],
-          grades: [],
           datasets: [
             {
-              label: '전체 성적',
+              label: '학기별 평균 성적',
               data: [],
               backgroundColor: ['rgba(255, 99, 132, 0.2)'],
               borderColor: ['rgba(255, 99, 132, 1)'],
@@ -110,6 +109,7 @@ export default {
       },
       scoreItems: [],
       selectedGrade: '',
+      semesterGPAs: [],
     };
   },
   created() {
@@ -118,9 +118,12 @@ export default {
         uid: this.userId,
       });
     }
-    // this.fetchScores();
+    this.fetchAndDisplayOverallScores();
   },
   methods: {
+    fetchAndDisplayOverallScores() {
+      this.fetchAllSemestersScores();
+    },
     submitGrade() {
       this.fetchScores();
       console.log('레이블: ', this.allScores.data.labels);
@@ -128,11 +131,10 @@ export default {
     },
     addScoreItem() {
       const subjects = this.allScores.data.labels;
-      // const grades = this.allScores.data.points;
       const grades = this.allScores.data.datasets[0].data;
-      console.log('aaaa', subjects);
-      console.log('bbbb', grades);
-      this.scoreItems.push({ subject: this.subjects, grade: grades });
+      subjects.forEach((subject, index) => {
+        this.scoreItems.push({ subject, grade: grades[index] });
+      });
     },
     removeScoreItem(index) {
       this.scoreItems.splice(index, 1);
@@ -141,8 +143,6 @@ export default {
       this.scoreItems[index].subject = newSubject;
     },
     updateGrade(index, newGrade) {
-      console.log('aa', newGrade);
-      console.log('b', this.scoreItems[index].grade);
       this.scoreItems[index].grade = newGrade;
     },
     async submitScores() {
@@ -206,8 +206,6 @@ export default {
               if (schedule.title) {
                 subjects.push(schedule.title);
                 grades.push(schedule.point);
-                console.log('Title:', schedule.title);
-                console.log('Point:', schedule.point);
               }
             });
           }
@@ -227,6 +225,97 @@ export default {
       } catch (error) {
         console.error('Error fetching scores:', error);
       }
+    },
+
+    async fetchAllSemestersScores() {
+      try {
+        const allSemesters = [
+          '1grade_1semester',
+          '1grade_2semester',
+          '2grade_1semester',
+          '2grade_2semester',
+          '3grade_1semester',
+          '3grade_2semester',
+          '4grade_1semester',
+          '4grade_2semester',
+        ];
+
+        this.semesterGPAs = [];
+        const semesterData = {};
+
+        for (let semester of allSemesters) {
+          const response = await fetch(
+            `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${semester}/.json`
+          );
+          const data = await response.json();
+
+          const subjects = [];
+          const grades = [];
+
+          for (let day in data) {
+            if (data[day] && data[day].schedules) {
+              data[day].schedules.forEach((schedule) => {
+                if (schedule.title && typeof schedule.point === 'number') {
+                  subjects.push(schedule.title);
+                  grades.push(schedule.point);
+                }
+              });
+            }
+          }
+
+          if (grades.length > 0) {
+            const totalPoints = grades.reduce((acc, point) => acc + point, 0);
+            const gpa = (totalPoints / grades.length).toFixed(2);
+
+            semesterData[semester] = {
+              subjects,
+              grades,
+              gpa,
+            };
+
+            this.semesterGPAs.push({ semester, gpa: parseFloat(gpa) });
+          }
+        }
+
+        console.log('Semester Data:', semesterData);
+        console.log('Semester GPAs:', this.semesterGPAs);
+
+        this.updateGPAChart();
+      } catch (error) {
+        console.error('Error fetching all scores:', error);
+      }
+    },
+
+    updateGPAChart() {
+      this.semesterGPAs.sort((a, b) => {
+        const order = [
+          '1grade_1semester',
+          '1grade_2semester',
+          '2grade_1semester',
+          '2grade_2semester',
+          '3grade_1semester',
+          '3grade_2semester',
+          '4grade_1semester',
+          '4grade_2semester',
+        ];
+        return order.indexOf(a.semester) - order.indexOf(b.semester);
+      });
+
+      this.thisScores.data.labels = this.semesterGPAs.map((item) =>
+        this.formatSemesterLabel(item.semester)
+      );
+      this.thisScores.data.datasets[0].data = this.semesterGPAs.map(
+        (item) => item.gpa
+      );
+
+      if (this.$refs.chartComponent && this.$refs.chartComponent.chart) {
+        this.$refs.chartComponent.chart.update();
+      }
+    },
+
+    formatSemesterLabel(semester) {
+      const [grade, sem] = semester.split('_');
+      return `${grade[0]}학년 ${sem[0]}학기`;
     },
     convertPointToGrade(point) {
       const formattedPoint = point.toFixed(1);
