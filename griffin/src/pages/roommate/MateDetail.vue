@@ -1,6 +1,9 @@
 <template>
   <div>
     <div class="card-container">
+      <div v-if="currentUser.id === mateUid" class="delete-btn-container">
+        <button @click="deleteMate" class="delete-btn">삭제하기</button>
+      </div>
       <base-card
         :style="{ backgroundColor: sex === 'male' ? '#4169E1' : '#DB7093' }"
       >
@@ -22,9 +25,6 @@
             }}</strong>
           </p>
           <p class="preferences">{{ preferences }}</p>
-        </div>
-        <div v-if="currentUser.id === mateUid">
-          <button @click="deleteMate">삭제하기</button>
         </div>
       </base-card>
       <div class="btn-container">
@@ -151,23 +151,45 @@ export default {
 .card-content {
   padding: 20px;
   font-family: 'Arial, sans-serif';
-  color: #333;
+  color: white;
 }
 
 p {
   margin: 10px 0;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
 .preferences {
   font-style: italic;
-  color: #ccc;
+  font-size: 16px;
+  color: white;
 }
 
 .btn-container {
   width: fit-content;
   margin: 0 auto;
   text-align: center;
+}
+.delete-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
 }
 </style>
