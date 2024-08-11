@@ -6,7 +6,7 @@
       <li v-for="notification in allNotifications" :key="notification.id">
         <alart-list
           @click="GotoPost(notification)"
-          :customClass="isMate ? 'mate' : 'list'"
+          :customClass="notification.message === '새로운 룸메이트 신청이 왔습니다' ? 'mate' : 'list'"
         >
           <p :class="{ isread: notification.is_read }">
             {{ notification.message }}
@@ -21,10 +21,8 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-// import BaseCard from "../../components/UI/BaseCard.vue";
 
 export default {
-  // components: { BaseCard },
   data() {
     return {
       isMate: false,
@@ -51,22 +49,16 @@ export default {
       const uid = this.userId;
       this.markNotificationAsRead({ uid, notificationId });
     },
-    GotoPost(notificationId) {
-      this.markAsRead(notificationId.id);
-      console.log("웨모 췤!!",notificationId.message);
+    GotoPost(notification) {
+      this.markAsRead(notification.id);
+      console.log("웨모 췤!!", notification.message);
       this.$router.push({
-        path: `/boardlist/${notificationId.boardId}`,
+        path: `/boardlist/${notification.boardId}`,
       });
     },
-    mateCheck(notificationId){
-      if(notificationId.message == '새로운 룸메이트 신청이 왔습니다'){
-        // 여기다가 메이트 클래스 넣기
-      }
-    }
   },
   created() {
     const uid = this.userId;
-    console.log(this.notificationId);
     this.fetchNotifications({ uid });
   },
 };
@@ -97,5 +89,11 @@ ul {
 .list {
   padding-left: 20px;
   cursor: pointer;
+}
+
+.mate {
+  padding-left: 20px;
+  cursor: pointer;
+  background-color: #f0f8ff;
 }
 </style>
