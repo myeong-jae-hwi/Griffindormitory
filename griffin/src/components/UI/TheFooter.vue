@@ -3,6 +3,9 @@
  - 각 router-link icon 추가 예정
  - 홈, 시간표, 설정, 알람 ? 조금 더 고민해보자
  - TheHeader의 dropdown-menu animation이 활성화 되면 footer가 밀리는 상황 발생
+
+ 08/04 재휘
+ - 푸터에 요소가 자꾸 겹쳐서 그냥 마진 줘버릴게용~ ^@^
 -->
 
 <template>
@@ -35,6 +38,7 @@
   width: 100%;
   bottom: 0;
   left: 0;
+  margin-top: 30px;
 }
 
 .footer-content {

@@ -4,9 +4,14 @@
     <div v-if="error">{{ error.message }}</div>
     <ul v-if="!loading">
       <li v-for="notification in allNotifications" :key="notification.id">
-        <base-card @click="GotoPost(notification)" class="list">
-          <p :class="{ isread: notification.is_read }">{{ notification.message }}</p>
-        </base-card>
+        <alart-list
+          @click="GotoPost(notification)"
+          :customClass="isMate ? 'mate' : 'list'"
+        >
+          <p :class="{ isread: notification.is_read }">
+            {{ notification.message }}
+          </p>
+        </alart-list>
       </li>
     </ul>
 
@@ -16,10 +21,15 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import BaseCard from "../../components/UI/BaseCard.vue";
+// import BaseCard from "../../components/UI/BaseCard.vue";
 
 export default {
-  components: { BaseCard },
+  // components: { BaseCard },
+  data() {
+    return {
+      isMate: false,
+    };
+  },
   computed: {
     ...mapGetters("notifications", [
       "allNotifications",
@@ -41,45 +51,51 @@ export default {
       const uid = this.userId;
       this.markNotificationAsRead({ uid, notificationId });
     },
-    GotoPost(notificationId){
-      this.markAsRead(notificationId.id)
+    GotoPost(notificationId) {
+      this.markAsRead(notificationId.id);
+      console.log("웨모 췤!!",notificationId.message);
       this.$router.push({
-        path: `/boardlist/${notificationId.boardId}`,})
+        path: `/boardlist/${notificationId.boardId}`,
+      });
+    },
+    mateCheck(notificationId){
+      if(notificationId.message == '새로운 룸메이트 신청이 왔습니다'){
+        // 여기다가 메이트 클래스 넣기
+      }
     }
-
   },
   created() {
     const uid = this.userId;
-    console.log(this.notificationId)
+    console.log(this.notificationId);
     this.fetchNotifications({ uid });
   },
 };
 </script>
 
 <style scoped>
-li{
+li {
   list-style-type: none;
 }
 
-li:last-child{
+li:last-child {
   padding-bottom: 50px;
 }
 
-.isread{
+.isread {
   color: #696969;
   font-weight: normal;
 }
 
-p{
+p {
   font-weight: 700;
 }
 
-ul{
+ul {
   padding: 0;
 }
 
-.list{
-  padding-left:20px;
+.list {
+  padding-left: 20px;
   cursor: pointer;
 }
 </style>

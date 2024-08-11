@@ -202,6 +202,7 @@ export default {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  padding-bottom: 50px;
   background: linear-gradient(135deg, #f8f8f8, #fff);
   border: 1px solid #ddd;
   border-radius: 15px;
