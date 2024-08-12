@@ -17,6 +17,7 @@ export default {
         university: userData.university,
         studentId: userData.studentId,
         semester: userData.semester || [],
+        gender: userData.gender,
       };
       commit('setUsers', [user]);
     } catch (error) {
@@ -31,6 +32,7 @@ export default {
       university: data.university,
       studentId: data.studentId,
       semester: [],
+      gender: data.gender,
     };
 
     try {
