@@ -87,19 +87,19 @@ export default {
         alert('비밀번호를 입력하세요.');
         return false;
       }
-      if (this.password.length < 8) {
-        alert('비밀번호는 최소 8자 이상이어야 합니다.');
-        return false;
-      }
-      if (
-        !/[a-z]/.test(this.password) ||
-        !/[A-Z]/.test(this.password) ||
-        !/[0-9]/.test(this.password) ||
-        !/[!@#$%^&*]/.test(this.password)
-      ) {
-        alert('비밀번호에는 대소문자, 숫자, 특수문자가 포함되어야 합니다.');
-        return false;
-      }
+      // if (this.password.length < 8) {
+      //   alert('비밀번호는 최소 8자 이상이어야 합니다.');
+      //   return false;
+      // }
+      // if (
+      //   !/[a-z]/.test(this.password) ||
+      //   !/[A-Z]/.test(this.password) ||
+      //   !/[0-9]/.test(this.password) ||
+      //   !/[!@#$%^&*]/.test(this.password)
+      // ) {
+      //   alert('비밀번호에는 대소문자, 숫자, 특수문자가 포함되어야 합니다.');
+      //   return false;
+      // }
       if (!this.isLogin) {
         if (!this.name) {
           alert('이름을 입력하세요.');
