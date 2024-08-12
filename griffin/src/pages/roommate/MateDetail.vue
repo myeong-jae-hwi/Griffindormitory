@@ -100,6 +100,8 @@ export default {
       this.notice(userUid, userName, mateId, userId);
     },
     async deleteMate() {
+      const confirmation = window.confirm('게시물을 삭제하시겠습니까 ?');
+      if (!confirmation) return;
       try {
         await this.$store.dispatch('deleteMate', this.id);
         alert('게시물을 삭제하셨습니다.');
@@ -127,6 +129,15 @@ export default {
     //   }
     // },
     openModal() {
+      if (this.currentUser.gender !== this.sex) {
+        alert('성별이 맞지 않아 신청할 수 없습니다.');
+        return;
+      }
+
+      if (this.currentUser.id === this.mateUid) {
+        alert(`${this.currentUser.name}님이 등록한 게시물입니다.`);
+        return;
+      }
       const mate = this.mates.find((mate) => mate.id === this.id);
       const isSameUniversity = mate.university === this.currentUser.university;
       if (isSameUniversity) this.modalOpen = true;
