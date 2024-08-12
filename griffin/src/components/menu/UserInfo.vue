@@ -41,7 +41,7 @@
 
 <script>
 import { ref, update } from 'firebase/database';
-import { database, auth } from '@/firebase/config';
+import { db, auth } from '@/firebase/config';
 import { signOut } from 'firebase/auth';
 
 export default {
@@ -72,7 +72,7 @@ export default {
       try {
         const user = await this.checkAuth();
         if (user) {
-          await update(ref(database, 'users/' + user.uid), {
+          await update(ref(db, 'users/' + user.uid), {
             name: this.name,
           });
           alert('이름이 수정되었습니다.');
@@ -89,7 +89,7 @@ export default {
       try {
         const user = await this.checkAuth();
         if (user) {
-          await update(ref(database, 'users/' + user.uid), {
+          await update(ref(db, 'users/' + user.uid), {
             university: this.university,
           });
           alert('대학교가 수정되었습니다.');
@@ -106,7 +106,7 @@ export default {
       try {
         const user = await this.checkAuth();
         if (user) {
-          await update(ref(database, 'users/' + user.uid), {
+          await update(ref(db, 'users/' + user.uid), {
             studentId: this.studentId,
           });
           alert('학번이 수정되었습니다.');
@@ -124,7 +124,7 @@ export default {
         const user = await this.checkAuth();
         if (user) {
           await user.updateEmail(this.email);
-          await update(ref(database, 'users/' + user.uid), {
+          await update(ref(db, 'users/' + user.uid), {
             email: this.email,
           });
           alert('이메일이 수정되었습니다.');
