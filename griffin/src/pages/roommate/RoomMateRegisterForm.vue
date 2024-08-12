@@ -8,7 +8,7 @@
       </div>
 
       <div class="form-group">
-        <label>모집 인원</label>
+        <label>전체 인원</label>
         <div class="radio-group">
           <input
             type="radio"
@@ -28,7 +28,6 @@
             value="2"
           />
           <label for="count2">2명</label>
-
           <input
             type="radio"
             id="count3"
@@ -37,6 +36,47 @@
             value="3"
           />
           <label for="count3">3명</label>
+          <input
+            type="radio"
+            id="count4"
+            name="count"
+            v-model="form.count"
+            value="4"
+          />
+          <label for="count4">4명</label>
+          </div>
+      </div>
+      
+        <div class="form-group">
+        <label>모집 인원</label>
+        <div class="radio-group">
+          <input
+            type="radio"
+            id="current1"
+            name="current"
+            v-model="form.current"
+            value="1"
+            required
+          />
+          <label for="current1">1명</label>
+
+          <input
+            type="radio"
+            id="current2"
+            name="current"
+            v-model="form.current"
+            value="2"
+          />
+          <label for="current2">2명</label>
+
+          <input
+            type="radio"
+            id="current3"
+            name="current"
+            v-model="form.current"
+            value="3"
+          />
+          <label for="current3">3명</label>
         </div>
       </div>
 
@@ -156,6 +196,7 @@ export default {
       form: {
         title: '',
         count: null,
+        current: null,
         sex: null,
         location: null,
         besmoke: null,
@@ -177,6 +218,7 @@ export default {
         await this.registerMate(this.form);
         this.form.title = '';
         this.form.count = null;
+        this.form.current = null;
         this.form.sex = null;
         this.form.location = null;
         this.form.besmoke = null;
@@ -205,6 +247,7 @@ export default {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  padding-bottom: 50px;
   background: linear-gradient(135deg, #f8f8f8, #fff);
   border: 1px solid #ddd;
   border-radius: 15px;

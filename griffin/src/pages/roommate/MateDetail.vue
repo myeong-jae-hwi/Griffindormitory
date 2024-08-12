@@ -16,7 +16,7 @@
             기숙사: <strong>{{ location === 'east' ? '동관' : '서관' }}</strong>
           </p>
           <p>
-            모집 인원: <strong>{{ count }}/4명</strong>
+            모집 인원: <strong>{{ current }}/{{ count }}명</strong>
           </p>
           <p>
             흡연:
@@ -49,6 +49,17 @@
         </div>
       </template>
     </mate-modal>
+    <mate-modal v-if="submissionSuccess" @close="closeSuccessModal">
+      <template v-slot:header>
+        <h3>알림</h3>
+      </template>
+      <template v-slot:body>
+        <p>전송되었습니다.</p>
+        <div class="btn-container">
+          <base-btn @click="closeSuccessModal">닫기</base-btn>
+        </div>
+      </template>
+    </mate-modal>
   </div>
 </template>
 
@@ -59,20 +70,22 @@ import MateModal from '../../components/roommate/MataModal.vue';
 export default {
   components: { MateModal },
   props: [
-    'id',
-    'title',
-    'count',
-    'sex',
-    'location',
-    'besmoke',
-    'preferences',
-    'university',
-    'userUid',
+    "id",
+    "title",
+    "count",
+    "current",
+    "sex",
+    "location",
+    "besmoke",
+    "preferences",
+    "university",
+    "userUid",
   ],
   data() {
     return {
       modalOpen: false,
       postId: this.id,
+      submissionSuccess: false,
     };
   },
   computed: {
@@ -87,6 +100,15 @@ export default {
     userId() {
       return this.$store.state.users.userID;
     },
+    // userUid() {
+    //   return this.$store.state.mates.userUid;
+    // },
+  },
+  created() {
+    console.log("Fetching initial data...");
+    console.log("Props: ", this.$parent.$options.name);
+    this.$store.dispatch("fetchInitialData");
+    console.log("제발", this.current);
   },
 
   methods: {
@@ -98,6 +120,8 @@ export default {
       const userId = this.userId;
 
       this.notice(userUid, userName, mateId, userId);
+      this.submissionSuccess = true;
+      this.modalOpen = true;
     },
     async deleteMate() {
       const confirmation = window.confirm('게시물을 삭제하시겠습니까 ?');
@@ -148,6 +172,10 @@ export default {
     closeModal() {
       this.modalOpen = false;
     },
+    closeSuccessModal() {
+    this.submissionSuccess = false;
+    this.modalOpen = false;
+  },
   },
 };
 </script>

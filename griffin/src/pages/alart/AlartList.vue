@@ -7,22 +7,28 @@
     <div v-if="error">{{ error.message }}</div>
     <ul v-if="!loading">
       <li v-for="notification in allNotifications" :key="notification.id">
-        <base-card @click="GotoPost(notification)" class="list">
+        <alart-list
+          @click="handleNotificationClick(notification)"
+          :customClass="notification.message === '새로운 룸메이트 신청이 왔습니다' ? 'mate' : 'list'"
+        >
           <p :class="{ isread: notification.is_read }">
             {{ notification.message }}
           </p>
-        </base-card>
+        </alart-list>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import BaseCard from '../../components/UI/BaseCard.vue';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
-  components: { BaseCard },
+  data() {
+    return {
+      isMate: false,
+    };
+  },
   computed: {
     ...mapGetters('notifications', [
       'allNotifications',
@@ -44,30 +50,34 @@ export default {
       const uid = this.userId;
       this.markNotificationAsRead({ uid, notificationId });
     },
-    GotoPost(notificationId) {
-      this.markAsRead(notificationId.id);
+    handleNotificationClick(notification) {
+      this.markAsRead(notification.id);
+      const isMateNotification = notification.message === '새로운 룸메이트 신청이 왔습니다';
+      if (isMateNotification) {
+        this.GotoMate(notification);
+      } else {
+        this.GotoPost(notification);
+      }
+    },
+    GotoPost(notification) {
       this.$router.push({
-        path: `/boardlist/${notificationId.boardId}`,
+        path: `/boardlist/${notification.boardId}`,
       });
     },
+    GotoMate(notification) {
+      this.$router.push({
+        path: `/roommateboard/${notification.boardId}`,
+      });
+    }
   },
   created() {
     const uid = this.userId;
-    console.log(this.notificationId);
     this.fetchNotifications({ uid });
   },
 };
 </script>
 
 <style scoped>
-.no-notifications {
-  color: #696969;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 20px;
-  padding: 10px;
-}
 li {
   list-style-type: none;
 }
@@ -92,5 +102,11 @@ ul {
 .list {
   padding-left: 20px;
   cursor: pointer;
+}
+
+.mate {
+  padding-left: 20px;
+  cursor: pointer;
+  background-color: #f0f8ff;
 }
 </style>

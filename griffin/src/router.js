@@ -52,6 +52,7 @@ const router = createRouter({
         id: route.params.id,
         title: route.query.title,
         count: decodeURIComponent(route.query.count),
+        current: decodeURIComponent(route.query.current),
         sex: route.query.sex,
         location: route.query.location,
         besmoke: route.query.besmoke,

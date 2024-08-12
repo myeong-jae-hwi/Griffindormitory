@@ -32,6 +32,7 @@
             :id="mate.id"
             :title="mate.title"
             :count="mate.count"
+            :current="mate.current"
             :sex="mate.sex"
             :location="mate.location"
             :besmoke="mate.besmoke"
