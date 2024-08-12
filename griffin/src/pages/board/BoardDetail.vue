@@ -130,7 +130,7 @@ export default {
       fromUid
     ) {
       console.log(fromUid);
-      if (to != fromUid) {
+      if (to != this.userId) {
         try {
           const notification = {
             userId: to,
@@ -139,7 +139,6 @@ export default {
             created_at: new Date().toISOString(),
             boardId: fromUid,
           };
-
           await this.$store.dispatch('notifications/createNotification', {
             uid: to,
             notification: notification,

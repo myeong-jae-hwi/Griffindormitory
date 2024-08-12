@@ -134,24 +134,24 @@ export default {
         console.error('Error deleting mate:', error.message);
       }
     },
-    // async notice(to, mateId, fromUid) {
-    //   try {
-    //     const notification = {
-    //       userId: to,
-    //       message: `새로운 룸메이트 신청이 왔습니다`,
-    //       is_read: false,
-    //       created_at: new Date().toISOString(),
-    //       mateId: mateId,
-    //     };
+    async notice(to, mateId) {
+      try {
+        const notification = {
+          userId: to,
+          message: `새로운 룸메이트 신청이 왔습니다`,
+          is_read: false,
+          created_at: new Date().toISOString(),
+          mateId: mateId,
+        };
 
-    //     await this.$store.dispatch('notifications/createNotification', {
-    //       uid: to,
-    //       notification: notification,
-    //     });
-    //   } catch (error) {
-    //     console.error('Error creating notification:', error.message);
-    //   }
-    // },
+        await this.$store.dispatch('notifications/createNotification', {
+          uid: to,
+          notification: notification,
+        });
+      } catch (error) {
+        console.error('Error creating notification:', error.message);
+      }
+    },
     openModal() {
       if (this.currentUser.gender !== this.sex) {
         alert('성별이 맞지 않아 신청할 수 없습니다.');
