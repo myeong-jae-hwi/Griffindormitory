@@ -1,16 +1,19 @@
 <template>
   <div>
     <div class="card-container">
+      <div v-if="currentUser.id === mateUid" class="delete-btn-container">
+        <button @click="deleteMate" class="delete-btn">삭제하기</button>
+      </div>
       <base-card
         :style="{ backgroundColor: sex === 'male' ? '#4169E1' : '#DB7093' }"
       >
         <div class="card-content">
           <h2>{{ title }}</h2>
           <p>
-            성별: <strong>{{ sex === "male" ? "남자" : "여자" }}</strong>
+            성별: <strong>{{ sex === 'male' ? '남자' : '여자' }}</strong>
           </p>
           <p>
-            기숙사: <strong>{{ location === "east" ? "동관" : "서관" }}</strong>
+            기숙사: <strong>{{ location === 'east' ? '동관' : '서관' }}</strong>
           </p>
           <p>
             모집 인원: <strong>{{ current }}/{{ count }}명</strong>
@@ -18,7 +21,7 @@
           <p>
             흡연:
             <strong>{{
-              besmoke === "notsmoke" ? "비흡연자만" : "상관없음"
+              besmoke === 'notsmoke' ? '비흡연자만' : '상관없음'
             }}</strong>
           </p>
           <p class="preferences">{{ preferences }}</p>
@@ -61,8 +64,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import MateModal from "../../components/roommate/MataModal.vue";
+import { mapGetters } from 'vuex';
+import MateModal from '../../components/roommate/MataModal.vue';
 
 export default {
   components: { MateModal },
@@ -86,12 +89,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("users", ["currentUser"]),
+    ...mapGetters('users', ['currentUser']),
     ...mapGetters({
-      mates: "mates",
-      hasMates: "hasMates",
+      mates: 'mates',
+      hasMates: 'hasMates',
     }),
-
+    mateUid() {
+      return this.$store.state.mates.userUid;
+    },
     userId() {
       return this.$store.state.users.userID;
     },
@@ -118,36 +123,50 @@ export default {
       this.submissionSuccess = true;
       this.modalOpen = true;
     },
-    async notice(to, mateId, fromUid) {
+    async deleteMate() {
+      const confirmation = window.confirm('게시물을 삭제하시겠습니까 ?');
+      if (!confirmation) return;
       try {
-        console.log("알림 받는 사람 uid: ", to);
-        console.log("알림이 발생한 글: ", mateId);
-        console.log("당신 Uid: ", fromUid);
-
-        const notification = {
-          userId: to,
-          message: `새로운 룸메이트 신청이 왔습니다`,
-          is_read: false,
-          created_at: new Date().toISOString(),
-          mateId: mateId,
-        };
-
-        await this.$store.dispatch("notifications/createNotification", {
-          uid: to,
-          notification: notification,
-        });
+        await this.$store.dispatch('deleteMate', this.id);
+        alert('게시물을 삭제하셨습니다.');
+        this.$router.push('/roommateboard');
       } catch (error) {
-        console.error("Error creating notification:", error.message);
+        console.error('Error deleting mate:', error.message);
       }
     },
-    openModal() {
-      const mate = this.mates.find((mate) => mate.id === this.id);
+    // async notice(to, mateId, fromUid) {
+    //   try {
+    //     const notification = {
+    //       userId: to,
+    //       message: `새로운 룸메이트 신청이 왔습니다`,
+    //       is_read: false,
+    //       created_at: new Date().toISOString(),
+    //       mateId: mateId,
+    //     };
 
+    //     await this.$store.dispatch('notifications/createNotification', {
+    //       uid: to,
+    //       notification: notification,
+    //     });
+    //   } catch (error) {
+    //     console.error('Error creating notification:', error.message);
+    //   }
+    // },
+    openModal() {
+      if (this.currentUser.gender !== this.sex) {
+        alert('성별이 맞지 않아 신청할 수 없습니다.');
+        return;
+      }
+
+      if (this.currentUser.id === this.mateUid) {
+        alert(`${this.currentUser.name}님이 등록한 게시물입니다.`);
+        return;
+      }
+      const mate = this.mates.find((mate) => mate.id === this.id);
       const isSameUniversity = mate.university === this.currentUser.university;
       if (isSameUniversity) this.modalOpen = true;
       else {
-        alert("다른 학교 게시물입니다. 신청 자격이 없습니다.");
-        return;
+        alert('다른 학교 게시물입니다. 신청 자격이 없습니다.');
       }
     },
     closeModal() {
@@ -170,24 +189,46 @@ export default {
 
 .card-content {
   padding: 20px;
-  font-family: "Arial, sans-serif";
-  color: #333;
+  font-family: 'Arial, sans-serif';
+  color: white;
 }
 
 p {
   margin: 10px 0;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
 .preferences {
   font-style: italic;
-  color: #ccc;
+  font-size: 16px;
+  color: white;
 }
 
 .btn-container {
   width: fit-content;
   margin: 0 auto;
   text-align: center;
+}
+.delete-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
 }
 </style>

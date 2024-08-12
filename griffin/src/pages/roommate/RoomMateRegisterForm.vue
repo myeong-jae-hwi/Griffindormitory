@@ -90,6 +90,7 @@
             v-model="form.sex"
             value="male"
             required
+            :disabled="true"
           />
           <label for="male">남자</label>
 
@@ -99,6 +100,7 @@
             name="sex"
             v-model="form.sex"
             value="female"
+            :disabled="true"
           />
           <label for="female">여자</label>
         </div>
@@ -207,6 +209,7 @@ export default {
   created() {
     this.form.university = this.userUniversity;
     this.form.userUid = this.userId;
+    this.form.sex = this.currentUser.gender;
   },
   methods: {
     ...mapActions(['registerMate']),

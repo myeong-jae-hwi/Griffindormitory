@@ -1,6 +1,5 @@
 <template>
   <div class="container" @click="goMateDetail">
-    <!-- <p class="description">{{ preferences }}</p> -->
     <h4
       class="description"
       :style="{ color: sex === 'male' ? '#4169E1' : '#DB7093' }"

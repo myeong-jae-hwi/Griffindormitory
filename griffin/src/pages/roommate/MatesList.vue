@@ -13,6 +13,7 @@
             :location="mate.location"
             :besmoke="mate.besmoke"
             :preferences="mate.preferences"
+            :userUid="mate.userUid"
           ></mate-item>
         </li>
       </ul>

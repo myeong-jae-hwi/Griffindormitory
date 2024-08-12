@@ -66,4 +66,17 @@ export default {
       console.error('Error registering mate:', error.message);
     }
   },
+
+  async deleteMate(context, mateId) {
+    try {
+      const response = await fetch(`${dbURL}/roommates/${mateId}.json`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete roommate');
+
+      context.commit('deleteMate', mateId);
+    } catch (error) {
+      console.error('Error deleting mate:', error.message);
+    }
+  },
 };

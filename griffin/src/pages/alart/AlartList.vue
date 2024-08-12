@@ -1,5 +1,8 @@
 <template>
   <div>
+    <h2 v-if="allNotifications.length === 0" class="no-notifications">
+      알람이 없습니다.
+    </h2>
     <div v-if="loading">Loading...</div>
     <div v-if="error">{{ error.message }}</div>
     <ul v-if="!loading">
@@ -14,8 +17,6 @@
         </alart-list>
       </li>
     </ul>
-
-    <!-- <button @click="createNewNotification">Create New Notification</button> -->
   </div>
 </template>
 
@@ -29,21 +30,21 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("notifications", [
-      "allNotifications",
-      "notificationsLoading",
-      "notificationsError",
+    ...mapGetters('notifications', [
+      'allNotifications',
+      'notificationsLoading',
+      'notificationsError',
     ]),
-    ...mapGetters("users", ["currentUser"]),
+    ...mapGetters('users', ['currentUser']),
     userId() {
       return this.$store.state.users.userID;
     },
   },
   methods: {
-    ...mapActions("notifications", [
-      "fetchNotifications",
-      "markNotificationAsRead",
-      "createNotification",
+    ...mapActions('notifications', [
+      'fetchNotifications',
+      'markNotificationAsRead',
+      'createNotification',
     ]),
     markAsRead(notificationId) {
       const uid = this.userId;

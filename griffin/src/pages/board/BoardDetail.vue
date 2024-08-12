@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="currentUser.id === boardUid" class="delete-btn-container">
+      <button @click="deleteBoard" class="delete-btn">삭제하기</button>
+    </div>
     <base-card class="horizental">
       <h2>{{ boardTitle }}</h2>
       <div class="vertical">
@@ -7,9 +10,6 @@
         <p id="author">{{ utcToKor }}</p>
       </div>
       <p>{{ boardContents }}</p>
-      <div v-if="currentUser.id === boardUid">
-        <button @click="deleteBoard">삭제하기</button>
-      </div>
     </base-card>
     <section class="comment-section">
       <input
@@ -37,19 +37,19 @@
 </template>
 
 <script>
-import moment from "moment";
-import { mapGetters } from "vuex";
-import BoardComments from "../../components/board/BoardComments.vue";
+import moment from 'moment';
+import { mapGetters } from 'vuex';
+import BoardComments from '../../components/board/BoardComments.vue';
 
 export default {
   components: {
     BoardComments,
   },
 
-  props: ["id", "name", "title", "content", "time", "author", "userUid"],
+  props: ['id', 'name', 'title', 'content', 'time', 'author', 'userUid'],
   data() {
     return {
-      newComment: "",
+      newComment: '',
       comments: [],
       boardTitle: this.title,
       boardContents: this.content,
@@ -60,10 +60,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters("boards", ["boards"]),
-    ...mapGetters("users", ["currentUser"]),
+    ...mapGetters('boards', ['boards']),
+    ...mapGetters('users', ['currentUser']),
     utcToKor() {
-      return moment.utc(this.boardTime).local().format("YYYY/MM/DD");
+      return moment.utc(this.boardTime).local().format('YYYY/MM/DD');
     },
     userName() {
       return this.$store.state.users.users[0].name;
@@ -77,26 +77,28 @@ export default {
   },
   methods: {
     formatTime(time) {
-      return moment.utc(time).local().format("YYYY/MM/DD");
+      return moment.utc(time).local().format('YYYY/MM/DD');
     },
     async deleteBoard() {
+      const confirmation = window.confirm('게시물을 삭제하시겠습니까 ?');
+      if (!confirmation) return;
       try {
-        await this.$store.dispatch("boards/deleteBoard", this.id);
-        alert("게시물을 삭제하셨습니다.");
-        this.$router.push("/boardlist");
+        await this.$store.dispatch('boards/deleteBoard', this.id);
+        alert('게시물을 삭제하셨습니다.');
+        this.$router.push('/boardlist');
       } catch (error) {
-        console.error("Error deleting board:", error.message);
+        console.error('Error deleting board:', error.message);
       }
     },
 
     async submitComment() {
-      if (this.newComment.trim() === "") return;
+      if (this.newComment.trim() === '') return;
       const commentText = this.newComment.trim();
       const userName = this.userName;
       const userId = this.id;
 
       try {
-        await this.$store.dispatch("boards/addComment", {
+        await this.$store.dispatch('boards/addComment', {
           boardId: this.id,
           comment: commentText,
           userName: userName,
@@ -108,7 +110,7 @@ export default {
           time: new Date().toISOString(),
           userId: userId,
         });
-        this.newComment = "";
+        this.newComment = '';
         this.createNotificationForPostAuthor(
           this.receiveUid,
           this.userName,
@@ -117,7 +119,7 @@ export default {
           this.id
         );
       } catch (error) {
-        console.error("Error adding comment:", error.message);
+        console.error('Error adding comment:', error.message);
       }
     },
     async createNotificationForPostAuthor(
@@ -127,7 +129,7 @@ export default {
       boardId,
       fromUid
     ) {
-      console.log(fromUid)
+      console.log(fromUid);
       if (to != fromUid) {
         try {
           const notification = {
@@ -138,17 +140,17 @@ export default {
             boardId: fromUid,
           };
 
-          await this.$store.dispatch("notifications/createNotification", {
+          await this.$store.dispatch('notifications/createNotification', {
             uid: to,
             notification: notification,
           });
         } catch (error) {
-          console.error("Error creating notification:", error.message);
+          console.error('Error creating notification:', error.message);
         }
       }
     },
     async fetchComments() {
-      await this.$store.dispatch("boards/fetchInitialData", this.id);
+      await this.$store.dispatch('boards/fetchInitialData', this.id);
       const board = this.boards.find((board) => board.id === this.id);
       this.comments = board.comments;
       this.boardTitle = board.title;
@@ -220,5 +222,26 @@ p {
   font-size: 14px;
   border: none;
   cursor: pointer;
+}
+.delete-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
 }
 </style>

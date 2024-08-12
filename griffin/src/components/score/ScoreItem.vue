@@ -4,6 +4,7 @@
       <input type="text" v-model="subject" placeholder="과목명" />
     </section>
     <select v-model="grade">
+      <option value="choise">학점 입력</option>
       <option value="A+">A+</option>
       <option value="A0">A0</option>
       <option value="B+">B+</option>
@@ -21,13 +22,12 @@
 </template>
 
 <script>
-
 export default {
   props: ['initialSubject', 'initialGrade'],
   data() {
     return {
       subject: this.initialSubject || '',
-      grade: this.initialGrade || 'A+'
+      grade: this.initialGrade || 'choise',
     };
   },
   watch: {
@@ -39,8 +39,8 @@ export default {
     },
     grade(newGrade) {
       this.$emit('update-grade', newGrade);
-    }
-  }
+    },
+  },
 };
 </script>
 
