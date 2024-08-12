@@ -16,6 +16,7 @@ export default {
           id: key,
           title: matesData[key].title,
           count: matesData[key].count,
+          current: matesData[key].current,
           sex: matesData[key].sex,
           location: matesData[key].location,
           besmoke: matesData[key].besmoke,
@@ -35,6 +36,7 @@ export default {
     const mateData = {
       title: data.title,
       count: data.count,
+      current: data.current,
       sex: data.sex,
       location: data.location,
       besmoke: data.besmoke,

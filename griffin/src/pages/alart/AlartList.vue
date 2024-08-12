@@ -5,7 +5,7 @@
     <ul v-if="!loading">
       <li v-for="notification in allNotifications" :key="notification.id">
         <alart-list
-          @click="GotoPost(notification)"
+          @click="handleNotificationClick(notification)"
           :customClass="notification.message === '새로운 룸메이트 신청이 왔습니다' ? 'mate' : 'list'"
         >
           <p :class="{ isread: notification.is_read }">
@@ -49,13 +49,25 @@ export default {
       const uid = this.userId;
       this.markNotificationAsRead({ uid, notificationId });
     },
-    GotoPost(notification) {
+    handleNotificationClick(notification) {
       this.markAsRead(notification.id);
-      console.log("웨모 췤!!", notification.message);
+      const isMateNotification = notification.message === '새로운 룸메이트 신청이 왔습니다';
+      if (isMateNotification) {
+        this.GotoMate(notification);
+      } else {
+        this.GotoPost(notification);
+      }
+    },
+    GotoPost(notification) {
       this.$router.push({
         path: `/boardlist/${notification.boardId}`,
       });
     },
+    GotoMate(notification) {
+      this.$router.push({
+        path: `/roommateboard/${notification.boardId}`,
+      });
+    }
   },
   created() {
     const uid = this.userId;

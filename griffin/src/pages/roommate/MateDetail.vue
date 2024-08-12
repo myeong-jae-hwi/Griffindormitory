@@ -13,7 +13,7 @@
             기숙사: <strong>{{ location === "east" ? "동관" : "서관" }}</strong>
           </p>
           <p>
-            모집 인원: <strong>{{ count }}/4명</strong>
+            모집 인원: <strong>{{ current }}/{{ count }}명</strong>
           </p>
           <p>
             흡연:
@@ -46,6 +46,17 @@
         </div>
       </template>
     </mate-modal>
+    <mate-modal v-if="submissionSuccess" @close="closeSuccessModal">
+      <template v-slot:header>
+        <h3>알림</h3>
+      </template>
+      <template v-slot:body>
+        <p>전송되었습니다.</p>
+        <div class="btn-container">
+          <base-btn @click="closeSuccessModal">닫기</base-btn>
+        </div>
+      </template>
+    </mate-modal>
   </div>
 </template>
 
@@ -59,6 +70,7 @@ export default {
     "id",
     "title",
     "count",
+    "current",
     "sex",
     "location",
     "besmoke",
@@ -70,6 +82,7 @@ export default {
     return {
       modalOpen: false,
       postId: this.id,
+      submissionSuccess: false,
     };
   },
   computed: {
@@ -88,8 +101,9 @@ export default {
   },
   created() {
     console.log("Fetching initial data...");
+    console.log("Props: ", this.$parent.$options.name);
     this.$store.dispatch("fetchInitialData");
-    console.log("제발", this.postId);
+    console.log("제발", this.current);
   },
 
   methods: {
@@ -101,6 +115,8 @@ export default {
       const userId = this.userId;
 
       this.notice(userUid, userName, mateId, userId);
+      this.submissionSuccess = true;
+      this.modalOpen = true;
     },
     async notice(to, mateId, fromUid) {
       try {
@@ -137,6 +153,10 @@ export default {
     closeModal() {
       this.modalOpen = false;
     },
+    closeSuccessModal() {
+    this.submissionSuccess = false;
+    this.modalOpen = false;
+  },
   },
 };
 </script>
