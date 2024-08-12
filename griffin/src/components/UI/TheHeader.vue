@@ -43,6 +43,9 @@
             <router-link to="/score" class="nav-link">학적 관리</router-link>
           </li>
           <li @click="closeMenu">
+            <router-link to="/timetable" class="nav-link">시간표</router-link>
+          </li>
+          <li @click="closeMenu">
             <router-link
               v-if="isLoggedIn"
               @click="handleAuthAction"

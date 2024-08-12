@@ -283,7 +283,7 @@ export default {
 
 <style scoped>
 .calendar {
-  max-width: 800px;
+  max-width: 95%;
   margin: 0 auto;
   text-align: center;
 }
