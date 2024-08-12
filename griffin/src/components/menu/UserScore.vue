@@ -57,7 +57,7 @@ import { Chart, registerables } from 'chart.js';
 import BaseCard from '../UI/BaseCard.vue';
 import ScoreItem from '../score/ScoreItem.vue';
 import { mapGetters } from 'vuex';
-import BaseBtn from '../UI/BaseBtn.vue';
+// import BaseBtn from '../UI/BaseBtn.vue';
 
 Chart.register(...registerables);
 
@@ -66,7 +66,7 @@ export default {
     BaseChart,
     BaseCard,
     ScoreItem,
-    BaseBtn,
+    // BaseBtn,
   },
   computed: {
     ...mapGetters('users', ['currentUser']),
@@ -128,6 +128,15 @@ export default {
       this.fetchScores();
       console.log('레이블: ', this.allScores.data.labels);
       console.log('데이터: ', this.allScores.data.datasets[0].data);
+      this.scoreItems = this.allScores.data.labels.map((subject, index) => ({
+        subject,
+        grade: this.allScores.data.datasets[0].data[index],
+      }));
+      this.scoreItems = [...this.scoreItems];
+
+      if (this.$refs.chartComponent && this.$refs.chartComponent.chart) {
+        this.$refs.chartComponent.chart.update();
+      }
     },
     addScoreItem() {
       const subjects = this.allScores.data.labels;
@@ -151,7 +160,7 @@ export default {
           subject: item.subject,
           grade: this.convertGradeToPoint(item.grade),
         }));
-        console.log(scoresArray);
+        console.log('hi', scoresArray);
 
         const response = await fetch(
           `${process.env.VUE_APP_FIREBASE_DATABASE_URL}/scores/${this.userId}/semesters/${this.selectedGrade}.json`
@@ -215,7 +224,7 @@ export default {
         this.allScores.data.datasets[0].data = grades;
 
         const letterGrades = grades.map((point) =>
-          this.convertPointToGrade(point)
+          point !== undefined ? this.convertPointToGrade(point) : ''
         );
 
         this.scoreItems = subjects.map((subject, index) => ({
@@ -317,7 +326,12 @@ export default {
       const [grade, sem] = semester.split('_');
       return `${grade[0]}학년 ${sem[0]}학기`;
     },
+
     convertPointToGrade(point) {
+      if (typeof point !== 'number' || isNaN(point)) {
+        console.error('Invalid point value:', point);
+        return '';
+      }
       const formattedPoint = point.toFixed(1);
       const pointToGradeMap = {
         4.5: 'A+',
@@ -330,8 +344,9 @@ export default {
         '1.0': 'D0',
         '0.0': 'F',
       };
-      return pointToGradeMap[formattedPoint] || 'Unknown';
+      return pointToGradeMap[formattedPoint] || '';
     },
+
     convertGradeToPoint(grade) {
       const gradeMap = {
         'A+': 4.5,
