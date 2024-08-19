@@ -103,6 +103,42 @@ export default {
     }
   },
 
+  async incrementCurrent({ commit }, mateid) {
+    try {
+      const currentResponse = await fetch(`${dbURL}/roommates/${mateid}/current.json`,);
+      const countResponse = await fetch(`${dbURL}/roommates/${mateid}/count.json`,);
+      if (!currentResponse.ok) {
+        throw new Error('Failed to fetch current value');
+      }
+      const currentValue = await currentResponse.json();
+      const countValue = await countResponse.json();
+      let newValue = 0
+
+      console.log(countValue)
+      if (countValue > currentValue){
+        newValue = currentValue + 1;
+      }
+      else{
+        window.alert('인원이 가득 찼습니다');
+      }
+      const updateResponse = await fetch(`${dbURL}/roommates/${mateid}/current.json`, {
+        method: 'PUT',
+        body: JSON.stringify(newValue),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error('Failed to update current value');
+      }
+
+      commit('setCurrent', newValue); // Vuex 상태 업데이트
+    } catch (error) {
+      console.error('Error incrementing current:', error.message);
+    }
+  },
+
   clearNotifications({ commit }) {
     commit('resetNotifications');
   },

@@ -20,5 +20,8 @@ export default {
   deleteAlert(state, id) {
     state.notifications = state.notifications.filter(notification => notification.id !== id);
   },
+  setCurrent(state, newValue) {
+    state.current = newValue;
+  },
 };
 

@@ -195,8 +195,8 @@ export default {
     return {
       form: {
         title: '',
-        count: null,
-        current: null,
+        count: 0,
+        current: 0,
         sex: null,
         location: null,
         besmoke: null,
@@ -217,8 +217,8 @@ export default {
       try {
         await this.registerMate(this.form);
         this.form.title = '';
-        this.form.count = null;
-        this.form.current = null;
+        this.form.count = 0;
+        this.form.current = 0;
         this.form.sex = null;
         this.form.location = null;
         this.form.besmoke = null;
