@@ -10,7 +10,6 @@
 
 <script>
 import { mapActions } from "vuex";
-import { mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -25,35 +24,55 @@ export default {
     },
   },
 
+  data() {
+    return {
+      hasMateClass: this.customClass.includes("mate"),
+    };
+  },
+
   computed: {
-    ...mapGetters('users', ['currentUser']),
-    ...mapGetters({
-      mates: 'mates',
-      hasMates: 'hasMates',
-    }),
     userId() {
       return this.$store.state.users.userID;
-    },
-    hasMateClass() {
-      return this.customClass.includes("mate");
-    },
-
+    }
   },
+
+  mounted() {
+    this.loadNotificationState();
+  },
+
   methods: {
     ...mapActions('notifications', [
       'deleteAlert',
       'incrementCurrent'
     ]),
+    ...mapActions('notifications', [
+      'hideNotification'
+    ]),
+    saveNotificationState() {
+      const hiddenNotifications = JSON.parse(localStorage.getItem('hiddenNotifications')) || [];
+      hiddenNotifications.push(this.notification.id);
+      localStorage.setItem('hiddenNotifications', JSON.stringify(hiddenNotifications));
+    },
+
+    loadNotificationState() {
+      const hiddenNotifications = JSON.parse(localStorage.getItem('hiddenNotifications')) || [];
+      if (hiddenNotifications.includes(this.notification.id)) {
+        this.hasMateClass = false;
+      }
+    },
 
     async accept() {
       await this.incrementCurrent(this.notification.mateId); 
-      console.log(this.notification.mateId);
+      this.hasMateClass = false;
+      this.saveNotificationState();  // 상태 저장
     },
 
     async refusal() {
       await this.deleteAlert({ id: this.notification.id, uid: this.$store.state.users.userID });
+      this.hasMateClass = false;
+      this.saveNotificationState();  // 상태 저장
     }
-  },
+  }
 };
 </script>
 
@@ -72,35 +91,25 @@ export default {
   box-shadow: 4px 4px 0px 0px #f0f0f0d7;
 }
 
-.accept {
+.accept, .refusal {
   outline: 0;
-  background: #5c78e5;
   width: 50px;
   height: 30px;
   border: 0;
   padding: 8px;
   color: #ffffff;
   font-size: 14px;
-  -webkit-transition: all 0.3 ease;
-  transition: all 0.3 ease;
+  transition: all 0.3s ease;
   border-radius: 8px;
   cursor: pointer;
   margin: 3px;
 }
 
+.accept {
+  background: #5c78e5;
+}
+
 .refusal {
-  outline: 0;
   background: #9b9b9b;
-  width: 50px;
-  height: 30px;
-  border: 0;
-  padding: 8px;
-  color: #ffffff;
-  font-size: 14px;
-  -webkit-transition: all 0.3 ease;
-  transition: all 0.3 ease;
-  border-radius: 8px;
-  cursor: pointer;
-  margin: 3px;
 }
 </style>
