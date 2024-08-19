@@ -1,5 +1,5 @@
 <template>
-  <div :class="['alart-list', customClass]" @click="handleClick">
+  <div :class="['alart-list', customClass]">
     <slot></slot>
     <div v-if="hasMateClass">
       <button class="accept" @click="accept">수락</button>
@@ -9,28 +9,43 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import { mapGetters } from 'vuex';
+
 export default {
   props: {
     customClass: {
       type: String,
       required: false,
-      default: ''
-    }
+      default: "",
+    },
+    notification: {
+      type: Object,
+      required: true,
+    },
   },
+
   computed: {
-    // ...mapGetters({
-    //   mates: 'mates',
-    //   hasMates: 'hasMates',
-    // }),
+    ...mapGetters('users', ['currentUser']),
+    userId() {
+      return this.$store.state.users.userID;
+    },
     hasMateClass() {
-      return this.customClass.includes('mate');
-    }
+      return this.customClass.includes("mate");
+    },
   },
   methods: {
-    accept(){
+    ...mapActions('notifications', [
+      'deleteAlert'
+    ]),
+    async accept() {
+    },
 
+    async refusal() {
+      await this.deleteAlert(this.notification.id, this.userId);
+      console.log('aa')
     }
-  }
+  },
 };
 </script>
 
@@ -56,7 +71,7 @@ export default {
   height: 30px;
   border: 0;
   padding: 8px;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
@@ -65,14 +80,14 @@ export default {
   margin: 3px;
 }
 
-.refusal{
-    outline: 0;
+.refusal {
+  outline: 0;
   background: #9b9b9b;
   width: 50px;
   height: 30px;
   border: 0;
   padding: 8px;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
@@ -80,5 +95,4 @@ export default {
   cursor: pointer;
   margin: 3px;
 }
-
 </style>

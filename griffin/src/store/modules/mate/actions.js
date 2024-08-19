@@ -79,4 +79,21 @@ export default {
       console.error('Error deleting mate:', error.message);
     }
   },
+  async updateMate(context, { mateId, updatedData }) {
+    try {
+      const response = await fetch(`${dbURL}/roommates/${mateId}.json`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+      if (!response.ok) throw new Error('Failed to update roommate');
+      context.commit('incrementCurrent');
+
+      context.commit('updateMate', { mateId, updatedData });
+    } catch (error) {
+      console.error('Error updating mate:', error.message);
+    }
+  },
 };

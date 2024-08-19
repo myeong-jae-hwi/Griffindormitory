@@ -126,7 +126,6 @@ export default {
       to,
       from,
       commentText,
-      boardId,
       fromUid
     ) {
       console.log(fromUid);

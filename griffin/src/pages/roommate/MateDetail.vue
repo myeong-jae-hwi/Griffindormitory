@@ -5,18 +5,18 @@
         <button @click="deleteMate" class="delete-btn">삭제하기</button>
       </div>
       <base-card
-        :style="{ backgroundColor: sex === 'male' ? '#4169E1' : '#DB7093' }"
+        :style="{ backgroundColor: mateSex === 'male' ? '#4169E1' : '#DB7093' }"
       >
         <div class="card-content">
-          <h2>{{ title }}</h2>
+          <h2>{{ mateTitle }}</h2>
           <p>
-            성별: <strong>{{ sex === 'male' ? '남자' : '여자' }}</strong>
+            성별: <strong>{{ mateSex === 'male' ? '남자' : '여자' }}</strong>
           </p>
           <p>
-            기숙사: <strong>{{ location === 'east' ? '동관' : '서관' }}</strong>
+            기숙사: <strong>{{ mateLocation === 'east' ? '동관' : '서관' }}</strong>
           </p>
           <p>
-            모집 인원: <strong>{{ current }}/{{ count }}명</strong>
+            모집 인원: <strong>{{ mateCurrent }}/{{ mateCount }}명</strong>
           </p>
           <p>
             흡연:
@@ -86,6 +86,12 @@ export default {
       modalOpen: false,
       postId: this.id,
       submissionSuccess: false,
+      mateTitle: '',
+      mateCount: null,
+      mateSex: null,
+      mateBesmoke: null,
+      mateCurrent: null,
+      mateLocation: null,
     };
   },
   computed: {
@@ -103,21 +109,20 @@ export default {
     },
   },
   created() {
-    console.log('Fetching initial data...');
-    console.log('Props: ', this.$parent.$options.name);
-    this.$store.dispatch('fetchInitialData');
-    console.log('제발', this.current);
+    this.fetchData()
+    this.$store.dispatch("fetchInitialData");
   },
 
   methods: {
     submitData() {
       const mate = this.mates.find((mate) => mate.id === this.id);
       const userUid = mate.userUid;
-      const userName = this.userName;
+      // const userName = this.userName;
       const mateId = this.postId;
       const userId = this.userId;
+      console.log(mateId)
 
-      this.notice(userUid, userName, mateId, userId);
+      this.notice(userUid, mateId, userId);
       this.submissionSuccess = true;
       this.modalOpen = true;
     },
@@ -132,14 +137,15 @@ export default {
         console.error('Error deleting mate:', error.message);
       }
     },
-    async notice(to, mateId) {
+    async notice(to, mateId, fromUid) {
       try {
+        console.log(fromUid)
         const notification = {
           userId: to,
+          mateId: mateId,
           message: `새로운 룸메이트 신청이 왔습니다`,
           is_read: false,
           created_at: new Date().toISOString(),
-          mateId: mateId,
         };
 
         await this.$store.dispatch('notifications/createNotification', {
@@ -149,6 +155,17 @@ export default {
       } catch (error) {
         console.error('Error creating notification:', error.message);
       }
+    },
+    async fetchData() {
+      await this.$store.dispatch('mates/fetchInitialData', this.id);
+      const mate = this.mates.find((mate) => mate.id === this.id);
+      this.mateTitle = mate.title;
+      this.mateCount = mate.count;
+      this.mateCurrent = mate.current;
+      this.mateBesmoke = mate.besmoke;
+      this.matePreference = mate.preference;
+      this.mateSex = mate.sex;
+      this.mateLocation = mate.location
     },
     openModal() {
       if (this.currentUser.gender !== this.sex) {

@@ -6,9 +6,10 @@
     <div v-if="loading">Loading...</div>
     <div v-if="error">{{ error.message }}</div>
     <ul v-if="!loading">
-      <li v-for="notification in allNotifications" :key="notification.id">
+  <li v-for="notification in [...allNotifications].reverse()" :key="notification.id">
         <alart-list
           @click="handleNotificationClick(notification)"
+          :notification="notification"
           :customClass="notification.message === '새로운 룸메이트 신청이 왔습니다' ? 'mate' : 'list'"
         >
           <p :class="{ isread: notification.is_read }">
@@ -65,8 +66,9 @@ export default {
       });
     },
     GotoMate(notification) {
+      console.log(notification.mateId)
       this.$router.push({
-        path: `/roommateboard/${notification.boardId}`,
+        path: `/roommateboard/${notification.mateId}`,
       });
     }
   },
