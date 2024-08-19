@@ -174,7 +174,12 @@ export default {
       }
 
       if (this.currentUser.id === this.mateUid) {
-        alert(`${this.currentUser.name}님이 등록한 게시물입니다.`);
+        alert('내가 쓴 글에는 신청할 수 없습니다.');
+        return;
+      }
+
+      if (this.mateCount <= this.mateCurrent){
+        alert('인원 모집이 마감되었습니다.');
         return;
       }
       const mate = this.mates.find((mate) => mate.id === this.id);
