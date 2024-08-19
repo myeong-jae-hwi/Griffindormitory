@@ -27,18 +27,27 @@ export default {
 
   computed: {
     ...mapGetters('users', ['currentUser']),
+    ...mapGetters({
+      mates: 'mates',
+      hasMates: 'hasMates',
+    }),
     userId() {
       return this.$store.state.users.userID;
     },
     hasMateClass() {
       return this.customClass.includes("mate");
     },
+
   },
   methods: {
     ...mapActions('notifications', [
-      'deleteAlert'
+      'deleteAlert',
+      'incrementCurrent'
     ]),
+
     async accept() {
+      await this.incrementCurrent(this.notification.mateId); 
+      console.log(this.notification.mateId);
     },
 
     async refusal() {

@@ -90,7 +90,7 @@ export default {
       mateCount: null,
       mateSex: null,
       mateBesmoke: null,
-      mateCurrent: null,
+      mateCurrent: 0,
       mateLocation: null,
     };
   },
@@ -104,7 +104,7 @@ export default {
       const mate = this.mates.find((mate) => mate.id === this.id);
       return mate ? mate.userUid : null;
     },
-    userId() {
+    userId() { 
       return this.$store.state.users.userID;
     },
   },
@@ -161,7 +161,7 @@ export default {
       const mate = this.mates.find((mate) => mate.id === this.id);
       this.mateTitle = mate.title;
       this.mateCount = mate.count;
-      this.mateCurrent = mate.current;
+      this.mateCurrent = Number(mate.current);
       this.mateBesmoke = mate.besmoke;
       this.matePreference = mate.preference;
       this.mateSex = mate.sex;

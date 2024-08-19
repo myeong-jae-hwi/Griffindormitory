@@ -68,7 +68,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     { path: '/alart', component: AlartList, meta: { requiresAuth: true } },
-    { path: '/:notFound(.*)', component: NotFound },
+    { path: '/:pathMatch(.*)*', component: NotFound }
   ],
 });
 

@@ -148,14 +148,19 @@ export default {
       }
     },
     async fetchComments() {
-      await this.$store.dispatch('boards/fetchInitialData', this.id);
-      const board = this.boards.find((board) => board.id === this.id);
-      this.comments = board.comments;
-      this.boardTitle = board.title;
-      this.boardContents = board.content;
-      this.boardTime = board.time;
-      this.boardAuthor = board.author;
-      this.boardUid = board.userUid;
+      try{
+        await this.$store.dispatch('boards/fetchInitialData', this.id);
+        const board = this.boards.find((board) => board.id === this.id);
+        this.comments = board.comments;
+        this.boardTitle = board.title;
+        this.boardContents = board.content;
+        this.boardTime = board.time;
+        this.boardAuthor = board.author;
+        this.boardUid = board.userUid;
+      }
+      catch{
+        window.alert('존재하지 않는 글입니다.')
+      }
     },
   },
   created() {

@@ -15,8 +15,8 @@ export default {
         const mate = {
           id: key,
           title: matesData[key].title,
-          count: matesData[key].count,
-          current: matesData[key].current,
+          count: Number(matesData[key].count),
+          current: Number(matesData[key].current),
           sex: matesData[key].sex,
           location: matesData[key].location,
           besmoke: matesData[key].besmoke,
@@ -35,8 +35,8 @@ export default {
   async registerMate(context, data) {
     const mateData = {
       title: data.title,
-      count: data.count,
-      current: data.current,
+      count: Number(data.count),
+      current: Number(data.current),
       sex: data.sex,
       location: data.location,
       besmoke: data.besmoke,
