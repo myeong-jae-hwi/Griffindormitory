@@ -2,8 +2,8 @@
   <div :class="['alart-list', customClass]">
     <slot></slot>
     <div v-if="hasMateClass">
-      <button class="accept" @click="accept">수락</button>
-      <button class="refusal" @click="refusal">거절</button>
+      <button class="accept" @click.stop="accept">수락</button>
+      <button class="refusal" @click.stop="refusal">거절</button>
     </div>
   </div>
 </template>
@@ -42,8 +42,7 @@ export default {
     },
 
     async refusal() {
-      await this.deleteAlert(this.notification.id, this.userId);
-      console.log('aa')
+      await this.deleteAlert({ id: this.notification.id, uid: this.$store.state.users.userID });
     }
   },
 };

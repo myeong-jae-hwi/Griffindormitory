@@ -44,12 +44,15 @@ export default {
     }
   },
 
-  async deleteAlert({ commit }, { id, userId }) {
+  async deleteAlert({ commit }, { id, uid }) {
     try {
-      const response = await fetch(`${dbURL}/notifications/${userId}/${id}.json`, {
+      const response = await fetch(`${dbURL}/notifications/${uid}/${id}.json`, {
         method: 'DELETE',
       });
-      if (!response.ok) throw new Error('Failed to delete alert');
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Failed to delete alert: ${errorMessage}`);
+      }
       commit('deleteAlert', id);
     } catch (error) {
       console.error('Error deleting alert:', error.message);
