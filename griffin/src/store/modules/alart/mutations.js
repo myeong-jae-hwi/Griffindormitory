@@ -17,4 +17,8 @@ export default {
   setHasUnreadNotifications(state, hasUnread) {
     state.hasUnreadNotifications = hasUnread;
   },
+  deleteAlert(state, id) {
+    state.notifications = state.notifications.filter(notification => notification.id !== id);
+  },
 };
+
