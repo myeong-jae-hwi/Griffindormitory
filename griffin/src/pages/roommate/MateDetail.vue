@@ -70,16 +70,16 @@ import MateModal from '../../components/roommate/MataModal.vue';
 export default {
   components: { MateModal },
   props: [
-    "id",
-    "title",
-    "count",
-    "current",
-    "sex",
-    "location",
-    "besmoke",
-    "preferences",
-    "university",
-    "userUid",
+    'id',
+    'title',
+    'count',
+    'current',
+    'sex',
+    'location',
+    'besmoke',
+    'preferences',
+    'university',
+    'userUid',
   ],
   data() {
     return {
@@ -101,14 +101,12 @@ export default {
       hasMates: 'hasMates',
     }),
     mateUid() {
-      return this.$store.state.mates.userUid;
+      const mate = this.mates.find((mate) => mate.id === this.id);
+      return mate ? mate.userUid : null;
     },
     userId() {
       return this.$store.state.users.userID;
     },
-    // userUid() {
-    //   return this.$store.state.mates.userUid;
-    // },
   },
   created() {
     this.fetchData()
@@ -190,9 +188,9 @@ export default {
       this.modalOpen = false;
     },
     closeSuccessModal() {
-    this.submissionSuccess = false;
-    this.modalOpen = false;
-  },
+      this.submissionSuccess = false;
+      this.modalOpen = false;
+    },
   },
 };
 </script>
