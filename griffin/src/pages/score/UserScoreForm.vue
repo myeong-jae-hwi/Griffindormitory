@@ -1,3 +1,4 @@
+<!--
 <template>
   <div>
     <h4>이번 학기 성적</h4>
@@ -164,3 +165,4 @@ export default {
   display: table-cell;
 }
 </style>
+-->

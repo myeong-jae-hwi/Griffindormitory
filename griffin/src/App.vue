@@ -1,9 +1,9 @@
 <template>
   <div :class="{ 'dark-mode': isDarkMode }">
-    <the-header
+    <!-- <the-header
       :isLoggedIn="isLoggedIn"
       @login-success="updateLoginStatus"
-    ></the-header>
+    ></the-header> -->
 
     <div class="app-btn-container">
       <button @click="toggleDarkMode">다크모드</button>

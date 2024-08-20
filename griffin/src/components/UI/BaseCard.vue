@@ -18,10 +18,10 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 20px 0 20px 0;
+  margin: 20px 20px 20px 20px;
   padding: 5px;
   border-radius: 22px;
-  box-shadow: 4px 4px 0px 0px rgba(209, 205, 205, 0.843);
+  /* box-shadow: 4px 4px 0px 0px rgba(209, 205, 205, 0.843); */
 }
 .dark-card {
   background-color: red;
