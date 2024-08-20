@@ -1,7 +1,8 @@
 <template>
   <div class="license">
     <div class="horizental">
-      <div class='logo'></div>
+      <div class='logo'>griffin</div>
+      
         <div class="vertical" v-if="currentUser">
           <h2>{{ currentUser.name }}</h2>
           <p>{{ currentUser.email }}</p>
@@ -10,7 +11,7 @@
           <p>{{ currentUser.semester.join(', ') }}</p>
           <div class="edit"> 
             <router-link to="/userinfo">
-              <div class="right"> 수정하기 </div>
+              <div class="right"> 수정 </div>
             </router-link>
           </div>
         </div>
@@ -18,9 +19,13 @@
       <div v-else>
         <h2>로그인이 필요합니다</h2>
       </div>
-
+    </div>
+      <div class='vertical'>
+      
+      <div id="menu" @click="toggleMenu">
+        <span v-if="!menuOpen">☰</span>
+        <span v-else>X</span>
       </div>
-
       <div class="image" :style="imageStyle" @click="triggerFileInput"></div>
       <input
         type="file"
@@ -29,6 +34,7 @@
         style="display: none"
       />
     </div>  
+  </div>
   
 </template>
 
@@ -40,6 +46,7 @@ import baseProfileImage from '../../assets/images/BaseProfile.svg';
 export default {
   data() {
     return {
+      menuOpen: false,
       imageUrl: baseProfileImage,
     };
   },
@@ -107,6 +114,12 @@ export default {
         console.error('Upload error user image', error);
       }
     },
+    toggleMenu() {
+      this.menuOpen = !this.menuOpen;
+    },
+    closeMenu() {
+      this.menuOpen = false;
+    },
   },
 };
 </script>
@@ -122,8 +135,7 @@ export default {
 .vertical {
   position: relative;
   display: block;
-  margin-top: 50px;
-  padding-top: 2%;
+  /* padding-top: 2%; */
   padding-bottom: 2%;
 }
 h2 {
@@ -140,7 +152,7 @@ p {
   margin-top: 100px;
 }
 .edit{
-  max-width: 80px;
+  max-width: 50px;
   margin-top: 20px;
   height: 20px;
   background: #ececec5f;
@@ -156,12 +168,24 @@ a{
 }
 
 .logo{
-  width: 40px;
-  height: 40px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  filter: invert(100%);
-  background-image: url('../../assets/images/Logo.png');
+  margin-bottom: 70px;
+  color: #FFF;
 }
 
+#menu{
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #FFF;
+  float: right;
+}
+span{
+    /* margin-bottom: 50px; */
+
+}
 </style>
