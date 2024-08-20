@@ -1,9 +1,13 @@
 <template>
-  <div>
+  <div :class="{ 'dark-mode': isDarkMode }">
     <the-header
       :isLoggedIn="isLoggedIn"
       @login-success="updateLoginStatus"
     ></the-header>
+
+    <div class="app-btn-container">
+      <button @click="toggleDarkMode">다크모드</button>
+    </div>
     <main>
       <router-view @login-success="updateLoginStatus" v-slot="slotProps">
         <transition name="route" mode="out-in">
@@ -28,12 +32,16 @@ export default {
   data() {
     return {
       isLoggedIn: false,
+      darkMode: false,
     };
   },
   computed: {
     ...mapGetters('users', ['currentUser']),
     userId() {
       return this.$store.state.users.userID;
+    },
+    isDarkMode() {
+      return this.darkMode;
     },
   },
   async created() {
@@ -48,6 +56,9 @@ export default {
     updateLoginStatus(user) {
       this.isLoggedIn = !!user;
     },
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;
+    },
   },
 };
 </script>
@@ -56,6 +67,21 @@ export default {
 body {
   margin: 0;
   background-color: #f2f2f2;
+  transition: background-color 0.3s ease;
+}
+main {
+  max-width: 600px;
+  height: 1000px;
+  margin: 0 auto;
+}
+.dark-mode {
+  background-color: rgba(84, 77, 77, 0.829);
+}
+.app-btn-container {
+  position: absolute;
+  right: 0;
+  bottom: 10%;
+  z-index: 1;
 }
 a,
 a:visited {

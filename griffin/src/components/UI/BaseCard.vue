@@ -1,11 +1,13 @@
 <template>
-  <div class="base-card">
+  <div :class="{ 'dark-card': isDarkMode }" class="base-card">
     <slot></slot>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  inject: ['isDarkMode'],
+};
 </script>
 
 <style scoped>
@@ -16,9 +18,12 @@ export default {};
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 20px;
+  margin: 20px 0 20px 0;
   padding: 5px;
   border-radius: 22px;
-  box-shadow: 4px 4px 0px 0px #f0f0f0d7;
+  box-shadow: 4px 4px 0px 0px rgba(209, 205, 205, 0.843);
+}
+.dark-card {
+  background-color: red;
 }
 </style>
