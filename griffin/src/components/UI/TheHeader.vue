@@ -5,66 +5,64 @@
 -->
 
 <template>
-  <div>
-    <header>
-      <div class="left-section">
-        <router-link to="/info">
-          <img src="../../assets/images/Logo.png" alt="Logo" class="logo" />
-        </router-link>
-      </div>
-      <div class="center-section">
-        <router-link to="/info">
-          <h1>Griffin</h1>
-        </router-link>
-      </div>
-      <div class="right-section">
-        <div class="alarm-section">
-          <router-link to="/alart">
-            <div id="alarm">
-              <div id="notification">
-                <span v-if="notice" class="note-num"></span>
-              </div>
+  <header class="header">
+    <div class="left-section">
+      <router-link to="/info">
+        <img src="../../assets/images/Logo.png" alt="Logo" class="logo" />
+      </router-link>
+    </div>
+    <div class="center-section">
+      <router-link to="/info">
+        <h1>Griffin</h1>
+      </router-link>
+    </div>
+    <div class="right-section">
+      <div class="alarm-section">
+        <router-link to="/alart">
+          <div id="alarm">
+            <div id="notification">
+              <span v-if="notice" class="note-num"></span>
             </div>
-          </router-link>
-        </div>
-        <div id="menu" @click="toggleMenu">
-          <span v-if="!menuOpen">☰</span>
-          <span v-else>X</span>
-        </div>
+          </div>
+        </router-link>
       </div>
-    </header>
-    <transition name="slide-fade">
-      <div class="dropdown-menu" v-if="menuOpen">
-        <ul>
-          <li @click="closeMenu">
-            <router-link to="/userinfo" class="nav-link">정보 수정</router-link>
-          </li>
-          <li @click="closeMenu">
-            <router-link to="/score" class="nav-link">학적 관리</router-link>
-          </li>
-          <li @click="closeMenu">
-            <router-link to="/timetable" class="nav-link">시간표</router-link>
-          </li>
-          <li @click="closeMenu">
-            <router-link
-              v-if="isLoggedIn"
-              @click="handleAuthAction"
-              to="/"
-              class="nav-link"
-              >로그아웃</router-link
-            >
-            <router-link
-              v-else
-              @click="handleAuthAction"
-              to="/login"
-              class="nav-link"
-              >로그인</router-link
-            >
-          </li>
-        </ul>
+      <div id="menu" @click="toggleMenu">
+        <span v-if="!menuOpen">☰</span>
+        <span v-else>X</span>
       </div>
-    </transition>
-  </div>
+    </div>
+  </header>
+  <transition name="slide-fade">
+    <div class="dropdown-menu" v-if="menuOpen">
+      <ul>
+        <li @click="closeMenu">
+          <router-link to="/userinfo" class="nav-link">정보 수정</router-link>
+        </li>
+        <li @click="closeMenu">
+          <router-link to="/score" class="nav-link">학적 관리</router-link>
+        </li>
+        <li @click="closeMenu">
+          <router-link to="/timetable" class="nav-link">시간표</router-link>
+        </li>
+        <li @click="closeMenu">
+          <router-link
+            v-if="isLoggedIn"
+            @click="handleAuthAction"
+            to="/"
+            class="nav-link"
+            >로그아웃</router-link
+          >
+          <router-link
+            v-else
+            @click="handleAuthAction"
+            to="/login"
+            class="nav-link"
+            >로그인</router-link
+          >
+        </li>
+      </ul>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -150,14 +148,14 @@ html {
   position: relative;
 }
 
-header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 8vh;
   background-color: #ffffff;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
   box-shadow: 0px 4px 0px 0px #f0f0f0d7;
   position: relative;
   z-index: 1;
