@@ -21,7 +21,7 @@ export default {};
   font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
   outline: 0;
-  background: #c4babc;
+  background: #6471e5;
   text-align: center;
   width: 100%;
   border: none;

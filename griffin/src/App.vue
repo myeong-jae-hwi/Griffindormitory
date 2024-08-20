@@ -68,7 +68,7 @@ export default {
 <style>
 body {
   margin: 0;
-  background-color: #f2f2f2;
+  background-color: rgb(239, 238, 244);
   transition: background-color 0.3s ease;
 }
 
@@ -92,7 +92,7 @@ main {
 .app-btn-container {
   position: fixed;
   right: 20px;
-  bottom: 7%;
+  bottom: 12%;
   z-index: 1;
 }
 a,

@@ -127,7 +127,7 @@ export default {
 <style scoped>
 .license{
   display: flex;
-  padding: 30px;
+  padding: 80px 30px 30px 30px;
   background: linear-gradient(130deg, #795ade, #6471e5);
   justify-content: space-between;
   border-radius: 0 0 10% 10%;

@@ -32,7 +32,7 @@
 <style scoped>
 .footer {
   background-color: #f8f8f8;
-  padding: 15px;
+  padding: 15px 15px 50px 15px;
   text-align: center;
   position: fixed;
   width: 100%;
