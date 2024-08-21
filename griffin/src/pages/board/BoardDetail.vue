@@ -2,7 +2,7 @@
   <div>
     <div class="header">
       <h3>
-        <font-awesome-icon icon="chevron-left" />
+        <font-awesome-icon icon="chevron-left" @click="goBack" />
       </h3>
       <h3>자유 게시판</h3>
       <h3>
@@ -10,14 +10,14 @@
       </h3>
     </div>
     <base-card class="horizental">
-    <div class='vartical'>
-      <h2>{{ boardTitle }}</h2>
-      <div v-if="currentUser.id === boardUid" class="delete-btn-container">
-        <!-- <font-awesome-icon icon="pen-to-square" /> -->
-        <font-awesome-icon @click="deleteBoard" icon="trash" />
+      <div class="vartical">
+        <h2>{{ boardTitle }}</h2>
+        <div v-if="currentUser.id === boardUid" class="delete-btn-container">
+          <!-- <font-awesome-icon icon="pen-to-square" /> -->
+          <font-awesome-icon @click="deleteBoard" icon="trash" />
+        </div>
       </div>
-    </div>
-      
+
       <div class="vertical">
         <p id="author">작성자: {{ boardAuthor }}</p>
         <p id="author">{{ utcToKor }}</p>
@@ -32,7 +32,7 @@
         placeholder="댓글을 입력하세요"
       />
       <base-btn @click="submitComment" class="comment-btn">
-        <font-awesome-icon class='go' icon="paper-plane" />
+        <font-awesome-icon class="go" icon="paper-plane" />
       </base-btn>
     </section>
     <section class="comments">
@@ -91,6 +91,9 @@ export default {
     },
   },
   methods: {
+    goBack() {
+      this.$router.push('/boardlist');
+    },
     formatTime(time) {
       return moment.utc(time).local().format('YYYY/MM/DD');
     },
@@ -137,12 +140,7 @@ export default {
         console.error('Error adding comment:', error.message);
       }
     },
-    async createNotificationForPostAuthor(
-      to,
-      from,
-      commentText,
-      fromUid
-    ) {
+    async createNotificationForPostAuthor(to, from, commentText, fromUid) {
       console.log(fromUid);
       if (to != this.userId) {
         try {
@@ -163,7 +161,7 @@ export default {
       }
     },
     async fetchComments() {
-      try{
+      try {
         await this.$store.dispatch('boards/fetchInitialData', this.id);
         const board = this.boards.find((board) => board.id === this.id);
         this.comments = board.comments;
@@ -172,9 +170,8 @@ export default {
         this.boardTime = board.time;
         this.boardAuthor = board.author;
         this.boardUid = board.userUid;
-      }
-      catch{
-        window.alert('존재하지 않는 글입니다.')
+      } catch {
+        window.alert('존재하지 않는 글입니다.');
       }
     },
   },
@@ -185,12 +182,11 @@ export default {
 </script>
 
 <style scoped>
-
-body{
+body {
   background-color: !important;
 }
 
-.header{
+.header {
   display: flex;
   justify-content: space-between;
   align-content: center;
@@ -229,8 +225,8 @@ p {
   color: rgb(89, 89, 89);
 }
 
-.go{
-  color:#FFF;
+.go {
+  color: #fff;
 }
 
 .comment-section {
@@ -263,10 +259,9 @@ p {
 }
 .delete-btn-container {
   vertical-align: text-bottom;
-  color: #DDD;
+  color: #ddd;
   font-size: 14px;
   float: right;
   margin: 15px 10px 10px 10px;
 }
-
 </style>
