@@ -1,11 +1,14 @@
 <template>
   <div :class="{ 'dark-mode': isDarkMode }">
-    <the-header
+    <!-- <the-header
       :isLoggedIn="isLoggedIn"
       @login-success="updateLoginStatus"
-    ></the-header>
+    ></the-header> -->
+
     <div class="app-btn-container">
-      <button @click="toggleDarkMode">다크모드</button>
+      <button @click="toggleDarkMode">
+        <div class='sun'> </div>
+      </button>
     </div>
     <main>
       <router-view @login-success="updateLoginStatus" v-slot="slotProps">
@@ -73,9 +76,19 @@ export default {
 <style>
 body {
   margin: 0;
-  background-color: #f2f2f2;
+  background-color: rgb(239, 238, 244);
   transition: background-color 0.3s ease;
 }
+
+button{
+  background: #3636367c;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+}
+
 main {
   max-width: 600px;
   height: 700px;
@@ -86,9 +99,9 @@ main {
 }
 .app-btn-container {
   position: fixed;
-  right: 2%;
-  bottom: 10%;
-  z-index: 1000;
+  right: 20px;
+  bottom: 12%;
+  z-index: 1;
 }
 .app-btn-container button {
   background-color: #333;
@@ -147,5 +160,15 @@ a:visited {
 .route-leave-from {
   opacity: 1;
   transform: translateY(0);
+}
+
+.sun{
+  width: 40px;
+  height: 40px;
+  opacity: 1;
+  background-image: url('assets/images/sun.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: invert(100%);
 }
 </style>

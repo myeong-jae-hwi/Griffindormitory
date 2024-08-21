@@ -1,10 +1,23 @@
 <template>
   <div>
-    <div v-if="currentUser.id === boardUid" class="delete-btn-container">
-      <button @click="deleteBoard" class="delete-btn">삭제하기</button>
+    <div class="header">
+      <h3>
+        <font-awesome-icon icon="chevron-left" @click="goBack" />
+      </h3>
+      <h3>자유 게시판</h3>
+      <h3>
+        <font-awesome-icon icon="ellipsis-vertical" />
+      </h3>
     </div>
     <base-card class="horizental">
-      <h2>{{ boardTitle }}</h2>
+      <div class="vartical">
+        <h2>{{ boardTitle }}</h2>
+        <div v-if="currentUser.id === boardUid" class="delete-btn-container">
+          <!-- <font-awesome-icon icon="pen-to-square" /> -->
+          <font-awesome-icon @click="deleteBoard" icon="trash" />
+        </div>
+      </div>
+
       <div class="vertical">
         <p id="author">작성자: {{ boardAuthor }}</p>
         <p id="author">{{ utcToKor }}</p>
@@ -18,7 +31,9 @@
         class="comment-input"
         placeholder="댓글을 입력하세요"
       />
-      <base-btn @click="submitComment" class="comment-btn">입력</base-btn>
+      <base-btn @click="submitComment" class="comment-btn">
+        <font-awesome-icon class="go" icon="paper-plane" />
+      </base-btn>
     </section>
     <section class="comments">
       <base-card v-if="comments.length" class="comments_container">
@@ -63,7 +78,7 @@ export default {
     ...mapGetters('boards', ['boards']),
     ...mapGetters('users', ['currentUser']),
     utcToKor() {
-      return moment.utc(this.boardTime).local().format('YYYY/MM/DD');
+      return moment.utc(this.boardTime).local().format('MM/DD/ HH:MM');
     },
     userName() {
       return this.$store.state.users.users[0].name;
@@ -76,6 +91,9 @@ export default {
     },
   },
   methods: {
+    goBack() {
+      this.$router.push('/boardlist');
+    },
     formatTime(time) {
       return moment.utc(time).local().format('YYYY/MM/DD');
     },
@@ -122,12 +140,7 @@ export default {
         console.error('Error adding comment:', error.message);
       }
     },
-    async createNotificationForPostAuthor(
-      to,
-      from,
-      commentText,
-      fromUid
-    ) {
+    async createNotificationForPostAuthor(to, from, commentText, fromUid) {
       console.log(fromUid);
       if (to != this.userId) {
         try {
@@ -148,7 +161,7 @@ export default {
       }
     },
     async fetchComments() {
-      try{
+      try {
         await this.$store.dispatch('boards/fetchInitialData', this.id);
         const board = this.boards.find((board) => board.id === this.id);
         this.comments = board.comments;
@@ -157,9 +170,8 @@ export default {
         this.boardTime = board.time;
         this.boardAuthor = board.author;
         this.boardUid = board.userUid;
-      }
-      catch{
-        window.alert('존재하지 않는 글입니다.')
+      } catch {
+        window.alert('존재하지 않는 글입니다.');
       }
     },
   },
@@ -170,6 +182,18 @@ export default {
 </script>
 
 <style scoped>
+body {
+  background-color: !important;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  padding: 20px;
+  padding-bottom: 0;
+}
+
 ul {
   list-style: none;
 }
@@ -177,6 +201,7 @@ ul {
 h2 {
   margin: 10px;
   margin-bottom: 0;
+  display: inline-block;
 }
 
 p {
@@ -197,15 +222,21 @@ p {
 #author {
   margin: 10px 5px 20px 10px;
   font-size: 13px;
+  color: rgb(89, 89, 89);
+}
+
+.go {
+  color: #fff;
 }
 
 .comment-section {
-  border: 1px solid #ccc;
+  /* border: 2px solid rgb(131, 140, 221); */
   border-radius: 10px;
   width: 90%;
   margin: 0 auto;
   display: flex;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: rgb(239, 238, 244);
+  box-shadow: 0px 0px 4px 4px rgba(234, 232, 242, 0.8);
 }
 
 .comment-input {
@@ -220,31 +251,17 @@ p {
   flex: 1;
   min-width: 60px;
   border-radius: 0 8px 8px 0;
-  background-color: #c4babc;
+  background-color: #6471e5;
   color: #fff;
   font-size: 14px;
   border: none;
   cursor: pointer;
 }
 .delete-btn-container {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px;
-}
-
-.delete-btn {
-  background-color: #ff4d4d;
-  color: white;
-  font-size: 0.8rem;
-  font-weight: bold;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.delete-btn:hover {
-  background-color: #cc0000;
+  vertical-align: text-bottom;
+  color: #ddd;
+  font-size: 14px;
+  float: right;
+  margin: 15px 10px 10px 10px;
 }
 </style>
