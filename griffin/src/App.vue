@@ -46,6 +46,13 @@ export default {
       return this.darkMode;
     },
   },
+
+  // 8.20 민재 - 다크 모드 활성화시 BaseCard background 배경 색상 변경 provide, inject으로 시도했지만 안됨
+  provide() {
+    return {
+      isDarkMode: this.isDarkMode,
+    };
+  },
   async created() {
     if (this.userId && !this.currentUser) {
       await this.$store.dispatch('users/fetchUserInitialData', {
@@ -60,6 +67,7 @@ export default {
     },
     toggleDarkMode() {
       this.darkMode = !this.darkMode;
+      console.log('App : ', this.darkMode);
     },
   },
 };
@@ -83,7 +91,7 @@ button{
 
 main {
   max-width: 600px;
-  height: 1000px;
+  height: 700px;
   margin: 0 auto;
 }
 .dark-mode {
@@ -95,6 +103,35 @@ main {
   bottom: 12%;
   z-index: 1;
 }
+.app-btn-container button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.app-btn-container button:hover {
+  background-color: #555;
+  transform: scale(1.05);
+}
+.app-btn-container button:active {
+  background-color: #222;
+  transform: scale(0.95);
+}
+.dark-mode .app-btn-container button {
+  background-color: #fff;
+  color: #333;
+}
+.dark-mode .app-btn-container button:hover {
+  background-color: #ddd;
+}
+.dark-mode .app-btn-container button:active {
+  background-color: #bbb;
+}
+
 a,
 a:visited {
   text-decoration: none;
