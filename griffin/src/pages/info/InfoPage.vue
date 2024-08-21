@@ -2,8 +2,8 @@
   <div>
     <students-license></students-license>
 
-    <div class='vertical'>
-      <base-card class='half'>
+    <div class="vertical">
+      <base-card class="half">
         <h3>여기에 뭐넣지 ㅋㅋ</h3>
       </base-card>
       <base-card class="half">
@@ -52,7 +52,7 @@
       </ul>
       <p v-else>등록된 게시물이 없습니다.</p>
       <p class="more">
-        <router-link to="/roommateboard">나의 학교 ro시물 보기</router-link>
+        <router-link to="/roommateboard">나의 학교 게시물 보기</router-link>
       </p>
     </base-card>
   </div>
@@ -115,18 +115,18 @@ li {
   font-size: 14px;
 }
 
-.half{
+.half {
   width: 100%;
   display: block;
   height: 150px;
   margin: 20px 10px 0px 10px;
-  }
+}
 
-.half h3{
+.half h3 {
   margin: 20px 0px 0px 10px;
 }
 
-.vertical{
+.vertical {
   /* width: 100%; */
   display: flex;
   justify-content: space-between;

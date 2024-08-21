@@ -75,6 +75,26 @@ export default {
     }
   },
 
+  async updateBoard(context, updatedBoard) {
+    try {
+      const response = await fetch(`${dbURL}/boards/${updatedBoard.id}.json`, {
+        method: 'PUT',
+        body: JSON.stringify(updatedBoard),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update board');
+      }
+
+      context.commit('UPDATE_BOARD', updatedBoard);
+    } catch (error) {
+      console.error('Error updating board:', error.message);
+    }
+  },
+
   async addComment(context, { boardId, comment, userName, userId }) {
     try {
       const boardResponse = await fetch(`${dbURL}/boards/${boardId}.json`);

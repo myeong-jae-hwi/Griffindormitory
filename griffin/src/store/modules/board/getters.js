@@ -10,4 +10,7 @@ export default {
       (board) => board.comments && board.comments.length > 0
     );
   },
+  getBoardById: (state) => (id) => {
+    return state.boards.find((board) => board.id === id);
+  },
 };
