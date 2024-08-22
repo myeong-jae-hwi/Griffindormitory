@@ -10,7 +10,7 @@
       </h3>
     </div>
     <base-card class="horizental">
-      <div class="vartical">
+      <div>
         <h2>{{ boardTitle }}</h2>
         <div v-if="currentUser.id === boardUid" class="btn-container">
           <font-awesome-icon
@@ -216,19 +216,10 @@ p {
   padding: 10px 20px;
 }
 
-.vertical {
-  display: flex;
-  align-items: flex-end;
-}
-
 #author {
   margin: 10px 5px 20px 10px;
   font-size: 13px;
   color: rgb(89, 89, 89);
-}
-
-.go {
-  color: #fff;
 }
 
 .comment-section {
@@ -248,23 +239,27 @@ p {
   font-size: 14px;
   border-radius: 10px 0 0 10px;
 }
-
 .comment-btn {
   flex: 1;
   min-width: 60px;
   border-radius: 0 8px 8px 0;
   background-color: #6471e5;
   color: #fff;
-  font-size: 16px;
-  border: none;
   cursor: pointer;
 }
+.go {
+  font-size: 24px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .btn-container {
   vertical-align: text-bottom;
-  /* color: #ccc; */
   font-size: 16px;
   float: right;
-  margin: 15px 10px 10px 10px;
 }
 .edit-bth {
   margin-right: 10px;
