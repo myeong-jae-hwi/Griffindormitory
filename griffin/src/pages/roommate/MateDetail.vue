@@ -1,19 +1,20 @@
 <template>
   <div>
     <div class="card-container">
-      <div v-if="currentUser.id === mateUid" class="delete-btn-container">
-        <button @click="deleteMate" class="delete-btn">삭제하기</button>
-      </div>
       <base-card
         :style="{ backgroundColor: mateSex === 'male' ? '#4169E1' : '#DB7093' }"
       >
+        <div v-if="currentUser.id === mateUid" class="delete-btn-container">
+          <font-awesome-icon @click="deleteBoard" icon="trash" />
+        </div>
         <div class="card-content">
           <h2>{{ mateTitle }}</h2>
           <p>
             성별: <strong>{{ mateSex === 'male' ? '남자' : '여자' }}</strong>
           </p>
           <p>
-            기숙사: <strong>{{ mateLocation === 'east' ? '동관' : '서관' }}</strong>
+            기숙사:
+            <strong>{{ mateLocation === 'east' ? '동관' : '서관' }}</strong>
           </p>
           <p>
             모집 인원: <strong>{{ mateCurrent }}/{{ mateCount }}명</strong>
@@ -104,13 +105,13 @@ export default {
       const mate = this.mates.find((mate) => mate.id === this.id);
       return mate ? mate.userUid : null;
     },
-    userId() { 
+    userId() {
       return this.$store.state.users.userID;
     },
   },
   created() {
-    this.fetchData()
-    this.$store.dispatch("fetchInitialData");
+    this.fetchData();
+    this.$store.dispatch('fetchInitialData');
   },
 
   methods: {
@@ -120,7 +121,7 @@ export default {
       // const userName = this.userName;
       const mateId = this.postId;
       const userId = this.userId;
-      console.log(mateId)
+      console.log(mateId);
 
       this.notice(userUid, mateId, userId);
       this.submissionSuccess = true;
@@ -139,7 +140,7 @@ export default {
     },
     async notice(to, mateId, fromUid) {
       try {
-        console.log(fromUid)
+        console.log(fromUid);
         const notification = {
           userId: to,
           mateId: mateId,
@@ -165,7 +166,7 @@ export default {
       this.mateBesmoke = mate.besmoke;
       this.matePreference = mate.preference;
       this.mateSex = mate.sex;
-      this.mateLocation = mate.location
+      this.mateLocation = mate.location;
     },
     openModal() {
       if (this.currentUser.gender !== this.sex) {
@@ -178,7 +179,7 @@ export default {
         return;
       }
 
-      if (this.mateCount <= this.mateCurrent){
+      if (this.mateCount <= this.mateCurrent) {
         alert('인원 모집이 마감되었습니다.');
         return;
       }
@@ -201,7 +202,17 @@ export default {
 </script>
 
 <style scoped>
+.delete-btn-container {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+}
+
 .card-container {
+  position: relative;
   flex-direction: column;
   align-items: center;
   margin: 20px;
@@ -229,26 +240,5 @@ p {
   width: fit-content;
   margin: 0 auto;
   text-align: center;
-}
-.delete-btn-container {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px;
-}
-
-.delete-btn {
-  background-color: #ff4d4d;
-  color: white;
-  font-size: 0.8rem;
-  font-weight: bold;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.delete-btn:hover {
-  background-color: #cc0000;
 }
 </style>

@@ -1,13 +1,8 @@
 <template>
   <div :class="{ 'dark-mode': isDarkMode }">
-    <!-- <the-header
-      :isLoggedIn="isLoggedIn"
-      @login-success="updateLoginStatus"
-    ></the-header> -->
-
     <div class="app-btn-container">
       <button @click="toggleDarkMode">
-        <div class='sun'> </div>
+        <div class="sun"></div>
       </button>
     </div>
     <main>
@@ -22,13 +17,11 @@
 </template>
 
 <script>
-import TheHeader from './components/UI/TheHeader.vue';
 import TheFooter from './components/UI/TheFooter.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   components: {
-    TheHeader,
     TheFooter,
   },
   data() {
@@ -74,14 +67,29 @@ export default {
 </script>
 
 <style>
-body {
+html,
+body,
+#app {
+  height: 100%;
   margin: 0;
+}
+body {
   background-color: rgb(239, 238, 244);
   transition: background-color 0.3s ease;
-  margin-bottom: 100px;
 }
-
-button{
+div.dark-mode {
+  min-height: 100%;
+  flex-direction: column;
+}
+main {
+  max-width: 600px;
+  /* margin: 0 auto; */
+  flex: 1;
+  width: 100%;
+  flex-direction: column;
+  padding-bottom: 100px;
+}
+button {
   background: #3636367c;
   width: 40px;
   height: 40px;
@@ -90,11 +98,6 @@ button{
   padding: 0;
 }
 
-main {
-  max-width: 600px;
-  height: 700px;
-  margin: 0 auto;
-}
 .dark-mode {
   background-color: rgba(84, 77, 77, 0.829);
 }
@@ -104,16 +107,16 @@ main {
   bottom: 12%;
   z-index: 1;
 }
-/* .app-btn-container > button {
-  background-color: #333;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-} */
+.sun {
+  width: 40px;
+  height: 40px;
+  opacity: 1;
+  background-image: url('assets/images/sun.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: invert(100%);
+}
+
 .app-btn-container button:hover {
   background-color: #555;
   transform: scale(1.05);
@@ -123,8 +126,7 @@ main {
   transform: scale(0.95);
 }
 .dark-mode .app-btn-container button {
-  background-color: #fff;
-  color: #333;
+  background-color: #333;
 }
 .dark-mode .app-btn-container button:hover {
   background-color: #ddd;
@@ -161,15 +163,5 @@ a:visited {
 .route-leave-from {
   opacity: 1;
   transform: translateY(0);
-}
-
-.sun{
-  width: 40px;
-  height: 40px;
-  opacity: 1;
-  background-image: url('assets/images/sun.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  filter: invert(100%);
 }
 </style>

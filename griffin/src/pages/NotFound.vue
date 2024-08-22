@@ -19,7 +19,6 @@
   align-items: center;
   height: 60vh;
   text-align: center;
-  background-color: #f0f0f0;
   color: #333;
   padding: 20px;
   font-family: 'Arial', sans-serif;
@@ -36,7 +35,7 @@ p {
   font-size: 1.2em;
   line-height: 1.5;
   margin-bottom: 30px;
-  color: #666;
+  color: #221f1f;
 }
 
 img {
