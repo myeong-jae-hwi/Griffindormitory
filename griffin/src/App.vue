@@ -78,6 +78,7 @@ body {
   margin: 0;
   background-color: rgb(239, 238, 244);
   transition: background-color 0.3s ease;
+  margin-bottom: 100px;
 }
 
 button{
@@ -103,7 +104,7 @@ main {
   bottom: 12%;
   z-index: 1;
 }
-.app-btn-container button {
+/* .app-btn-container > button {
   background-color: #333;
   color: #fff;
   border: none;
@@ -112,7 +113,7 @@ main {
   font-size: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-}
+} */
 .app-btn-container button:hover {
   background-color: #555;
   transform: scale(1.05);

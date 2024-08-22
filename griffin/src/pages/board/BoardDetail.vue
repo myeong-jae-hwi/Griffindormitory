@@ -182,10 +182,6 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background-color: !important;
-}
-
 .header {
   display: flex;
   justify-content: space-between;

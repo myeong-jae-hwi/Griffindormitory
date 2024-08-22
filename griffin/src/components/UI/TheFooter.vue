@@ -38,7 +38,6 @@
   width: 100%;
   bottom: 0;
   left: 0;
-  margin-top: 30px;
 }
 
 .footer-content {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='body'>
     <students-license></students-license>
 
     <div class='vertical'>
@@ -52,7 +52,7 @@
       </ul>
       <p v-else>등록된 게시물이 없습니다.</p>
       <p class="more">
-        <router-link to="/roommateboard">나의 학교 ro시물 보기</router-link>
+        <router-link to="/roommateboard">나의 학교 게시물 보기</router-link>
       </p>
     </base-card>
   </div>
@@ -150,5 +150,9 @@ a {
 
 p {
   text-align: center;
+}
+
+.body{
+  padding-bottom: 100px;
 }
 </style>
