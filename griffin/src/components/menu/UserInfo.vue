@@ -1,8 +1,18 @@
 <template>
-  <div class="edit-box">
+  <!-- <div class="edit-box"> -->
     <h2>정보 수정</h2>
     <form @submit.prevent="handleNameSubmit">
+      <div class="image" :style="imageStyle" @click="triggerFileInput"></div>
+      <input
+        type="file"
+        ref="fileInput"
+        @change="handleFileUpload"
+        style="display: none"
+      />
+
+      <p>{{name}}</p>
       <div class="user-box">
+        
         <input type="text" v-model="name" />
         <label>이름</label>
         <button type="submit" class="submit-btn">이름 수정</button>
@@ -36,13 +46,16 @@
         <button type="submit" class="submit-btn">비밀번호 수정</button>
       </div>
     </form>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
-import { ref, update } from 'firebase/database';
+import { mapGetters } from 'vuex';
+import { update } from 'firebase/database';
 import { db, auth } from '@/firebase/config';
 import { signOut } from 'firebase/auth';
+import baseProfileImage from '../../assets/images/BaseProfile.svg';
+import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 
 export default {
   props: {
@@ -55,9 +68,75 @@ export default {
       studentId: '',
       email: '',
       password: '',
+      imageUrl: baseProfileImage,
+
     };
   },
+  computed:{
+    ...mapGetters('users', ['currentUser']),
+    userId() {
+      return this.$store.state.users.userID;
+    },
+    
+    imageStyle() {
+      return {
+        backgroundImage: `url(${this.imageUrl})`,
+        backgroundSize: 'contain',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        width: '10vh',
+        height: '10vh',
+        borderRadius: '50%',
+        marginLeft: '3%',
+        cursor: 'pointer',
+      };
+    },
+  },
+  async mounted(){
+    if (this.userId && !this.currentUser) {
+      await this.$store.dispatch('users/fetchUserInitialData', {
+        uid: this.userId,
+      });
+    }
+    if (this.currentUser) {
+      this.loadUserImage();
+    }
+  },
   methods: {
+    async loadUserImage() {
+      try {
+        const storage = getStorage();
+        const imageRef = ref(
+          storage,
+          `users/${this.currentUser.id}/profile.jpg`
+        );
+        const url = await getDownloadURL(imageRef);
+        this.imageUrl = url;
+      } catch (error) {
+        console.error('Failed to load user image', error);
+        this.imageUrl = baseProfileImage;
+      }
+    },
+    triggerFileInput() {
+      this.$refs.fileInput.click();
+    },
+    async handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      try {
+        const storage = getStorage();
+        const imageRef = ref(
+          storage,
+          `users/${this.currentUser.id}/profile.jpg`
+        );
+        await uploadBytes(imageRef, file);
+        const url = await getDownloadURL(imageRef);
+        this.imageUrl = url;
+      } catch (error) {
+        console.error('Upload error user image', error);
+      }
+    },
     async checkAuth() {
       const user = auth.currentUser;
       if (!user) {

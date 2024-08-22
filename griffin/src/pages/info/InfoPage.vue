@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='body'>
     <students-license></students-license>
 
     <div class="vertical">
@@ -150,5 +150,9 @@ a {
 
 p {
   text-align: center;
+}
+
+.body{
+  padding-bottom: 100px;
 }
 </style>
