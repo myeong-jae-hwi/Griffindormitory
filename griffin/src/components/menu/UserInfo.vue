@@ -315,7 +315,7 @@ export default {
   left: 0;
   padding: 10px 0;
   font-size: 16px;
-  color: #aaa;
+  /* color: #aaa; */
   pointer-events: none;
   transition: 0.5s;
 }
@@ -324,7 +324,6 @@ export default {
 .user-box input:valid ~ label {
   top: -20px;
   left: 0;
-  color: #333;
   font-size: 12px;
 }
 

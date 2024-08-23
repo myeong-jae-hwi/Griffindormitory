@@ -21,7 +21,7 @@ export default {
   margin: 20px 20px 20px 20px;
   padding: 5px;
   border-radius: 22px;
-  box-shadow: 0px 0px 4px 4px rgba(234, 232, 242, 0.8);
+  /* box-shadow: 0px 0px 4px 4px rgba(234, 232, 242, 0.8); */
 }
 .dark-card {
   background-color: red;
