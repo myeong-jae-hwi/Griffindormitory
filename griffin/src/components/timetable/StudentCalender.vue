@@ -405,6 +405,7 @@ td {
 
 .schedule-cell {
   min-height: 50px;
+  /* min-width: px; */
 }
 
 .schedule-item {
