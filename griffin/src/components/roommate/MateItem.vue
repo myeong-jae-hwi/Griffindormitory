@@ -2,7 +2,7 @@
   <div class="container" @click="goMateDetail">
     <h4 class="description">
       {{ title }}
-      ({{ current }}/{{ count }})
+      ({{ current }}/{{ count }})&nbsp;
       <font-awesome-icon
         :icon="sex === 'male' ? 'mars' : 'venus'"
         :style="{ color: sex === 'male' ? 'skyblue' : 'pink' }"

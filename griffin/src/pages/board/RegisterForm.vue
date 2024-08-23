@@ -73,6 +73,7 @@ export default {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 2vh;
+  margin-top: 50px;
 }
 
 .form-group {
