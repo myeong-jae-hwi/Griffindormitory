@@ -1,14 +1,26 @@
 <template>
-  <div class='body'>
+  <div class="body">
     <students-license></students-license>
 
-    <div class="vertical">
-      <base-card class="half">
-        <h3>여기에 뭐넣지 ㅋㅋ</h3>
-      </base-card>
-      <base-card class="half">
-        <h3>여기에 뭐넣지 ㅋㅋ</h3>
-      </base-card>
+    <div class="slider-container">
+      <button @click="slideLeft" class="slider-button left">←</button>
+
+      <div class="slider-track">
+        <base-card class="slider-item">
+          <h3>Content 1</h3>
+        </base-card>
+        <base-card class="slider-item">
+          <h3>Content 2</h3>
+        </base-card>
+        <base-card class="slider-item">
+          <h3>Content 3</h3>
+        </base-card>
+        <base-card class="slider-item">
+          <h3>Content 4</h3>
+        </base-card>
+      </div>
+
+      <button @click="slideRight" class="slider-button right">→</button>
     </div>
 
     <base-card class="card" v-if="currentUser">
@@ -85,19 +97,92 @@ export default {
     this.$store.dispatch('boards/fetchInitialData');
     this.$store.dispatch('fetchInitialData');
   },
-  methods: {},
+  mounted() {
+    this.setSliderItemWidth();
+    window.addEventListener('resize', this.setSliderItemWidth);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.setSliderItemWidth);
+  },
+  methods: {
+    slideLeft() {
+      const track = this.$el.querySelector('.slider-track');
+      track.scrollBy({ left: -200, behavior: 'smooth' });
+    },
+    slideRight() {
+      const track = this.$el.querySelector('.slider-track');
+      track.scrollBy({ left: 200, behavior: 'smooth' });
+    },
+    setSliderItemWidth() {
+      const track = this.$el.querySelector('.slider-track');
+      const items = track.querySelectorAll('.slider-item');
+      const itemWidth = track.clientWidth / items.length;
+      items.forEach((item) => {
+        item.style.width = `${itemWidth}px`;
+      });
+    },
+  },
 };
 </script>
-
 <style scoped>
-h3 {
-  font-size: 16px;
-  margin: 20px 0px 0px 20px;
+.slider-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
 }
+
+.slider-track {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+  margin: 20px;
+  scroll-behavior: smooth;
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  justify-content: space-between;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.slider-track::-webkit-scrollbar {
+  display: none;
+}
+
+.slider-item {
+  flex-shrink: 0;
+  height: 150px;
+  margin: 10px;
+  scroll-snap-align: start;
+  text-align: center;
+}
+
+.slider-button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.slider-button.left {
+  left: 10px;
+}
+
+.slider-button.right {
+  right: 10px;
+}
+
 .card {
   position: relative;
   display: block !important;
 }
+
 .more {
   position: absolute;
   top: 5px;
@@ -114,26 +199,9 @@ li {
   font-size: 14px;
 }
 
-.half {
-  width: 100%;
-  display: block;
-  height: 150px;
-  margin: 20px 10px 0px 10px;
-}
-
-.half h3 {
-  margin: 20px 0px 0px 10px;
-}
-
-.vertical {
-  /* width: 100%; */
-  display: flex;
-  justify-content: space-between;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
 h3 {
+  font-size: 16px;
+  margin: 20px 0px 0px 20px;
   display: block;
 }
 
@@ -147,7 +215,7 @@ a {
   font-size: 13px;
 }
 
-.dark-mode a{
+.dark-mode a {
   color: #aeaeae;
 }
 
@@ -155,16 +223,15 @@ p {
   text-align: center;
 }
 
-.body{
+.body {
   padding-bottom: 100px;
 }
 
-.dark-mode .card{
-  /* background-color: rgba(31, 33, 40, 0.829); */
-  background-color: rgb(52, 52, 62)
-}
-.dark-mode .half{
-  background-color: rgb(52, 52, 62)
+.dark-mode .card {
+  background-color: rgb(52, 52, 62);
 }
 
+.dark-mode .slider-item {
+  background-color: rgb(52, 52, 62);
+}
 </style>
