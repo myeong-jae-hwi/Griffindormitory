@@ -217,6 +217,14 @@ p {
   padding: 10px 20px;
 }
 
+.dark-mode .horizental {
+  background-color: rgb(52, 52, 62)
+}
+
+.dark-mode h2 {
+  color: rgb(229, 229, 229);
+}
+
 #author {
   margin: 10px 5px 20px 10px;
   font-size: 13px;
