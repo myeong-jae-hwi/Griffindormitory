@@ -204,6 +204,7 @@ h2 {
   margin: 10px;
   margin-bottom: 0;
   display: inline-block;
+  color: #2f2f2f;
 }
 
 p {
@@ -222,6 +223,10 @@ p {
   color: rgb(89, 89, 89);
 }
 
+.dark-mode #author{
+  color: rgb(190, 190, 190);
+}
+
 .comment-section {
   /* border: 2px solid rgb(131, 140, 221); */
   border-radius: 10px;
@@ -229,7 +234,7 @@ p {
   margin: 0 auto;
   display: flex;
   background-color: rgb(239, 238, 244);
-  box-shadow: 0px 0px 4px 4px rgba(234, 232, 242, 0.8);
+  /* box-shadow: 0px 0px 4px 4px rgba(234, 232, 242, 0.8); */
 }
 
 .comment-input {

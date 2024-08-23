@@ -91,7 +91,6 @@ export default {
 
 <style scoped>
 h3 {
-  color: rgb(55, 55, 55);
   font-size: 16px;
   margin: 20px 0px 0px 20px;
 }
@@ -148,6 +147,10 @@ a {
   font-size: 13px;
 }
 
+.dark-mode a{
+  color: #aeaeae;
+}
+
 p {
   text-align: center;
 }
@@ -155,4 +158,13 @@ p {
 .body{
   padding-bottom: 100px;
 }
+
+.dark-mode .card{
+  /* background-color: rgba(31, 33, 40, 0.829); */
+  background-color: rgb(52, 52, 62)
+}
+.dark-mode .half{
+  background-color: rgb(52, 52, 62)
+}
+
 </style>

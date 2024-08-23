@@ -1,25 +1,35 @@
 <template>
   <div class="container" @click="goMateDetail">
-    <h4
-      class="description"
-      :style="{ color: sex === 'male' ? '#4169E1' : '#DB7093' }"
-    >
+    <h4 class="description">
       {{ title }}
-      <!-- {{ sex === 'male' ? '남자' : '여자' }}
-      {{ location === 'east' ? '동관' : '서관' }} {{ count }}명
+      ({{ current }}/{{ count }})
+      <font-awesome-icon
+        :icon="sex === 'male' ? 'mars' : 'venus'"
+        :style="{ color: sex === 'male' ? 'skyblue' : 'pink' }"
+      />
+      <!-- {{ sex === 'male' ? '남자' : '여자' }} -->
+      <!-- {{ location === 'east' ? '동관' : '서관' }} {{ count }}명
       {{ besmoke === 'notsmoke' ? '비흡연자만' : '흡연-상관없음' }} 룸메이트
       구합니다. -->
-      {{current}}/{{count}}
     </h4>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['id', 'title', 'count', 'current','sex', 'location', 'besmoke', 'preferences'],
+  props: [
+    "id",
+    "title",
+    "count",
+    "current",
+    "sex",
+    "location",
+    "besmoke",
+    "preferences",
+  ],
   methods: {
     goMateDetail() {
-      console.log(this.current)
+      console.log(this.current);
       this.$router.push({
         path: `/roommateboard/${this.id}`,
         query: {

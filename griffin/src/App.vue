@@ -12,7 +12,7 @@
         </transition>
       </router-view>
     </main>
-    <the-footer></the-footer>
+    <the-footer class="footer"></the-footer>
   </div>
 </template>
 
@@ -99,7 +99,9 @@ button {
 }
 
 .dark-mode {
-  background-color: rgba(84, 77, 77, 0.829);
+  background-color: rgba(31, 33, 46, 0.829);
+  /* background-color: rgb(32,32,32); */
+  color: rgb(212, 212, 212)
 }
 .app-btn-container {
   position: fixed;
@@ -134,6 +136,14 @@ button {
 .dark-mode .app-btn-container button:active {
   background-color: #bbb;
 }
+
+.dark-mode .footer{
+  background-color: rgb(32,32,32);
+} 
+
+.dark-mode .footer svg{
+  color: rgb(221, 221, 221);
+} 
 
 a,
 a:visited {
