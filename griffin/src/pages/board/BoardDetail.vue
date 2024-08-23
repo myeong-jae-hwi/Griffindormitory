@@ -96,7 +96,8 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.push('/boardlist');
+      window.history.back();
+
     },
     formatTime(time) {
       return moment.utc(time).local().format('YYYY/MM/DD');

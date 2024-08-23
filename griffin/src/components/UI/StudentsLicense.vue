@@ -58,7 +58,7 @@ export default {
     imageStyle() {
       return {
         backgroundImage: `url(${this.imageUrl})`,
-        backgroundSize: 'contain',
+        backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         width: '10vh',

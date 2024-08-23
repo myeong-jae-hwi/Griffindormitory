@@ -1,100 +1,126 @@
 <template>
-  <!-- <div class="edit-box"> -->
-    <h2>정보 수정</h2>
-    <form @submit.prevent="handleNameSubmit">
-      <div class="image" :style="imageStyle" @click="triggerFileInput"></div>
-      <input
-        type="file"
-        ref="fileInput"
-        @change="handleFileUpload"
-        style="display: none"
-      />
+  <div class="edit-box">
+  <h2>정보 수정</h2>
 
-      <p>{{name}}</p>
+  <div class="horizontal">
+    <div class="vertical">
+      <div class="image" :style="imageStyle"></div>
+    </div>
+    <div id="userName">
+      {{ this.userName }}
+    </div>
+  </div>
+
+  <div class="edit">
+    <form @submit.prevent="handleNameSubmit">
       <div class="user-box">
-        
         <input type="text" v-model="name" />
         <label>이름</label>
-        <button type="submit" class="submit-btn">이름 수정</button>
+        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
+        <!-- <button type="submit" class="submit-btn">이름 수정</button> -->
       </div>
     </form>
     <form @submit.prevent="handleUniversitySubmit">
       <div class="user-box">
         <input type="text" v-model="university" />
         <label>대학교</label>
-        <button type="submit" class="submit-btn">대학교 수정</button>
+        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
       </div>
     </form>
     <form @submit.prevent="handleStudentIdSubmit">
       <div class="user-box">
         <input type="text" v-model="studentId" />
         <label>학번</label>
-        <button type="submit" class="submit-btn">학번 수정</button>
+        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
       </div>
     </form>
     <form @submit.prevent="handleEmailSubmit">
       <div class="user-box">
         <input type="email" v-model="email" />
         <label>이메일</label>
-        <button type="submit" class="submit-btn">이메일 수정</button>
+        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
       </div>
     </form>
     <form @submit.prevent="handlePasswordSubmit">
       <div class="user-box">
         <input type="password" v-model="password" />
         <label>비밀번호</label>
-        <button type="submit" class="submit-btn">비밀번호 수정</button>
+        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
       </div>
     </form>
-  <!-- </div> -->
+    <form @submit.prevent="submitData">
+    <base-btn type="submit" class="btn">변경</base-btn>
+    </form>
+
+  </div>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { update } from 'firebase/database';
-import { db, auth } from '@/firebase/config';
-import { signOut } from 'firebase/auth';
-import baseProfileImage from '../../assets/images/BaseProfile.svg';
-import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { mapGetters } from "vuex";
+import { update } from "firebase/database";
+import { db, auth } from "@/firebase/config";
+import { signOut } from "firebase/auth";
+import baseProfileImage from "../../assets/images/BaseProfile.svg";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import BaseBtn from "../UI/BaseBtn.vue";
 
 export default {
+  components: { BaseBtn },
   props: {
     isLoggedIn: Boolean,
   },
   data() {
     return {
-      name: '',
-      university: '',
-      studentId: '',
-      email: '',
-      password: '',
+      name: "",
+      university: "",
+      studentId: "",
+      email: "",
+      password: "",
       imageUrl: baseProfileImage,
-
     };
   },
-  computed:{
-    ...mapGetters('users', ['currentUser']),
+  created() {
+    this.name = this.userName;
+    this.email = this.userEmail;
+    this.studentId = this.userStudentId;
+    this.university = this.userUniversity;
+  },
+  computed: {
+    ...mapGetters("users", ["currentUser"]),
     userId() {
       return this.$store.state.users.userID;
     },
-    
+    userName() {
+      return this.$store.state.users.users[0].name;
+    },
+    userEmail(){
+      return this.$store.state.users.users[0].email;
+    },
+    userStudentId(){
+      return this.$store.state.users.users[0].studentId;
+    },
+    userUniversity(){
+      return this.$store.state.users.users[0].university;
+    },
+
     imageStyle() {
       return {
         backgroundImage: `url(${this.imageUrl})`,
-        backgroundSize: 'contain',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        width: '10vh',
-        height: '10vh',
-        borderRadius: '50%',
-        marginLeft: '3%',
-        cursor: 'pointer',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        width: "13vh",
+        height: "13vh",
+        borderRadius: "50%",
+        marginLeft: "3%",
+        cursor: "pointer",
       };
     },
   },
-  async mounted(){
+  async mounted() {
     if (this.userId && !this.currentUser) {
-      await this.$store.dispatch('users/fetchUserInitialData', {
+      await this.$store.dispatch("users/fetchUserInitialData", {
         uid: this.userId,
       });
     }
@@ -113,7 +139,7 @@ export default {
         const url = await getDownloadURL(imageRef);
         this.imageUrl = url;
       } catch (error) {
-        console.error('Failed to load user image', error);
+        console.error("Failed to load user image", error);
         this.imageUrl = baseProfileImage;
       }
     },
@@ -134,86 +160,107 @@ export default {
         const url = await getDownloadURL(imageRef);
         this.imageUrl = url;
       } catch (error) {
-        console.error('Upload error user image', error);
+        console.error("Upload error user image", error);
       }
     },
     async checkAuth() {
       const user = auth.currentUser;
       if (!user) {
-        alert('로그인이 필요합니다.');
-        this.$router.push('/login');
+        alert("로그인이 필요합니다.");
+        this.$router.push("/login");
         return null;
       }
-      console.log('Logged in user UID:', user.uid);
+      console.log("Logged in user UID:", user.uid);
       return user;
     },
-    async handleNameSubmit() {
+    // async handleNameSubmit() {
+    //   try {
+    //     const user = await this.checkAuth();
+    //     if (user) {
+    //       await update(ref(db, "users/" + user.uid), {
+    //         name: this.name,
+    //       });
+    //       alert("이름이 수정되었습니다.");
+    //       await signOut(auth);
+    //       this.$store.dispatch("users/logout");
+    //       this.$router.push("/login");
+    //     }
+    //   } catch (error) {
+    //     console.error("Firebase 오류: ", error);
+    //     alert("오류가 발생했습니다. 다시 시도해 주세요.");
+    //   }
+    // },
+    // async handleUniversitySubmit() {
+    //   try {
+    //     const user = await this.checkAuth();
+    //     if (user) {
+    //       await update(ref(db, "users/" + user.uid), {
+    //         university: this.university,
+    //       });
+    //       alert("대학교가 수정되었습니다.");
+    //       await signOut(auth);
+    //       this.$store.dispatch("users/logout");
+    //       this.$router.push("/login");
+    //     }
+    //   } catch (error) {
+    //     console.error("Firebase 오류: ", error);
+    //     alert("오류가 발생했습니다. 다시 시도해 주세요.");
+    //   }
+    // },
+    // async handleStudentIdSubmit() {
+    //   try {
+    //     const user = await this.checkAuth();
+    //     if (user) {
+    //       await update(ref(db, "users/" + user.uid), {
+    //         studentId: this.studentId,
+    //       });
+    //       alert("학번이 수정되었습니다.");
+    //       await signOut(auth);
+    //       this.$store.dispatch("users/logout");
+    //       this.$router.push("/login");
+    //     }
+    //   } catch (error) {
+    //     console.error("Firebase 오류: ", error);
+    //     alert("오류가 발생했습니다. 다시 시도해 주세요.");
+    //   }
+    // },
+    // async handleEmailSubmit() {
+    //   try {
+    //     const user = await this.checkAuth();
+    //     if (user) {
+    //       await user.updateEmail(this.email);
+    //       await update(ref(db, "users/" + user.uid), {
+    //         email: this.email,
+    //       });
+    //       alert("이메일이 수정되었습니다.");
+    //       await signOut(auth);
+    //       this.$store.dispatch("users/logout");
+    //       this.$router.push("/login");
+    //     }
+    //   } catch (error) {
+    //     console.error("Firebase 오류: ", error);
+    //     alert("오류가 발생했습니다. 다시 시도해 주세요.");
+    //   }
+    // },
+
+    async submitData(){
       try {
         const user = await this.checkAuth();
         if (user) {
-          await update(ref(db, 'users/' + user.uid), {
+          await update(ref(db, "users/" + user.uid), {
             name: this.name,
-          });
-          alert('이름이 수정되었습니다.');
-          await signOut(auth);
-          this.$store.dispatch('users/logout');
-          this.$router.push('/login');
-        }
-      } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
-      }
-    },
-    async handleUniversitySubmit() {
-      try {
-        const user = await this.checkAuth();
-        if (user) {
-          await update(ref(db, 'users/' + user.uid), {
             university: this.university,
-          });
-          alert('대학교가 수정되었습니다.');
-          await signOut(auth);
-          this.$store.dispatch('users/logout');
-          this.$router.push('/login');
-        }
-      } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
-      }
-    },
-    async handleStudentIdSubmit() {
-      try {
-        const user = await this.checkAuth();
-        if (user) {
-          await update(ref(db, 'users/' + user.uid), {
             studentId: this.studentId,
-          });
-          alert('학번이 수정되었습니다.');
-          await signOut(auth);
-          this.$store.dispatch('users/logout');
-          this.$router.push('/login');
-        }
-      } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
-      }
-    },
-    async handleEmailSubmit() {
-      try {
-        const user = await this.checkAuth();
-        if (user) {
-          await user.updateEmail(this.email);
-          await update(ref(db, 'users/' + user.uid), {
             email: this.email,
           });
-          alert('이메일이 수정되었습니다.');
+          alert("정보가 수정되었습니다.");
           await signOut(auth);
-          this.$store.dispatch('users/logout');
-          this.$router.push('/login');
+          this.$store.dispatch("users/logout");
+          this.$router.push("/login");
         }
       } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        console.error("Firebase 오류: ", error);
+        alert("오류가 발생했습니다. 다시 시도해 주세요.");
       }
     },
     async handlePasswordSubmit() {
@@ -221,14 +268,14 @@ export default {
         const user = await this.checkAuth();
         if (user) {
           await user.updatePassword(this.password);
-          alert('비밀번호가 수정되었습니다.');
+          alert("비밀번호가 수정되었습니다.");
           await signOut(auth);
-          this.$store.dispatch('users/logout');
-          this.$router.push('/login');
+          this.$store.dispatch("users/logout");
+          this.$router.push("/login");
         }
       } catch (error) {
-        console.error('Firebase 오류: ', error);
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        console.error("Firebase 오류: ", error);
+        alert("오류가 발생했습니다. 다시 시도해 주세요.");
       }
     },
   },
@@ -237,30 +284,29 @@ export default {
 
 <style scoped>
 .edit-box {
-  width: 80%;
-  max-width: 400px;
+
   margin: 0 auto;
   padding: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background-color: #fff;
 }
 
 .user-box {
+  display: flex;
+  justify-content: center;
   position: relative;
   margin-bottom: 30px;
+  max-height: 50px;
 }
 
 .user-box input {
   width: 100%;
-  padding: 10px 0;
+  padding: 10px;
   font-size: 16px;
   color: #333;
-  margin-bottom: 10px;
   border: none;
-  border-bottom: 1px solid #ccc;
+  background-color: #dfdfdf;
+  border-radius: 8px;
+  margin-top: 10px;
   outline: none;
-  background: transparent;
 }
 
 .user-box label {
@@ -282,16 +328,35 @@ export default {
   font-size: 12px;
 }
 
-.submit-btn {
-  background-color: #5cb85c;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.vertical {
+  display: flex;
+  justify-content: center;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-.submit-btn:hover {
-  background-color: #4cae4c;
+.horizontal {
+  display: flex;
+  flex-direction: column;
+}
+
+#userName {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.edit{
+  margin-top: 30px;
+}
+
+.btn{
+  max-width: 60px;
+  max-height: 40px;
+  min-width: 50px;
+  padding: 0px;
+  float: right;
 }
 </style>
