@@ -10,6 +10,7 @@ import LoginForm from './components/menu/LoginForm.vue';
 import UserInfo from './components/menu/UserInfo.vue';
 import UserScore from './components/menu/UserScore.vue';
 import BoardDetail from './pages/board/BoardDetail.vue';
+import EditBoard from './pages/board/EditBoard.vue';
 import MateDetail from './pages/roommate/MateDetail.vue';
 import StudentCalender from './components/timetable/StudentCalender.vue';
 import AlartList from './pages/alart/AlartList.vue';
@@ -38,6 +39,13 @@ const router = createRouter({
         author: decodeURIComponent(route.query.author),
       }),
     },
+    {
+      path: '/edit-board/:id',
+      name: 'EditBoard',
+      component: EditBoard,
+      meta: { requiresAuth: true },
+    },
+
     {
       path: '/roommateboard',
       component: MatesList,
@@ -68,7 +76,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     { path: '/alart', component: AlartList, meta: { requiresAuth: true } },
-    { path: '/:pathMatch(.*)*', component: NotFound }
+    { path: '/:pathMatch(.*)*', component: NotFound },
   ],
 });
 

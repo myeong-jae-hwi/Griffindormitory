@@ -10,10 +10,14 @@
       </h3>
     </div>
     <base-card class="horizental">
-      <div class="vartical">
+      <div>
         <h2>{{ boardTitle }}</h2>
-        <div v-if="currentUser.id === boardUid" class="delete-btn-container">
-          <!-- <font-awesome-icon icon="pen-to-square" /> -->
+        <div v-if="currentUser.id === boardUid" class="btn-container">
+          <font-awesome-icon
+            @click="editBoard"
+            icon="pen-to-square"
+            class="edit-bth"
+          />
           <font-awesome-icon @click="deleteBoard" icon="trash" />
         </div>
       </div>
@@ -109,7 +113,9 @@ export default {
         console.error('Error deleting board:', error.message);
       }
     },
-
+    editBoard() {
+      this.$router.push({ name: 'EditBoard', params: { id: this.id } });
+    },
     async submitComment() {
       if (this.newComment.trim() === '') return;
       const commentText = this.newComment.trim();
@@ -211,19 +217,10 @@ p {
   padding: 10px 20px;
 }
 
-.vertical {
-  display: flex;
-  align-items: flex-end;
-}
-
 #author {
   margin: 10px 5px 20px 10px;
   font-size: 13px;
   color: rgb(89, 89, 89);
-}
-
-.go {
-  color: #fff;
 }
 
 .comment-section {
@@ -243,22 +240,29 @@ p {
   font-size: 14px;
   border-radius: 10px 0 0 10px;
 }
-
 .comment-btn {
   flex: 1;
   min-width: 60px;
   border-radius: 0 8px 8px 0;
   background-color: #6471e5;
   color: #fff;
-  font-size: 14px;
-  border: none;
   cursor: pointer;
 }
-.delete-btn-container {
+.go {
+  font-size: 24px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-container {
   vertical-align: text-bottom;
-  color: #ddd;
-  font-size: 14px;
+  font-size: 16px;
   float: right;
-  margin: 15px 10px 10px 10px;
+}
+.edit-bth {
+  margin-right: 10px;
 }
 </style>
