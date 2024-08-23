@@ -84,11 +84,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px;
+  margin: 0px;
   padding: 5px;
   padding-left: 20px;
   border-radius: 22px;
-  box-shadow: 4px 4px 0px 0px #f0f0f0d7;
 }
 
 .accept, .refusal {

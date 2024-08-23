@@ -22,12 +22,32 @@
           <font-awesome-icon :icon="['fas', 'cogs']" class="fa-lg" />
         </router-link>
         <router-link to="/alart" class="footer-link">
+          <span v-if="notice" class="note-num"></span>
           <font-awesome-icon :icon="['fas', 'bell']" class="fa-lg" />
         </router-link>
       </nav>
     </div>
   </footer>
 </template>
+<script>
+import { mapState } from "vuex";
+
+export default {
+  data() {
+    return {
+      notice: false,
+    };
+  },
+  computed: {
+    ...mapState(["notifications", ["hasUnreadNotifications"]]),
+  },
+  watch: {
+    hasUnreadNotifications(newValue) {
+      this.notice = newValue;
+    },
+  },
+};
+</script>
 
 <style scoped>
 .footer {
