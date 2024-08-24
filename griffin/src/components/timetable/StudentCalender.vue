@@ -32,7 +32,7 @@
               v-for="(schedule, index) in getSchedulesFor(day, hour)"
               :key="index"
               :class="['schedule-cell', getScheduleColor(schedule.title)]"
-              @click="showModal(day, index)"
+              @click="showModal(day, schedule)"
             >
               {{ schedule.title }}
             </div>
@@ -205,32 +205,56 @@ export default {
       'SET_SELECTED_SCHEDULE',
       'SET_SELECTED_DAY',
       'SET_SELECTED_INDEX',
+      'SET_SCHEDULE_COLOR',
     ]),
-    async showModal(day, index) {
-      const schedulesForDay = this.schedules[day];
-      const selectedSchedule = schedulesForDay[index];
-
-      if (selectedSchedule) {
-        this.SET_SELECTED_SCHEDULE(selectedSchedule);
-        this.SET_SELECTED_DAY(day);
-        this.SET_SELECTED_INDEX(index);
-        this.SET_MODAL_VISIBLE(true);
-      } else {
-        console.error('선택된 일정이 없습니다.');
-      }
-    },
     async handleAddSchedule() {
       const result = await this.addSchedule(this.newSchedule);
       if (result.success) {
+        const color = this.getRandomColor();
+        this.$store.commit('schedule/SET_SCHEDULE_COLOR', {
+          title: this.newSchedule.title,
+          color,
+        });
         this.closeAddModal();
       } else {
         alert(result.message);
       }
     },
+
+    getRandomColor() {
+      const colors = [
+        'pastel-red',
+        'pastel-orange',
+        'pastel-yellow',
+        'pastel-green',
+        'pastel-blue',
+        'pastel-indigo',
+        'pastel-purple',
+        'pastel-pink',
+        'pastel-teal',
+        'pastel-brown',
+      ];
+
+      const scheduleColors = this.$store.state.scheduleColors || {};
+
+      const availableColors = colors.filter(
+        (color) => !Object.values(scheduleColors).includes(color)
+      );
+
+      return availableColors.length > 0
+        ? availableColors[Math.floor(Math.random() * availableColors.length)]
+        : 'pastel-gray';
+    },
+    async showModal(day, schedule) {
+      this.SET_SELECTED_SCHEDULE(schedule);
+      this.SET_SELECTED_DAY(day);
+      this.SET_MODAL_VISIBLE(true);
+    },
+
     async handleRemoveSchedule() {
       await this.removeSchedule({
         day: this.selectedDay,
-        index: this.selectedIndex,
+        schedule: this.selectedSchedule,
       });
       this.closeModal();
     },
@@ -380,11 +404,18 @@ select {
   border: 1px solid #ccc;
   font-size: 1rem;
 }
-
+/*
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1vh;
+}
+*/
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1vh;
+  table-layout: fixed;
 }
 
 th,
@@ -405,6 +436,9 @@ td {
 
 .schedule-cell {
   min-height: 50px;
+  white-space: normal;
+  word-wrap: break-word;
+  text-align: center;
 }
 
 .schedule-item {
