@@ -3,8 +3,6 @@
     <students-license></students-license>
 
     <div class="slider-container">
-      <button @click="slideLeft" class="slider-button left">←</button>
-
       <div class="slider-track">
         <base-card class="slider-item">
           <h3>Content 1</h3>
@@ -31,8 +29,6 @@
           <h3>Content 8</h3>
         </base-card>
       </div>
-
-      <button @click="slideRight" class="slider-button right">→</button>
     </div>
 
     <base-card class="card" v-if="currentUser">
@@ -179,7 +175,7 @@ export default {
 .slider-track {
   display: flex;
   transition: transform 0.3s ease-in-out;
-  margin: 20px;
+  margin: 0px 20px;
   scroll-behavior: smooth;
   width: 100%;
   overflow-x: auto;
@@ -198,6 +194,7 @@ export default {
   height: 150px;
   min-width: 180px;
   margin: 10px;
+
   scroll-snap-align: start;
   text-align: center;
 }

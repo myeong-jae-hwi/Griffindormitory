@@ -456,6 +456,7 @@ td {
 }
 .empty-cell {
   border: 1px solid #ccc;
+
 }
 
 .schedule-item {

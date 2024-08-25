@@ -1,6 +1,14 @@
 <template>
   <section class="container">
-    <h1 class="name">자유 게시판</h1>
+    <div class="header">
+      <h3>
+        <font-awesome-icon icon="chevron-left" @click="goBack" />
+      </h3>
+      <h3>자유 게시판</h3>
+      <h3>
+        <font-awesome-icon icon="ellipsis-vertical" />
+      </h3>
+    </div>
     <div v-if="isListRoute" class="checkbox-container">
       <input type="checkbox" id="myUni" v-model="myUniBoards" />
       <label for="myUni">나의 학교 게시물 보기</label>
@@ -67,10 +75,16 @@ export default {
       }
       return this.boards;
     },
+  
   },
   created() {
     this.$store.dispatch('boards/fetchInitialData');
   },
+  methods:{
+    goBack() {
+      window.history.back();
+    },
+  }
 };
 </script>
 
@@ -80,23 +94,53 @@ export default {
   justify-content: flex-end;
   align-items: center;
   margin-right: 20px;
+  margin-top: 40px;
 }
-.name {
-  text-align: center;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  padding: 20px;
+  padding-bottom: 0;
 }
 .list {
   padding: 0 20px;
-  list-style-type: disc;
+  list-style-type: none;
 }
 .board-list {
   display: block !important;
 }
+
+.dark-mode .board-list{
+  background-color: rgb(52, 52, 62)
+}
+
 .btn-container {
   display: flex;
   justify-content: center;
+  border: none;
 }
 h3 {
   text-align: center;
+  margin: 0;
+  padding-top: 10%;
+}
+
+section{
+  border-bottom: 1px solid #b3b3b33f;
+  margin-bottom: 20px;
+}
+
+.container{
+  border: none;
+}
+
+.dark-mode .container{
+  border: none;
+}
+
+.dark-mode section{
+  border-bottom: 1px solid #6262626f;
 }
 
 .board-enter-from {
