@@ -16,6 +16,18 @@
         <base-card class="slider-item">
           <h3>Content 4</h3>
         </base-card>
+        <base-card class="slider-item">
+          <h3>Content 5</h3>
+        </base-card>
+        <base-card class="slider-item">
+          <h3>Content 6</h3>
+        </base-card>
+        <base-card class="slider-item">
+          <h3>Content 7</h3>
+        </base-card>
+        <base-card class="slider-item">
+          <h3>Content 8</h3>
+        </base-card>
       </div>
     </div>
 
@@ -81,6 +93,7 @@ export default {
     MateItem,
     BaseCard,
   },
+
   computed: {
     ...mapGetters('boards', ['boards', 'hasBoards']),
     ...mapGetters('users', ['currentUser']),
@@ -96,9 +109,21 @@ export default {
   mounted() {
     this.setSliderItemWidth();
     window.addEventListener('resize', this.setSliderItemWidth);
+
+    const track = this.$el.querySelector('.slider-track');
+    track.addEventListener('mousedown', this.startDrag);
+    track.addEventListener('mouseleave', this.stopDrag);
+    track.addEventListener('mouseup', this.stopDrag);
+    track.addEventListener('mousemove', this.dragMove);
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.setSliderItemWidth);
+
+    const track = this.$el.querySelector('.slider-track');
+    track.removeEventListener('mousedown', this.startDrag);
+    track.removeEventListener('mouseleave', this.stopDrag);
+    track.removeEventListener('mouseup', this.stopDrag);
+    track.removeEventListener('mousemove', this.dragMove);
   },
   methods: {
     slideLeft() {
@@ -116,6 +141,24 @@ export default {
       items.forEach((item) => {
         item.style.width = `${itemWidth}px`;
       });
+    },
+    startDrag(event) {
+      this.isDragging = true;
+      this.startX =
+        event.pageX - this.$el.querySelector('.slider-track').offsetLeft;
+      this.scrollLeft = this.$el.querySelector('.slider-track').scrollLeft;
+    },
+    stopDrag() {
+      this.isDragging = false;
+    },
+    dragMove(event) {
+      if (!this.isDragging) return;
+      event.preventDefault();
+      const x =
+        event.pageX - this.$el.querySelector('.slider-track').offsetLeft;
+      const walk = (x - this.startX) * 2;
+      this.$el.querySelector('.slider-track').scrollLeft =
+        this.scrollLeft - walk;
     },
   },
 };
@@ -149,7 +192,9 @@ export default {
 .slider-item {
   flex-shrink: 0;
   height: 150px;
-  margin: 20px 10px 0px 10px;
+  min-width: 180px;
+  margin: 10px;
+
   scroll-snap-align: start;
   text-align: center;
 }

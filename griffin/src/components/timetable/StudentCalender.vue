@@ -27,14 +27,21 @@
       <tbody>
         <tr v-for="hour in hoursDisplay" :key="hour">
           <td class="time">{{ hour }}</td>
-          <td v-for="day in days" :key="day" class="schedule-cell">
+          <td
+            v-for="day in days"
+            :key="day"
+            :class="[
+              'schedule-cell',
+              { 'empty-cell': !getSchedulesFor(day, hour).length },
+            ]"
+          >
             <div
               v-for="(schedule, index) in getSchedulesFor(day, hour)"
               :key="index"
-              :class="['schedule-cell', getScheduleColor(schedule.title)]"
-              @click="showModal(day, index)"
+              :class="['schedule-item', getScheduleColor(schedule.title)]"
+              @click="showModal(day, schedule)"
             >
-              {{ schedule.title }}
+              {{ isScheduleStart(schedule, hour) ? schedule.title : '' }}
             </div>
           </td>
         </tr>
@@ -138,7 +145,6 @@ export default {
     ...mapGetters('schedule', ['getSchedulesFor', 'getScheduleColor']),
     hoursDisplay() {
       return [
-        '08:00',
         '09:00',
         '10:00',
         '11:00',
@@ -158,7 +164,6 @@ export default {
     },
     hours() {
       return [
-        '08',
         '09',
         '10',
         '11',
@@ -205,32 +210,58 @@ export default {
       'SET_SELECTED_SCHEDULE',
       'SET_SELECTED_DAY',
       'SET_SELECTED_INDEX',
+      'SET_SCHEDULE_COLOR',
     ]),
-    async showModal(day, index) {
-      const schedulesForDay = this.schedules[day];
-      const selectedSchedule = schedulesForDay[index];
-
-      if (selectedSchedule) {
-        this.SET_SELECTED_SCHEDULE(selectedSchedule);
-        this.SET_SELECTED_DAY(day);
-        this.SET_SELECTED_INDEX(index);
-        this.SET_MODAL_VISIBLE(true);
-      } else {
-        console.error('선택된 일정이 없습니다.');
-      }
-    },
     async handleAddSchedule() {
       const result = await this.addSchedule(this.newSchedule);
       if (result.success) {
+        const color = this.getRandomColor();
+        this.$store.commit('schedule/SET_SCHEDULE_COLOR', {
+          title: this.newSchedule.title,
+          color,
+        });
         this.closeAddModal();
       } else {
         alert(result.message);
       }
     },
+    isScheduleStart(schedule, hour) {
+      return schedule.startTime === hour;
+    },
+    getRandomColor() {
+      const colors = [
+        'pastel-red',
+        'pastel-orange',
+        'pastel-yellow',
+        'pastel-green',
+        'pastel-blue',
+        'pastel-indigo',
+        'pastel-purple',
+        'pastel-pink',
+        'pastel-teal',
+        'pastel-brown',
+      ];
+
+      const scheduleColors = this.$store.state.scheduleColors || {};
+
+      const availableColors = colors.filter(
+        (color) => !Object.values(scheduleColors).includes(color)
+      );
+
+      return availableColors.length > 0
+        ? availableColors[Math.floor(Math.random() * availableColors.length)]
+        : 'pastel-gray';
+    },
+    async showModal(day, schedule) {
+      this.SET_SELECTED_SCHEDULE(schedule);
+      this.SET_SELECTED_DAY(day);
+      this.SET_MODAL_VISIBLE(true);
+    },
+
     async handleRemoveSchedule() {
       await this.removeSchedule({
         day: this.selectedDay,
-        index: this.selectedIndex,
+        schedule: this.selectedSchedule,
       });
       this.closeModal();
     },
@@ -247,9 +278,9 @@ export default {
       this.SET_ADD_MODAL_VISIBLE(false);
       this.SET_NEW_SCHEDULE({
         title: '',
-        startHour: '08',
+        startHour: '09',
         startMinute: '00',
-        endHour: '08',
+        endHour: '09',
         endMinute: '00',
         startAmPm: '오전',
         endAmPm: '오전',
@@ -380,11 +411,19 @@ select {
   border: 1px solid #ccc;
   font-size: 1rem;
 }
-
+/*
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1vh;
+}
+*/
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1vh;
+  table-layout: fixed;
+  border-spacing: 0;
 }
 
 th,
@@ -394,8 +433,12 @@ td.time {
   text-align: center;
 }
 
-td {
+tbody {
   border: 1px solid #ccc;
+}
+
+td {
+  border-left: 1px solid #ccc;
   padding: 0;
 }
 
@@ -404,24 +447,38 @@ td {
 }
 
 .schedule-cell {
-  min-height: 50px;
-  /* min-width: px; */
+  height: 50px;
+  white-space: normal;
+  word-wrap: break-word;
+  text-align: left;
+  table-layout: fixed;
+  border: 0 1px solid #ccc;
+}
+.empty-cell {
+  border: 1px solid #ccc;
+
 }
 
 .schedule-item {
   display: flex;
   justify-content: space-between;
-  margin: 2px 0;
-  padding: 5px;
   cursor: pointer;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+  height: 100%;
+  border: none;
 }
 
-.schedule-item:hover {
+/*
+ .schedule-item:hover {
   background: #e0e0e0;
 }
+*/
 
 .pastel-red {
   background-color: #ffcccb;
+  border: none;
 }
 
 .pastel-orange {

@@ -82,11 +82,37 @@ export default {
     return { success: false, message: '입력 정보가 올바르지 않습니다.' };
   },
 
-  async removeSchedule({ commit, state, rootGetters }, { day, index }) {
+  // async removeSchedule({ commit, state, rootGetters }, { day, index }) {
+  //   const currentUser = rootGetters['users/currentUser'];
+  //   if (currentUser) {
+  //     if (state.schedules[day] && state.schedules[day].length > index) {
+  //       commit('REMOVE_SCHEDULE', { day, index });
+  //       try {
+  //         const encodedSemester = encodeURIComponent(
+  //           state.selectedSemester
+  //             .replace(/ /g, '_')
+  //             .replace(/학년/g, 'grade')
+  //             .replace(/학기/g, 'semester')
+  //         );
+  //         const semesterPath = `scores/${currentUser.id}/semesters/${encodedSemester}/${day}`;
+  //         const dbRef = ref(db, semesterPath);
+  //         await set(dbRef, { schedules: state.schedules[day] });
+  //         console.log('시간표가 업데이트되었습니다.');
+  //       } catch (e) {
+  //         console.error('시간표 업데이트 중 오류 발생:', e);
+  //       }
+  //     } else {
+  //       console.error('삭제하려는 일정이 존재하지 않습니다.');
+  //     }
+  //   }
+  // },
+  async removeSchedule({ commit, state, rootGetters }, { day, schedule }) {
     const currentUser = rootGetters['users/currentUser'];
     if (currentUser) {
-      if (state.schedules[day] && state.schedules[day].length > index) {
-        commit('REMOVE_SCHEDULE', { day, index });
+      const scheduleIndex = state.schedules[day].indexOf(schedule);
+
+      if (scheduleIndex !== -1) {
+        commit('REMOVE_SCHEDULE', { day, index: scheduleIndex });
         try {
           const encodedSemester = encodeURIComponent(
             state.selectedSemester
@@ -94,7 +120,7 @@ export default {
               .replace(/학년/g, 'grade')
               .replace(/학기/g, 'semester')
           );
-          const semesterPath = `users/${currentUser.id}/semesters/${encodedSemester}/${day}`;
+          const semesterPath = `scores/${currentUser.id}/semesters/${encodedSemester}/${day}`;
           const dbRef = ref(db, semesterPath);
           await set(dbRef, { schedules: state.schedules[day] });
           console.log('시간표가 업데이트되었습니다.');

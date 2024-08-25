@@ -11,26 +11,6 @@ export default {
     });
   },
   getScheduleColor: (state) => (title) => {
-    if (!state.scheduleColors[title]) {
-      const colors = [
-        'pastel-red',
-        'pastel-orange',
-        'pastel-yellow',
-        'pastel-green',
-        'pastel-blue',
-        'pastel-indigo',
-        'pastel-purple',
-        'pastel-pink',
-        'pastel-teal',
-        'pastel-brown',
-      ];
-      const availableColors = colors.filter(
-        (color) => !Object.values(state.scheduleColors).includes(color)
-      );
-      const randomColor =
-        availableColors[Math.floor(Math.random() * availableColors.length)];
-      state.scheduleColors[title] = randomColor;
-    }
-    return state.scheduleColors[title];
+    return state.scheduleColors[title] || 'default-color-class';
   },
 };

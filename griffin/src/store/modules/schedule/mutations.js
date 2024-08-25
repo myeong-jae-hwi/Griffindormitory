@@ -31,6 +31,12 @@ export default {
   SET_SELECTED_INDEX(state, index) {
     state.selectedIndex = index;
   },
+  SET_SCHEDULE_COLOR(state, { title, color }) {
+    state.scheduleColors = {
+      ...state.scheduleColors,
+      [title]: color,
+    };
+  },
   RESET_SCHEDULES(state) {
     state.schedules = {
       월: [],
