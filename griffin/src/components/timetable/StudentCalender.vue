@@ -27,14 +27,21 @@
       <tbody>
         <tr v-for="hour in hoursDisplay" :key="hour">
           <td class="time">{{ hour }}</td>
-          <td v-for="day in days" :key="day" class="schedule-cell">
+          <td
+            v-for="day in days"
+            :key="day"
+            :class="[
+              'schedule-cell',
+              { 'empty-cell': !getSchedulesFor(day, hour).length },
+            ]"
+          >
             <div
               v-for="(schedule, index) in getSchedulesFor(day, hour)"
               :key="index"
-              :class="['schedule-cell', getScheduleColor(schedule.title)]"
+              :class="['schedule-item', getScheduleColor(schedule.title)]"
               @click="showModal(day, schedule)"
             >
-              {{ schedule.title }}
+              {{ isScheduleStart(schedule, hour) ? schedule.title : '' }}
             </div>
           </td>
         </tr>
@@ -138,7 +145,6 @@ export default {
     ...mapGetters('schedule', ['getSchedulesFor', 'getScheduleColor']),
     hoursDisplay() {
       return [
-        '08:00',
         '09:00',
         '10:00',
         '11:00',
@@ -158,7 +164,6 @@ export default {
     },
     hours() {
       return [
-        '08',
         '09',
         '10',
         '11',
@@ -220,7 +225,9 @@ export default {
         alert(result.message);
       }
     },
-
+    isScheduleStart(schedule, hour) {
+      return schedule.startTime === hour;
+    },
     getRandomColor() {
       const colors = [
         'pastel-red',
@@ -271,9 +278,9 @@ export default {
       this.SET_ADD_MODAL_VISIBLE(false);
       this.SET_NEW_SCHEDULE({
         title: '',
-        startHour: '08',
+        startHour: '09',
         startMinute: '00',
-        endHour: '08',
+        endHour: '09',
         endMinute: '00',
         startAmPm: '오전',
         endAmPm: '오전',
@@ -416,6 +423,7 @@ table {
   border-collapse: collapse;
   margin-top: 1vh;
   table-layout: fixed;
+  border-spacing: 0;
 }
 
 th,
@@ -425,8 +433,12 @@ td.time {
   text-align: center;
 }
 
-td {
+tbody {
   border: 1px solid #ccc;
+}
+
+td {
+  border-left: 1px solid #ccc;
   padding: 0;
 }
 
@@ -435,26 +447,37 @@ td {
 }
 
 .schedule-cell {
-  min-height: 50px;
+  height: 50px;
   white-space: normal;
   word-wrap: break-word;
-  text-align: center;
+  text-align: left;
+  table-layout: fixed;
+  border: 0 1px solid #ccc;
+}
+.empty-cell {
+  border: 1px solid #ccc;
 }
 
 .schedule-item {
   display: flex;
   justify-content: space-between;
-  margin: 2px 0;
-  padding: 5px;
   cursor: pointer;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+  height: 100%;
+  border: none;
 }
 
-.schedule-item:hover {
+/*
+ .schedule-item:hover {
   background: #e0e0e0;
 }
+*/
 
 .pastel-red {
   background-color: #ffcccb;
+  border: none;
 }
 
 .pastel-orange {
