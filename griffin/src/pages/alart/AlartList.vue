@@ -1,8 +1,5 @@
 <template>
   <div>
-    <h2 v-if="allNotifications.length === 0" class="no-notifications">
-      알람이 없습니다.
-    </h2>
     <div v-if="loading">Loading...</div>
     <div v-if="error">{{ error.message }}</div>
     <div class="header">
@@ -15,6 +12,9 @@
       </h3>
     </div>
     <ul v-if="!loading">
+      <h3 v-if="allNotifications.length === 0" class="no-notifications">
+      알람이 없습니다.
+    </h3>
       <li
         v-for="notification in [...allNotifications].reverse()"
         :key="notification.id"
