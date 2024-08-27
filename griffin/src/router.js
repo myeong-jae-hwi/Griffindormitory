@@ -15,11 +15,13 @@ import MateDetail from './pages/roommate/MateDetail.vue';
 import StudentCalender from './components/timetable/StudentCalender.vue';
 import AlartList from './pages/alart/AlartList.vue';
 import NotFound from './pages/NotFound.vue';
+import MainForm from './components/menu/mainForm.vue'
+import SignUp from './components/menu/SignUp.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', redirect: '/login' },
+    { path: '/', redirect: '/mainForm' },
     { path: '/info', component: InfoPage, meta: { requiresAuth: true } },
     {
       path: '/boardlist',
@@ -67,7 +69,7 @@ const router = createRouter({
         preferences: route.query.preferences,
       }),
     },
-    { path: '/login', component: LoginForm },
+    { path: '/login', component: LoginForm ,meta: {hideFooter: true, hideDarkmode: true}},
     { path: '/userinfo', component: UserInfo, meta: { requiresAuth: true } },
     { path: '/score', component: UserScore, meta: { requiresAuth: true } },
     {
@@ -76,6 +78,9 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     { path: '/alart', component: AlartList, meta: { requiresAuth: true } },
+    { path: '/mainForm', component: MainForm, meta: { requiresAuth: true ,hideFooter: true, hideDarkmode: true} },
+    { path: '/signup', component: SignUp, meta: { requiresAuth: true ,hideFooter: true, hideDarkmode: true} },
+
     { path: '/:pathMatch(.*)*', component: NotFound },
   ],
 });
@@ -83,6 +88,12 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const userId = store.state.users.userID;
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  // 회원가입 페이지는 인증이 필요하지 않으므로 바로 통과시킵니다.
+  if (to.path === '/signup' || to.path === '/mainForm') {
+    next();
+    return;
+  }
 
   if (requiresAuth && !userId) {
     next('/login');

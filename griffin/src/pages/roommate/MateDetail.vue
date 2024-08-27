@@ -122,8 +122,9 @@ export default {
   },
   created() {
     this.fetchData();
-    this.$store.dispatch("fetchInitialData");
+    // this.$store.dispatch("fetchInitialData");
   },
+
 
   methods: {
     submitData() {
@@ -137,6 +138,9 @@ export default {
       this.notice(userUid, mateId, userId);
       this.submissionSuccess = true;
       this.modalOpen = true;
+    },
+    goBack() {
+      window.history.back();
     },
     async deleteMate() {
       const confirmation = window.confirm("게시물을 삭제하시겠습니까 ?");
@@ -168,11 +172,9 @@ export default {
         console.error("Error creating notification:", error.message);
       }
     },
-    goBack() {
-      window.history.back();
-    },
+    
     async fetchData() {
-      await this.$store.dispatch("mates/fetchInitialData", this.id);
+      await this.$store.dispatch("fetchInitialData", this.id);
       const mate = this.mates.find((mate) => mate.id === this.id);
       this.mateTitle = mate.title;
       this.mateCount = mate.count;
@@ -182,6 +184,7 @@ export default {
       this.mateSex = mate.sex;
       this.mateLocation = mate.location;
     },
+
     openModal() {
       if (this.currentUser.gender !== this.sex) {
         alert("성별이 맞지 않아 신청할 수 없습니다.");

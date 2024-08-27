@@ -1,58 +1,65 @@
 <template>
   <div class="edit-box">
-  <h2>정보 수정</h2>
-
-  <div class="horizontal">
-    <div class="vertical">
-      <div class="image" :style="imageStyle"></div>
+    <div class="header">
+      <h3>
+        <font-awesome-icon icon="chevron-left" @click="goBack" />
+      </h3>
+      <h3>정보 수정</h3>
+      <h3>
+        <font-awesome-icon icon="ellipsis-vertical" />
+      </h3>
     </div>
-    <div id="userName">
-      {{ this.userName }}
+
+    <div class="horizontal">
+      <div class="vertical">
+        <div class="image" :style="imageStyle"></div>
+      </div>
+      <div id="userName">
+        {{ this.userName }}
+      </div>
     </div>
-  </div>
 
-  <div class="edit">
-    <form @submit.prevent="handleNameSubmit">
-      <div class="user-box">
-        <input type="text" v-model="name" />
-        <label>이름</label>
-        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
-        <!-- <button type="submit" class="submit-btn">이름 수정</button> -->
-      </div>
-    </form>
-    <form @submit.prevent="handleUniversitySubmit">
-      <div class="user-box">
-        <input type="text" v-model="university" />
-        <label>대학교</label>
-        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
-      </div>
-    </form>
-    <form @submit.prevent="handleStudentIdSubmit">
-      <div class="user-box">
-        <input type="text" v-model="studentId" />
-        <label>학번</label>
-        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
-      </div>
-    </form>
-    <form @submit.prevent="handleEmailSubmit">
-      <div class="user-box">
-        <input type="email" v-model="email" />
-        <label>이메일</label>
-        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
-      </div>
-    </form>
-    <form @submit.prevent="handlePasswordSubmit">
-      <div class="user-box">
-        <input type="password" v-model="password" />
-        <label>비밀번호</label>
-        <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
-      </div>
-    </form>
-    <form @submit.prevent="submitData">
-    <base-btn type="submit" class="btn">변경</base-btn>
-    </form>
-
-  </div>
+    <div class="edit">
+      <form @submit.prevent="handleNameSubmit">
+        <div class="user-box">
+          <input type="text" v-model="name" />
+          <label>이름</label>
+          <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
+          <!-- <button type="submit" class="submit-btn">이름 수정</button> -->
+        </div>
+      </form>
+      <form @submit.prevent="handleUniversitySubmit">
+        <div class="user-box">
+          <input type="text" v-model="university" />
+          <label>대학교</label>
+          <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
+        </div>
+      </form>
+      <form @submit.prevent="handleStudentIdSubmit">
+        <div class="user-box">
+          <input type="text" v-model="studentId" />
+          <label>학번</label>
+          <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
+        </div>
+      </form>
+      <form @submit.prevent="handleEmailSubmit">
+        <div class="user-box">
+          <input type="email" v-model="email" />
+          <label>이메일</label>
+          <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
+        </div>
+      </form>
+      <form @submit.prevent="handlePasswordSubmit">
+        <div class="user-box">
+          <input type="password" v-model="password" />
+          <label>비밀번호</label>
+          <!-- <base-btn type="submit" class="btn">변경</base-btn> -->
+        </div>
+      </form>
+      <form @submit.prevent="submitData">
+        <base-btn type="submit" class="btn">변경</base-btn>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -94,13 +101,13 @@ export default {
     userName() {
       return this.$store.state.users.users[0].name;
     },
-    userEmail(){
+    userEmail() {
       return this.$store.state.users.users[0].email;
     },
-    userStudentId(){
+    userStudentId() {
       return this.$store.state.users.users[0].studentId;
     },
-    userUniversity(){
+    userUniversity() {
       return this.$store.state.users.users[0].university;
     },
 
@@ -242,8 +249,10 @@ export default {
     //     alert("오류가 발생했습니다. 다시 시도해 주세요.");
     //   }
     // },
-
-    async submitData(){
+    goBack() {
+      window.history.back();
+    },
+    async submitData() {
       try {
         const user = await this.checkAuth();
         if (user) {
@@ -284,9 +293,22 @@ export default {
 
 <style scoped>
 .edit-box {
-
   margin: 0 auto;
   padding: 20px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  padding: 20px;
+  padding-bottom: 0;
+  margin-bottom: 30px;
+}
+
+h3 {
+  text-align: center;
+  margin: 0;
+  padding-top: 10%;
 }
 
 .user-box {
@@ -347,11 +369,11 @@ export default {
   padding-right: 10px;
 }
 
-.edit{
+.edit {
   margin-top: 30px;
 }
 
-.btn{
+.btn {
   max-width: 60px;
   max-height: 40px;
   min-width: 50px;

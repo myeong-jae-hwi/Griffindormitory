@@ -11,7 +11,7 @@
         </option>
       </select>
       <h2>시간표</h2>
-      <button class="add-button" @click="openAddModal">+</button>
+      <base-btn class="add-button" @click="openAddModal">+</base-btn>
     </div>
     <table cellspacing="0" cellpadding="0" border="0">
       <thead>
@@ -98,7 +98,7 @@
               {{ day }}요일
             </option>
           </select>
-          <button class="confirm-button" type="submit">추가</button>
+          <base-btn type="submit">추가</base-btn>
         </form>
       </div>
     </div>
@@ -113,7 +113,7 @@
           {{ selectedSchedule.endTime }}
         </p>
         <p><strong>요일:</strong> {{ selectedDay }}</p>
-        <button @click="handleRemoveSchedule">삭제</button>
+        <base-btn @click="handleRemoveSchedule">삭제</base-btn>
       </div>
     </div>
   </div>
@@ -121,8 +121,10 @@
 
 <script>
 import { mapState, mapMutations, mapGetters, mapActions } from 'vuex';
+import BaseBtn from '../UI/BaseBtn.vue';
 
 export default {
+  components: { BaseBtn },
   data() {
     return {
       selectedSemesterLocal: '',
@@ -345,6 +347,7 @@ export default {
 .calender-head h2 {
   flex: 2;
   text-align: left;
+  text-align: center;
 }
 
 .add-button {
@@ -358,11 +361,11 @@ export default {
   background-color: transparent;
 }
 
-.add-button:hover {
+/* .add-button:hover {
   color: royalblue;
-}
+} */
 
-.confirm-button {
+/* .confirm-button {
   flex: none;
   padding: 10px 20px;
   border: none;
@@ -372,7 +375,7 @@ export default {
   font-size: 1rem;
   cursor: pointer;
   margin-top: 10px;
-}
+} */
 
 .confirm-button:hover {
   background-color: rgb(21, 80, 255);
@@ -410,6 +413,10 @@ select {
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 1rem;
+}
+
+.dark-mode .schedule-cell{
+  color: rgb(47, 47, 47);
 }
 /*
 table {

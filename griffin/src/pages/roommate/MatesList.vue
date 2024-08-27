@@ -1,7 +1,15 @@
 <template>
   <section class="container">
-    <h1 class="name">룸메이트 모집 게시판</h1>
-    <base-card v-if="isListRoute && filteredMates.length">
+    <div class="header">
+      <h3>
+        <font-awesome-icon icon="chevron-left" @click="goBack" />
+      </h3>
+      <h3>룸메이트 모집 게시판</h3>
+      <h3>
+        <font-awesome-icon icon="ellipsis-vertical" />
+      </h3>
+    </div>
+    <base-card class='list' v-if="isListRoute && filteredMates.length">
       <ul v-if="filteredMates.length" class="list">
         <li v-for="mate in filteredMates" :key="mate.id">
           <mate-item
@@ -59,6 +67,11 @@ export default {
   created() {
     this.$store.dispatch('fetchInitialData');
   },
+  methods:{
+    goBack() {
+      window.history.back();
+    },
+  }
 };
 </script>
 
@@ -66,16 +79,32 @@ export default {
 .name {
   text-align: center;
 }
-.list {
-  padding: 0 20px;
-  list-style-type: disc;
+.container{
+  margin-bottom: 20px;
+  /* border-bottom: 1px solid #b3b3b33f; */
+
 }
 .btn-container {
   display: flex;
   justify-content: center;
 }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  padding: 20px;
+  padding-bottom: 0;
+  margin-bottom: 30px;
+}
+.list {
+  padding: 0px 10px;
+  list-style-type: none;
+}
+
 h3 {
   text-align: center;
+  margin: 0;
+  padding-top: 10%;
 }
 
 .mate-enter-from {
@@ -88,5 +117,8 @@ h3 {
 .mate-enter-to {
   opacity: 1;
   transform: translateY(0);
+}
+.dark-mode .list{
+  background-color: rgb(52, 52, 62)
 }
 </style>

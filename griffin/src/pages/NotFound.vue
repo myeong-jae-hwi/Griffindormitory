@@ -19,7 +19,6 @@
   align-items: center;
   height: 60vh;
   text-align: center;
-  color: #333;
   padding: 20px;
   font-family: 'Arial', sans-serif;
 }
@@ -27,7 +26,6 @@
 h1 {
   font-size: 2em;
   margin-bottom: 20px;
-  color: #323030;
   animation: fadeIn 1s ease-in-out;
 }
 
@@ -35,7 +33,6 @@ p {
   font-size: 1.2em;
   line-height: 1.5;
   margin-bottom: 30px;
-  color: #221f1f;
 }
 
 img {

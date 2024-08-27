@@ -193,7 +193,7 @@ export default {
   flex-shrink: 0;
   height: 150px;
   min-width: 180px;
-  margin: 10px;
+  margin: 20px 10px 0px 10px;
 
   scroll-snap-align: start;
   text-align: center;
