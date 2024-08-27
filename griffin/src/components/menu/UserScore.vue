@@ -45,8 +45,8 @@
           @remove="removeScoreItem(index)"
         ></score-item>
       </div>
-      <button @click="addScoreItem">Plus</button>
-      <button @click="submitScores">확인</button>
+      <base-btn @click="addScoreItem">Plus</base-btn>
+      <base-btn @click="submitScores">확인</base-btn>
     </base-card>
   </div>
 </template>
@@ -57,6 +57,7 @@ import { Chart, registerables } from 'chart.js';
 import BaseCard from '../UI/BaseCard.vue';
 import ScoreItem from '../score/ScoreItem.vue';
 import { mapGetters } from 'vuex';
+import BaseBtn from '../UI/BaseBtn.vue';
 // import BaseBtn from '../UI/BaseBtn.vue';
 
 Chart.register(...registerables);
@@ -66,6 +67,7 @@ export default {
     BaseChart,
     BaseCard,
     ScoreItem,
+    BaseBtn,
     // BaseBtn,
   },
   computed: {

@@ -26,6 +26,37 @@
         <span v-if="!menuOpen">☰</span>
         <span v-else>X</span>
       </div>
+      <transition name="slide-fade">
+    <div class="dropdown-menu" v-if="menuOpen">
+      <ul>
+        <li @click="closeMenu">
+          <router-link to="/userinfo" class="nav-link">정보 수정</router-link>
+        </li>
+        <li @click="closeMenu">
+          <router-link to="/score" class="nav-link">학적 관리</router-link>
+        </li>
+        <li @click="closeMenu">
+          <router-link to="/timetable" class="nav-link">시간표</router-link>
+        </li>
+        <li @click="closeMenu">
+          <router-link
+            v-if="isLoggedIn"
+            @click="handleAuthAction"
+            to="/"
+            class="nav-link"
+            >로그아웃</router-link
+          >
+          <router-link
+            v-else
+            @click="handleAuthAction"
+            to="/login"
+            class="nav-link"
+            >로그인</router-link
+          >
+        </li>
+      </ul>
+    </div>
+  </transition>
       <div class="image" :style="imageStyle" @click="triggerFileInput"></div>
       <input
         type="file"
@@ -41,11 +72,17 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { auth } from '@/firebase/config.js';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import baseProfileImage from '../../assets/images/BaseProfile.svg';
 
 export default {
+  //   props: {
+  //   isLoggedIn: Boolean,
+  // },
   data() {
     return {
+      isLoggedIn: true,
       menuOpen: false,
       imageUrl: baseProfileImage,
     };
@@ -79,6 +116,14 @@ export default {
       this.loadUserImage();
     }
   },
+  created(){
+    onAuthStateChanged(auth, (user) => {
+      this.$emit('login-success', user);
+      // if (user) {
+      //   this.checkNotifications();
+      // }
+    });
+  },
   methods: {
     async loadUserImage() {
       try {
@@ -93,6 +138,26 @@ export default {
         console.error('Failed to load user image', error);
         this.imageUrl = baseProfileImage;
       }
+    },
+    handleAuthAction() {
+      if (this.isLoggedIn) {
+        signOut(auth)
+          .then(() => {
+            this.$store.dispatch('users/logout');
+            this.$router.push('/login');
+            this.$emit('login-success', null);
+            if (self.name != 'reload') {
+              self.name = 'reload';
+              self.location.reload(true);
+            } else self.name = '';
+          })
+          .catch((error) => {
+            console.error('로그아웃 오류: ', error);
+          });
+      } else {
+        this.$router.push('/login');
+      }
+      this.closeMenu();
     },
     triggerFileInput() {
       this.$refs.fileInput.click();
@@ -161,6 +226,47 @@ p {
   color: white;
   text-align: center;
   align-content: center;
+}
+
+/* #menu {
+  width: 20px;
+  height: 100%;
+  background-size: cover;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+} */
+
+.dropdown-menu {
+  position: absolute;
+  top: 20px;
+  right: -20px;
+  background-color: white;
+  border: 1px solid #ddd;
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); */
+  z-index: 1000;
+  width: 200px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+}
+
+.dropdown-menu li {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.dropdown-menu a{
+  color: #383838;
+
 }
 
 a{

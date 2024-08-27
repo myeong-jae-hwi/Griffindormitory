@@ -9,7 +9,7 @@
 -->
 
 <template>
-  <footer class="footer">
+  <footer class="footer" v-if="!$route.meta.hideFooter">
     <div class="footer-content">
       <nav>
         <router-link to="/info" class="footer-link">

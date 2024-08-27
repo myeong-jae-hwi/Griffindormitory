@@ -1,7 +1,7 @@
 <template>
   <div :class="{ 'dark-mode': isDarkMode }">
     <div class="app-btn-container">
-      <button @click="toggleDarkMode">
+      <button v-if="!$route.meta.hideDarkmode" @click="toggleDarkMode">
         <div class="sun"></div>
       </button>
     </div>
@@ -87,7 +87,7 @@ main {
   flex: 1;
   width: 100%;
   flex-direction: column;
-  padding-bottom: 100px;
+  padding-bottom: 80px;
 }
 button {
   background: #3636367c;
