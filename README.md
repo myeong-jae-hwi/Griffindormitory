@@ -3,8 +3,12 @@
   <img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=ffffff"/> 
   <img src="https://img.shields.io/badge/firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=ffffff"/>
   <img src="https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=ffffff"/>
-
 </p>
+
+## 소개
+<img width="15%" src="https://github.com/user-attachments/assets/cc374e8f-3ead-4359-a2ec-154b17c60273"/>
+
+
 
 ## 👨‍👩‍👧‍👦 팀 소개
 ### Project Manager 😎
