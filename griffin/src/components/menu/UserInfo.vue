@@ -1,21 +1,13 @@
 <template>
   <div class="edit-box">
-    <div class="header">
-      <h3>
-        <font-awesome-icon icon="chevron-left" @click="goBack" />
-      </h3>
-      <h3>정보 수정</h3>
-      <h3>
-        <font-awesome-icon icon="ellipsis-vertical" />
-      </h3>
-    </div>
+    <h2>정보 수정</h2>
 
     <div class="horizontal">
       <div class="vertical">
         <div class="image" :style="imageStyle"></div>
       </div>
-      <div id="userName">
-        {{ this.userName }}
+      <div v-if="currentUser" id="userName">
+        <p>{{ userName }}</p>
       </div>
     </div>
 
@@ -64,13 +56,18 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { update } from "firebase/database";
-import { db, auth } from "@/firebase/config";
-import { signOut } from "firebase/auth";
-import baseProfileImage from "../../assets/images/BaseProfile.svg";
-import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import BaseBtn from "../UI/BaseBtn.vue";
+import { mapGetters } from 'vuex';
+import { update, ref as dbRef } from 'firebase/database';
+import { db, auth } from '../../firebase/config';
+import { signOut } from 'firebase/auth';
+import baseProfileImage from '../../assets/images/BaseProfile.svg';
+import {
+  getStorage,
+  ref as storageRef,
+  getDownloadURL,
+  uploadBytes,
+} from 'firebase/storage';
+import BaseBtn from '../UI/BaseBtn.vue';
 
 export default {
   components: { BaseBtn },
@@ -79,11 +76,11 @@ export default {
   },
   data() {
     return {
-      name: "",
-      university: "",
-      studentId: "",
-      email: "",
-      password: "",
+      name: '',
+      university: '',
+      studentId: '',
+      email: '',
+      password: '',
       imageUrl: baseProfileImage,
     };
   },
@@ -94,40 +91,40 @@ export default {
     this.university = this.userUniversity;
   },
   computed: {
-    ...mapGetters("users", ["currentUser"]),
+    ...mapGetters('users', ['currentUser']),
     userId() {
       return this.$store.state.users.userID;
     },
     userName() {
-      return this.$store.state.users.users[0].name;
+      return this.$store.state.users.users[0]?.name || 'Unknown';
     },
     userEmail() {
-      return this.$store.state.users.users[0].email;
+      return this.$store.state.users.users[0]?.email || '';
     },
     userStudentId() {
-      return this.$store.state.users.users[0].studentId;
+      return this.$store.state.users.users[0]?.studentId || '';
     },
     userUniversity() {
-      return this.$store.state.users.users[0].university;
+      return this.$store.state.users.users[0]?.university || '';
     },
 
     imageStyle() {
       return {
         backgroundImage: `url(${this.imageUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        width: "13vh",
-        height: "13vh",
-        borderRadius: "50%",
-        marginLeft: "3%",
-        cursor: "pointer",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        width: '13vh',
+        height: '13vh',
+        borderRadius: '50%',
+        marginLeft: '3%',
+        cursor: 'pointer',
       };
     },
   },
   async mounted() {
     if (this.userId && !this.currentUser) {
-      await this.$store.dispatch("users/fetchUserInitialData", {
+      await this.$store.dispatch('users/fetchUserInitialData', {
         uid: this.userId,
       });
     }
@@ -139,14 +136,14 @@ export default {
     async loadUserImage() {
       try {
         const storage = getStorage();
-        const imageRef = ref(
+        const imageRef = storageRef(
           storage,
           `users/${this.currentUser.id}/profile.jpg`
         );
         const url = await getDownloadURL(imageRef);
         this.imageUrl = url;
       } catch (error) {
-        console.error("Failed to load user image", error);
+        console.error('Failed to load user image', error);
         this.imageUrl = baseProfileImage;
       }
     },
@@ -159,7 +156,7 @@ export default {
 
       try {
         const storage = getStorage();
-        const imageRef = ref(
+        const imageRef = storageRef(
           storage,
           `users/${this.currentUser.id}/profile.jpg`
         );
@@ -167,109 +164,121 @@ export default {
         const url = await getDownloadURL(imageRef);
         this.imageUrl = url;
       } catch (error) {
-        console.error("Upload error user image", error);
+        console.error('Upload error user image', error);
       }
     },
     async checkAuth() {
       const user = auth.currentUser;
       if (!user) {
-        alert("로그인이 필요합니다.");
-        this.$router.push("/login");
+        alert('로그인이 필요합니다.');
+        this.$router.push('/login');
         return null;
       }
-      console.log("Logged in user UID:", user.uid);
+      console.log('Logged in user UID:', user.uid);
       return user;
     },
-    // async handleNameSubmit() {
-    //   try {
-    //     const user = await this.checkAuth();
-    //     if (user) {
-    //       await update(ref(db, "users/" + user.uid), {
-    //         name: this.name,
-    //       });
-    //       alert("이름이 수정되었습니다.");
-    //       await signOut(auth);
-    //       this.$store.dispatch("users/logout");
-    //       this.$router.push("/login");
-    //     }
-    //   } catch (error) {
-    //     console.error("Firebase 오류: ", error);
-    //     alert("오류가 발생했습니다. 다시 시도해 주세요.");
-    //   }
-    // },
-    // async handleUniversitySubmit() {
-    //   try {
-    //     const user = await this.checkAuth();
-    //     if (user) {
-    //       await update(ref(db, "users/" + user.uid), {
-    //         university: this.university,
-    //       });
-    //       alert("대학교가 수정되었습니다.");
-    //       await signOut(auth);
-    //       this.$store.dispatch("users/logout");
-    //       this.$router.push("/login");
-    //     }
-    //   } catch (error) {
-    //     console.error("Firebase 오류: ", error);
-    //     alert("오류가 발생했습니다. 다시 시도해 주세요.");
-    //   }
-    // },
-    // async handleStudentIdSubmit() {
-    //   try {
-    //     const user = await this.checkAuth();
-    //     if (user) {
-    //       await update(ref(db, "users/" + user.uid), {
-    //         studentId: this.studentId,
-    //       });
-    //       alert("학번이 수정되었습니다.");
-    //       await signOut(auth);
-    //       this.$store.dispatch("users/logout");
-    //       this.$router.push("/login");
-    //     }
-    //   } catch (error) {
-    //     console.error("Firebase 오류: ", error);
-    //     alert("오류가 발생했습니다. 다시 시도해 주세요.");
-    //   }
-    // },
-    // async handleEmailSubmit() {
-    //   try {
-    //     const user = await this.checkAuth();
-    //     if (user) {
-    //       await user.updateEmail(this.email);
-    //       await update(ref(db, "users/" + user.uid), {
-    //         email: this.email,
-    //       });
-    //       alert("이메일이 수정되었습니다.");
-    //       await signOut(auth);
-    //       this.$store.dispatch("users/logout");
-    //       this.$router.push("/login");
-    //     }
-    //   } catch (error) {
-    //     console.error("Firebase 오류: ", error);
-    //     alert("오류가 발생했습니다. 다시 시도해 주세요.");
-    //   }
-    // },
-    goBack() {
-      window.history.back();
+    async handleNameSubmit() {
+      try {
+        const user = await this.checkAuth();
+        if (user) {
+          await update(dbRef(db, 'users/' + user.uid), {
+            name: this.name,
+          });
+          alert('이름이 수정되었습니다.');
+          await signOut(auth);
+          this.$store.dispatch('users/logout');
+          this.$router.push('/login');
+        }
+      } catch (error) {
+        console.error('Firebase 오류: ', error);
+        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+      }
+    },
+    async handleUniversitySubmit() {
+      try {
+        const user = await this.checkAuth();
+        if (user) {
+          await update(dbRef(db, 'users/' + user.uid), {
+            university: this.university,
+          });
+          alert('대학교가 수정되었습니다.');
+          await signOut(auth);
+          this.$store.dispatch('users/logout');
+          this.$router.push('/login');
+        }
+      } catch (error) {
+        console.error('Firebase 오류: ', error);
+        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+      }
+    },
+
+    async handleStudentIdSubmit() {
+      try {
+        const user = await this.checkAuth();
+        if (user) {
+          await update(dbRef(db, 'users/' + user.uid), {
+            studentId: this.studentId,
+          });
+          alert('학번이 수정되었습니다.');
+          await signOut(auth);
+          this.$store.dispatch('users/logout');
+          this.$router.push('/login');
+        }
+      } catch (error) {
+        console.error('Firebase 오류: ', error);
+        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+      }
+    },
+    async handleEmailSubmit() {
+      try {
+        const user = await this.checkAuth();
+        if (user) {
+          await user.updateEmail(this.email);
+          await update(dbRef(db, 'users/' + user.uid), {
+            email: this.email,
+          });
+          alert('이메일이 수정되었습니다.');
+          await signOut(auth);
+          this.$store.dispatch('users/logout');
+          this.$router.push('/login');
+        }
+      } catch (error) {
+        console.error('Firebase 오류: ', error);
+        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+      }
     },
     async submitData() {
       try {
         const user = await this.checkAuth();
-        if (user) {
-          await update(ref(db, "users/" + user.uid), {
-            name: this.name,
-            university: this.university,
-            studentId: this.studentId,
-            email: this.email,
-          });
-          alert("정보가 수정되었습니다.");
-          await signOut(auth);
-          this.$store.dispatch("users/logout");
-          this.$router.push("/login");
+        if (!user || !user.uid) {
+          console.error('Invalid user data:', user);
+          alert(
+            '사용자 정보를 가져오는 데 실패했습니다. 다시 로그인해 주세요.'
+          );
+          this.$router.push('/login');
+          return;
         }
+
+        console.log('Updating data for user ID:', user.uid);
+        console.log('Database object:', db);
+
+        const userRef = dbRef(db, `users/${user.uid}`);
+        console.log('Database reference path:', userRef.toString());
+
+        await update(userRef, {
+          name: this.name,
+          university: this.university,
+          studentId: this.studentId,
+          email: this.email,
+        });
+
+        alert('정보가 수정되었습니다.');
+        await signOut(auth);
+        this.$store.dispatch('users/logout');
+        this.$router.push('/login');
       } catch (error) {
-        console.error("Firebase 오류: ", error);
-        alert("오류가 발생했습니다. 다시 시도해 주세요.");
+        console.error('Firebase 오류: ', error);
+        alert('오류가 발생했습니다. 다시 시도해 주세요.');
       }
     },
     async handlePasswordSubmit() {
@@ -277,14 +286,14 @@ export default {
         const user = await this.checkAuth();
         if (user) {
           await user.updatePassword(this.password);
-          alert("비밀번호가 수정되었습니다.");
+          alert('비밀번호가 수정되었습니다.');
           await signOut(auth);
-          this.$store.dispatch("users/logout");
-          this.$router.push("/login");
+          this.$store.dispatch('users/logout');
+          this.$router.push('/login');
         }
       } catch (error) {
-        console.error("Firebase 오류: ", error);
-        alert("오류가 발생했습니다. 다시 시도해 주세요.");
+        console.error('Firebase 오류: ', error);
+        alert('오류가 발생했습니다. 다시 시도해 주세요.');
       }
     },
   },
