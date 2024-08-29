@@ -235,6 +235,10 @@ p {
   color: rgb(190, 190, 190);
 }
 
+.dark-mode .comments_container{
+  background-color: rgb(52, 52, 62);
+}
+
 .comment-section {
   /* border: 2px solid rgb(131, 140, 221); */
   border-radius: 10px;

@@ -110,6 +110,7 @@ export default {
 
 li {
   list-style-type: none;
+  margin-bottom: 15px;
 }
 
 li:last-child {

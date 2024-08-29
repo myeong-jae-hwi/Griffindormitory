@@ -5,13 +5,13 @@
     <div class="slider-container">
       <div class="slider-track">
         <base-card class="slider-item">
-          <h3>Content 1</h3>
+          <h3>광고 1</h3>
         </base-card>
         <base-card class="slider-item">
-          <h3>Content 2</h3>
+          <h3>광고 2</h3>
         </base-card>
         <base-card class="slider-item">
-          <h3>Content 3</h3>
+          <h3>광고 3</h3>
         </base-card>
         <base-card class="slider-item">
           <h3>Content 4</h3>
@@ -103,18 +103,19 @@ export default {
     }),
   },
   created() {
+    console.log('크리에이트 시작')
     this.$store.dispatch('boards/fetchInitialData');
     this.$store.dispatch('fetchInitialData');
   },
   mounted() {
     this.setSliderItemWidth();
     window.addEventListener('resize', this.setSliderItemWidth);
-
     const track = this.$el.querySelector('.slider-track');
     track.addEventListener('mousedown', this.startDrag);
     track.addEventListener('mouseleave', this.stopDrag);
     track.addEventListener('mouseup', this.stopDrag);
     track.addEventListener('mousemove', this.dragMove);
+    console.log('마운트 끝')
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.setSliderItemWidth);
@@ -258,6 +259,10 @@ a {
 
 .dark-mode a {
   color: #aeaeae;
+}
+.slider-track a {
+  width: 100%;
+  height: 10%;
 }
 
 p {

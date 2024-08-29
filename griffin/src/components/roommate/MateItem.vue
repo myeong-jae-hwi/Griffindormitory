@@ -32,15 +32,6 @@ export default {
       console.log(this.current);
       this.$router.push({
         path: `/roommateboard/${this.id}`,
-        query: {
-          title: this.title,
-          count: encodeURIComponent(this.count),
-          current: encodeURIComponent(this.current),
-          sex: this.sex,
-          location: this.location,
-          besmoke: this.besmoke,
-          preferences: this.preferences,
-        },
       });
     },
   },

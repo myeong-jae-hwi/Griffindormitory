@@ -4,8 +4,8 @@
       <img src="../../assets/images/Logo.png" class="logo">
       <h1 class="app-name">GRIFFIN DOMITORY</h1>
     </div>
-    <router-link to="/login" class="sign-in-button">Sign In</router-link>
-    <router-link to='/signup' class="sign-up-text">Sign up</router-link>
+    <router-link to="/login" class="sign-in-button">로그인</router-link>
+    <router-link to='/signup' class="sign-up-text">회원가입</router-link>
   </div>
 </template>
 
@@ -42,7 +42,7 @@
 
 .sign-in-button {
   background-color: white;
-  color: #4285F4;
+  color: #6471e5;
   width: auto;
   border: none;
   border-radius: 20px;
