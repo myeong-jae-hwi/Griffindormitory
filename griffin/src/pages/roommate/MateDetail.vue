@@ -1,60 +1,59 @@
 <template>
-  <div class='header'>
+  <div>
+      <div class="header">
     <h3>
-        <font-awesome-icon icon="chevron-left" @click="goBack" />
+      <font-awesome-icon icon="chevron-left" @click="goBack" />
     </h3>
     <h3>룸메이트 모집 게시판</h3>
     <h3>
-        <font-awesome-icon icon="ellipsis-vertical" />
+      <font-awesome-icon icon="ellipsis-vertical" />
     </h3>
   </div>
     <div class="card-container">
-      <base-card>
-        <div v-if="currentUser.id === mateUid" class="delete-btn-container">
-          <font-awesome-icon @click="deleteBoard" icon="trash" />
-        </div>
+      <base-card class="card-view">
+        <template v-if="isCurrentUserMate">
+          <div class="delete-btn-container">
+            <font-awesome-icon @click="deleteBoard" icon="trash" />
+          </div>
+        </template>
         <div class="card-content">
-          <h2>
-            {{ mateTitle }}
-            <font-awesome-icon
-              :icon="mateSex === 'male' ? 'mars' : 'venus'"
-              :style="{ color: mateSex === 'male' ? 'skyblue' : 'pink' }"
-            />
-          </h2>
-          <p>
-            <!-- 성별: <strong>{{ mateSex === 'male' ? '남자' : '여자' }}</strong> -->
-          </p>
-          <p>
-            기숙사:
-            <strong>{{ mateLocation === "east" ? "동관" : "서관" }}</strong>
-          </p>
-          <p>
-            모집 인원: <strong>{{ mateCurrent }}/{{ mateCount }}명</strong>
-          </p>
-          <p>
-            흡연:
-            <strong>{{
-              besmoke === "notsmoke" ? "비흡연자만" : "상관없음"
-            }}</strong>
-          </p>
-          <p class="preferences">{{ preferences }}</p>
-        </div>
+        <h2>
+          {{ mateTitle }}
+          <font-awesome-icon
+            :icon="mateSex === 'male' ? 'mars' : 'venus'"
+            :style="{ color: mateSex === 'male' ? 'skyblue' : 'pink' }"
+          />
+        </h2>
+        <p>
+          기숙사:
+          <strong>{{ mateLocation === "east" ? "동관" : "서관" }}</strong>
+        </p>
+        <p>
+          모집 인원: <strong>{{ mateCurrent }}/{{ mateCount }}명</strong>
+        </p>
+        <p>
+          흡연:
+          <strong>{{
+            besmoke === "notsmoke" ? "비흡연자만" : "상관없음"
+          }}</strong>
+        </p>
+        <p class="preferences">{{ matePreference }}</p>
+      </div>
       </base-card>
       <div class="btn-container">
         <base-btn @click="openModal">신청하기</base-btn>
       </div>
     </div>
     <mate-modal v-if="modalOpen" @close="closeModal">
-      <template v-slot:header>
+      <template #header>
         <h3>신청하기</h3>
       </template>
-      <template v-slot:body>
-        <p>이름 : {{ currentUser.name }}</p>
-        <p>학교 : {{ currentUser.university }}</p>
-        <p>학번 : {{ currentUser.studentId }}</p>
+      <template #body>
+        <user-info :user="currentUser" />
         <textarea
+          v-model="applicationText"
           rows="2"
-          style="width: 100%; resize: none; outline: none; margin: 0 auto"
+          class="application-textarea"
           placeholder="간단한 자기 소개를 적어주세요."
         ></textarea>
         <div class="btn-container">
@@ -63,45 +62,44 @@
       </template>
     </mate-modal>
     <mate-modal v-if="submissionSuccess" @close="closeSuccessModal">
-      <template v-slot:header>
+      <template #header>
         <h3>알림</h3>
       </template>
-      <template v-slot:body>
+      <template #body>
         <p>전송되었습니다.</p>
         <div class="btn-container">
           <base-btn @click="closeSuccessModal">닫기</base-btn>
         </div>
-      </template>
+      </template> 
     </mate-modal>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import MateModal from "../../components/roommate/MataModal.vue";
+// import HeaderComponent from "../../components/common/HeaderComponent.vue";
+// import MateInfo from "../../components/roommate/MateInfo.vue";
+// import UserInfo from "../../components/user/UserInfo.vue";
 
 export default {
-  components: { MateModal },
-  props: [
-    "id",
-    "title",
-    "count",
-    "current",
-    "sex",
-    "location",
-    "besmoke",
-    "preferences",
-    "university",
-    "userUid",
-  ],
+  name: 'RoommateDetail',
+  components: { 
+    MateModal,
+    // HeaderComponent,
+    // MateInfo,
+    // UserInfo
+  },
   data() {
     return {
       modalOpen: false,
-      postId: this.id,
       submissionSuccess: false,
+      applicationText: '',
       mateTitle: "",
       mateCount: null,
       mateSex: null,
       mateBesmoke: null,
+      matePreference: null,
       mateCurrent: 0,
       mateLocation: null,
     };
@@ -112,107 +110,94 @@ export default {
       mates: "mates",
       hasMates: "hasMates",
     }),
-    mateUid() {
-      const mate = this.mates.find((mate) => mate.id === this.id);
-      return mate ? mate.userUid : null;
+    mate() {
+      return this.mates.find(mate => mate.id === this.$route.params.id) || {};
     },
-    userId() {
-      return this.$store.state.users.userID;
+    isCurrentUserMate() {
+      return this.currentUser.id === this.mate.userUid;
     },
   },
   created() {
     this.fetchData();
-    // this.$store.dispatch("fetchInitialData");
   },
-
-
   methods: {
-    submitData() {
-      const mate = this.mates.find((mate) => mate.id === this.id);
-      const userUid = mate.userUid;
-      // const userName = this.userName;
-      const mateId = this.postId;
-      const userId = this.userId;
-      console.log(mateId);
-
-      this.notice(userUid, mateId, userId);
-      this.submissionSuccess = true;
-      this.modalOpen = true;
-    },
-    goBack() {
-      window.history.back();
-    },
-    async deleteMate() {
-      const confirmation = window.confirm("게시물을 삭제하시겠습니까 ?");
-      if (!confirmation) return;
-      try {
-        await this.$store.dispatch("deleteMate", this.id);
-        alert("게시물을 삭제하셨습니다.");
-        this.$router.push("/roommateboard");
-      } catch (error) {
-        console.error("Error deleting mate:", error.message);
-      }
-    },
-    async notice(to, mateId, fromUid) {
-      try {
-        console.log(fromUid);
-        const notification = {
-          userId: to,
-          mateId: mateId,
-          message: `새로운 룸메이트 신청이 왔습니다`,
-          is_read: false,
-          created_at: new Date().toISOString(),
-        };
-
-        await this.$store.dispatch("notifications/createNotification", {
-          uid: to,
-          notification: notification,
-        });
-      } catch (error) {
-        console.error("Error creating notification:", error.message);
-      }
-    },
-    
     async fetchData() {
-      await this.$store.dispatch("fetchInitialData", this.id);
-      const mate = this.mates.find((mate) => mate.id === this.id);
+      await this.$store.dispatch("fetchInitialData", this.$route.params.id);
+      const id = this.$route.params.id;
+      const mate = this.mates.find((mate) => mate.id === id);
       this.mateTitle = mate.title;
       this.mateCount = mate.count;
       this.mateCurrent = Number(mate.current);
       this.mateBesmoke = mate.besmoke;
-      this.matePreference = mate.preference;
+      this.matePreference = mate.preferences;
       this.mateSex = mate.sex;
       this.mateLocation = mate.location;
     },
-
     openModal() {
-      if (this.currentUser.gender !== this.sex) {
+      if (!this.canApply()) return;
+      this.modalOpen = true;
+    },
+    canApply() {
+      if (this.currentUser.gender !== this.mate.sex) {
         alert("성별이 맞지 않아 신청할 수 없습니다.");
-        return;
+        return false;
       }
-
-      if (this.currentUser.id === this.mateUid) {
+      if (this.isCurrentUserMate) {
         alert("내가 쓴 글에는 신청할 수 없습니다.");
-        return;
+        return false;
       }
-
-      if (this.mateCount <= this.mateCurrent) {
+      if (this.mate.count <= this.mate.current) {
         alert("인원 모집이 마감되었습니다.");
-        return;
+        return false;
       }
-      const mate = this.mates.find((mate) => mate.id === this.id);
-      const isSameUniversity = mate.university === this.currentUser.university;
-      if (isSameUniversity) this.modalOpen = true;
-      else {
+      if (this.mate.university !== this.currentUser.university) {
         alert("다른 학교 게시물입니다. 신청 자격이 없습니다.");
+        return false;
       }
+      return true;
     },
     closeModal() {
       this.modalOpen = false;
     },
+    async submitData() {
+      try {
+        await this.$store.dispatch("notifications/createNotification", {
+          uid: this.mate.userUid,
+          notification: {
+            userId: this.mate.userUid,
+            mateId: this.mate.id,
+            message: `새로운 룸메이트 신청이 왔습니다`,
+            is_read: false,
+            created_at: new Date().toISOString(),
+          },
+        });
+        this.submissionSuccess = true;
+      } catch (error) {
+        console.error("Error creating notification:", error.message);
+        alert("신청 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      }
+    },
     closeSuccessModal() {
       this.submissionSuccess = false;
       this.modalOpen = false;
+      this.applicationText = '';
+    },
+    goBack() {
+      this.$router.back();
+    },
+    openMenu() {
+      // Implement menu opening logic
+    },
+    async deleteBoard() {
+      if (!confirm("게시물을 삭제하시겠습니까?")) return;
+      try {
+        await this.$store.dispatch("deleteMate", this.mate.id);
+        alert("게시물을 삭제하셨습니다.");
+        this.$router.push("/roommateboard");
+      } catch (error) {
+        console.error("Error deleting mate:", error.message);
+        alert("게시물 삭제 중 오류가 발생했습니다.");
+      }
     },
   },
 };
@@ -228,6 +213,11 @@ export default {
   color: #333;
 }
 
+.application-textarea{
+  width: 100%;
+  height: 100px;
+  margin-bottom: 10px;
+}
 .card-container {
   position: relative;
   flex-direction: column;
@@ -236,10 +226,18 @@ export default {
   /* height: 100%; */
 }
 
+.dark-mode .card-view {
+  background-color: rgb(52, 52, 62);
+}
+
 .card-content {
   padding: 20px;
   font-family: "Arial, sans-serif";
   color: rgb(52, 52, 52);
+}
+
+.dark-mode .card-content {
+  color: rgb(220, 220, 220);
 }
 
 p {
@@ -249,9 +247,9 @@ p {
 }
 
 .preferences {
-  font-style: italic;
-  font-size: 16px;
-  color: white;
+  /* font-style: italic; */
+  font-size: 14px;
+  /* color: white; */
 }
 
 .header {
@@ -268,8 +266,7 @@ p {
   text-align: center;
 }
 
-h3{
+h3 {
   display: inline-block;
 }
-
 </style>

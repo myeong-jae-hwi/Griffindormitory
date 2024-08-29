@@ -22,15 +22,20 @@
           <font-awesome-icon :icon="['fas', 'cogs']" class="fa-lg" />
         </router-link>
         <router-link to="/alart" class="footer-link">
-          <span v-if="notice" class="note-num"></span>
-          <font-awesome-icon :icon="['fas', 'bell']" class="fa-lg" />
+          <div class="notification-wrapper">
+            <span v-if="notice" class="note-num"></span>
+            <font-awesome-icon :icon="['fas', 'bell']" class="fa-lg" />
+          </div>
         </router-link>
       </nav>
     </div>
   </footer>
 </template>
+
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
+import { auth } from '@/firebase/config.js';
+import { onAuthStateChanged } from 'firebase/auth';
 
 export default {
   data() {
@@ -39,13 +44,33 @@ export default {
     };
   },
   computed: {
-    ...mapState(["notifications", ["hasUnreadNotifications"]]),
+    ...mapGetters('users', ['currentUser']),
+    ...mapState(['notifications', ['hasUnreadNotifications']]),
+    userUid() {
+      return this.$store.state.users.users[0]?.id;
+    },
   },
   watch: {
     hasUnreadNotifications(newValue) {
       this.notice = newValue;
     },
   },
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.checkNotifications();
+      }
+    });
+  },
+  methods: {
+    ...mapActions('notifications', ['checkUnreadNotifications']),
+    async checkNotifications() {
+      const hasUnread = await this.checkUnreadNotifications({
+        uid: this.userUid,
+      });
+      this.notice = hasUnread;
+    },
+  }
 };
 </script>
 
@@ -81,5 +106,21 @@ nav {
 
 .footer-link .fa-icon {
   margin-right: 5px;
+}
+
+.notification-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.note-num {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  height: 8px;
+  width: 8px;
+  background-color: rgb(255, 33, 33);
+  border-radius: 50%;
+  display: inline-block;
 }
 </style>

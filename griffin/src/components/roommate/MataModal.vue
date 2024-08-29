@@ -42,6 +42,9 @@ export default {
   max-width: 500px;
   position: relative;
 }
+.dark-mode .modal-content {
+  background-color: rgb(52, 52, 62);
+  }
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -52,5 +55,10 @@ export default {
   border: none;
   font-size: 20px;
   cursor: pointer;
+}
+
+.dark-mode .close-btn {
+  color: rgb(220, 220, 220);
+
 }
 </style>

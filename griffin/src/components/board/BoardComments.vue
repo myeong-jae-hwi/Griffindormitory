@@ -40,4 +40,9 @@ export default {
     margin: 17px 0 0 10px ;
     color: #626262;
   }
+
+  .dark-mode .time{
+      color: rgb(190, 190, 190);
+
+  }
 </style>
