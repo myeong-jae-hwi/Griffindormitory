@@ -74,6 +74,7 @@ body,
   margin: 0;
 }
 body {
+  font-family: 'Roboto', sans-serif;
   background-color: rgb(239, 238, 244);
   transition: background-color 0.3s ease;
 }
@@ -118,6 +119,8 @@ button {
   background-repeat: no-repeat;
   filter: invert(100%);
 }
+
+
 
 .app-btn-container button:hover {
   background-color: #555;
@@ -173,5 +176,9 @@ a:visited {
 .route-leave-from {
   opacity: 1;
   transform: translateY(0);
+}
+
+*{
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 </style>
