@@ -90,6 +90,10 @@ export default {
   border-radius: 22px;
 }
 
+.dark-mode .alart-list {
+  background-color: #1e1e1e;
+}
+
 .accept, .refusal {
   outline: 0;
   width: 50px;

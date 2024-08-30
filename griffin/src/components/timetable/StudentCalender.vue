@@ -475,6 +475,8 @@ td {
   white-space: normal;
   height: 100%;
   border: none;
+  background-color: #ccccff;
+
 }
 
 /*

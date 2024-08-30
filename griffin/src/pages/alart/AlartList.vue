@@ -122,6 +122,9 @@ li:last-child {
   font-weight: normal;
 }
 
+.dark-mode .isread {
+  color: #d3d3d3;
+}
 p {
   font-weight: 700;
 }

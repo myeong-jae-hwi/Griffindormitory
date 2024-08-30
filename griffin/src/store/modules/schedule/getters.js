@@ -11,6 +11,7 @@ export default {
     });
   },
   getScheduleColor: (state) => (title) => {
+    console.log(state.scheduleColors[title]);
     return state.scheduleColors[title] || 'default-color-class';
   },
 };
