@@ -1,3 +1,14 @@
+<img width="100%" src="https://github.com/user-attachments/assets/b3b7f2fe-e749-47f1-a29c-4363eed7e21e"/> 
+
+## 👨‍👩‍👧‍👦 팀원 소개
+
+<div align=center>
+  
+| **주민재** | **명재휘** | **이성우** | 
+| :------: | :------: | :------: |
+| [<img src="https://avatars.githubusercontent.com/u/145652237?v=4" height=100 width=100> <br/> @Ju-MINJAE](https://github.com/Ju-MINJAE) | [<img src="https://avatars.githubusercontent.com/u/72872676?v=4" height=100 width=100> <br/> @myeong-jae-hwi](https://github.com/myeong-jae-hwi) |[<img src="https://avatars.githubusercontent.com/u/131874861?v=4" height=100 width=100> <br/> @Sungwoo00](https://github.com/Sungwoo00) |
+</div>
+
 ## 📌 Stack 📌
 <p>
   <img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=ffffff"/> 
@@ -10,7 +21,12 @@
 ### 🎓 대학생들의 필수 어플리케이션, 그리핀도르! <br>
 
 학업 관리부터 캠퍼스 생활까지 모든 것을 도와주는 대학생 맞춤형 어플리케이션입니다. 학기별 시간표와 점수 관리, 그리고 룸메이트를 구하는 것까지, 대학생활의 필수 요소들을 한 곳에서 관리할 수 있습니다. <br><br>
-<img width="100%" src="https://github.com/user-attachments/assets/b3b7f2fe-e749-47f1-a29c-4363eed7e21e"/> 
+
+
+<div align=center>
+  <img src='https://github.com/user-attachments/assets/02e30892-66f5-4c93-beb6-998075c3a101' width=600/>
+</div>
+
 
 ### 💬 커뮤니티 
 
@@ -31,10 +47,6 @@
 | :------: | :------: | :------: | :------: |
 | 시작 화면 | 홈 | 게시판 (다크모드) | 룸메이트 게시판
 
-## 👨‍👩‍👧‍👦 팀원 소개
-| **주민재** | **명재휘** | **이성우** | 
-| :------: | :------: | :------: |
-| [<img src="https://avatars.githubusercontent.com/u/145652237?v=4" height=100 width=100> <br/> @Ju-MINJAE](https://github.com/Ju-MINJAE) | [<img src="https://avatars.githubusercontent.com/u/72872676?v=4" height=100 width=100> <br/> @myeong-jae-hwi](https://github.com/myeong-jae-hwi) |[<img src="https://avatars.githubusercontent.com/u/131874861?v=4" height=100 width=100> <br/> @Sungwoo00](https://github.com/Sungwoo00) |
 
 ## 실행방법
 ## Project setup
